@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>The Vault — FocusPulse®</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root{
+  --bg:#050505;
+  --fg:#f4f4ee;
+  --muted:#666;
+  --line:rgba(255,255,255,.1);
+  --lime:#d8ff3e;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:"Space Grotesk",sans-serif;
+  overflow-x:hidden;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+::selection{
+  background:var(--lime);
+  color:#000;
+}
+
+/* NAV */
+
+.nav{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(1200px,calc(100% - 30px));
+  height:62px;
+  padding:0 9px 0 22px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  border:1px solid var(--line);
+  border-radius:100px;
+
+  background:rgba(5,5,5,.7);
+  backdrop-filter:blur(25px);
+
+  z-index:1000;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:-1.5px;
+}
+
+.logo span{color:var(--lime)}
+.logo sup{color:#555;font-size:8px}
+
+.nav-links{
+  display:flex;
+  gap:27px;
+  color:#666;
+  font-size:10px;
+}
+
+.nav-links a{
+  transition:.3s;
+}
+
+.nav-links a:hover,
+.nav-links .active{
+  color:#fff;
+}
+
+.nav-cta{
+  background:var(--lime);
+  color:#000;
+  padding:12px 18px;
+  border-radius:100px;
+  font-size:10px;
+  font-weight:700;
+}
+
+/* GRID */
+
+.grid{
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+
+  background-size:80px 80px;
+
+  mask-image:
+    linear-gradient(to bottom,#000,transparent 90%);
+}
+
+/* HERO */
+
+.hero{
+  min-height:80vh;
+  padding:190px 25px 100px;
+  display:flex;
+  align-items:center;
+}
+
+.container{
+  width:min(1250px,100%);
+  margin:auto;
+}
+
+.mono{
+  font-family:"DM Mono";
+  color:#555;
+  font-size:9px;
+  letter-spacing:2px;
+}
+
+.hero h1{
+  margin-top:35px;
+
+  font-size:clamp(80px,15vw,190px);
+  line-height:.76;
+  letter-spacing:-13px;
+  font-weight:500;
+}
+
+.outline{
+  color:transparent;
+  -webkit-text-stroke:1px rgba(255,255,255,.4);
+}
+
+.lime{
+  color:var(--lime);
+}
+
+.hero-copy{
+  margin-top:55px;
+  max-width:540px;
+  color:#777;
+  font-size:14px;
+  line-height:1.8;
+}
+
+/* TOOLBAR */
+
+.toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+
+  padding:20px 0;
+
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+
+  position:sticky;
+  top:95px;
+
+  background:rgba(5,5,5,.8);
+  backdrop-filter:blur(20px);
+
+  z-index:100;
+}
+
+.filters{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.filter{
+  border:1px solid var(--line);
+  background:transparent;
+  color:#666;
+
+  padding:9px 13px;
+
+  border-radius:100px;
+
+  font-family:"DM Mono";
+  font-size:9px;
+
+  cursor:pointer;
+
+  transition:.3s;
+}
+
+.filter:hover,
+.filter.active{
+  background:var(--lime);
+  border-color:var(--lime);
+  color:#000;
+}
+
+.search{
+  width:210px;
+
+  border:1px solid var(--line);
+  border-radius:100px;
+
+  background:#090909;
+
+  padding:10px 15px;
+
+  outline:none;
+
+  color:white;
+
+  font-family:"DM Mono";
+  font-size:9px;
+}
+
+/* VAULT */
+
+.vault{
+  padding:80px 0 150px;
+}
+
+.vault-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  margin-bottom:30px;
+}
+
+.vault-count{
+  color:#444;
+  font-family:"DM Mono";
+  font-size:9px;
+}
+
+.archive{
+  border-top:1px solid var(--line);
+}
+
+/* ARTICLE ROW */
+
+.article{
+  display:grid;
+
+  grid-template-columns:90px 1fr 180px 100px;
+
+  align-items:center;
+
+  min-height:180px;
+
+  border-bottom:1px solid var(--line);
+
+  position:relative;
+
+  overflow:hidden;
+
+  transition:.45s;
+}
+
+.article::before{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  background:
+    radial-gradient(
+      circle at var(--x,50%) 50%,
+      rgba(216,255,62,.08),
+      transparent 35%
+    );
+
+  opacity:0;
+
+  transition:.5s;
+}
+
+.article:hover::before{
+  opacity:1;
+}
+
+.article:hover{
+  padding-left:15px;
+  padding-right:15px;
+}
+
+.number{
+  position:relative;
+  color:#444;
+  font-family:"DM Mono";
+  font-size:10px;
+}
+
+.article-main{
+  position:relative;
+}
+
+.article-category{
+  color:var(--lime);
+  font-family:"DM Mono";
+  font-size:8px;
+  letter-spacing:1px;
+}
+
+.article h2{
+  margin-top:12px;
+
+  font-size:clamp(27px,3vw,48px);
+  line-height:.9;
+  letter-spacing:-2.5px;
+
+  font-weight:500;
+
+  transition:.4s;
+}
+
+.article:hover h2{
+  transform:translateX(8px);
+}
+
+.article-desc{
+  position:relative;
+  color:#666;
+  font-size:11px;
+  line-height:1.6;
+}
+
+.article-meta{
+  position:relative;
+  color:#444;
+  font-family:"DM Mono";
+  font-size:9px;
+}
+
+.open{
+  position:relative;
+
+  width:38px;
+  height:38px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:1px solid var(--line);
+  border-radius:50%;
+
+  color:#777;
+
+  transition:.4s;
+}
+
+.article:hover .open{
+  background:var(--lime);
+  color:#000;
+  border-color:var(--lime);
+  transform:rotate(45deg);
+}
+
+/* EMPTY */
+
+.empty{
+  display:none;
+  padding:80px 0;
+  text-align:center;
+  color:#555;
+  font-family:"DM Mono";
+  font-size:10px;
+}
+
+/* FOOTER */
+
+footer{
+  padding:30px 25px;
+  border-top:1px solid var(--line);
+  color:#444;
+  font-family:"DM Mono";
+  font-size:9px;
+
+  display:flex;
+  justify-content:space-between;
+}
+
+/* MOBILE */
+
+@media(max-width:750px){
+
+  .nav-links,
+  .nav-cta{
+    display:none;
+  }
+
+  .hero{
+    padding-top:150px;
+  }
+
+  .hero h1{
+    font-size:20vw;
+    letter-spacing:-6px;
+  }
+
+  .toolbar{
+    display:block;
+  }
+
+  .search{
+    width:100%;
+    margin-top:15px;
+  }
+
+  .article{
+    grid-template-columns:50px 1fr 45px;
+    min-height:190px;
+  }
+
+  .article-desc,
+  .article-meta{
+    display:none;
+  }
+
+  .article h2{
+    font-size:30px;
+  }
+
+  footer{
+    display:block;
+    line-height:2;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="grid"></div>
+
+<!-- NAV -->
+
+<nav class="nav">
+
+  <a href="index.html" class="logo">
+    focus<span>pulse</span><sup>®</sup>
+  </a>
+
+  <div class="nav-links">
+
+    <a href="index.html">Home</a>
+
+    <a href="manifesto.html">Manifesto</a>
+
+    <a href="vault.html" class="active">Vault</a>
+
+    <a href="protocols.html">Protocols</a>
+
+  </div>
+
+  <a href="focus.html" class="nav-cta">
+    FOCUS MODE ↗
+  </a>
+
+</nav>
+
+
+<main>
+
+<!-- HERO -->
+
+<section class="hero">
+
+  <div class="container">
+
+    <div class="mono">
+      FOCUSPULSE / KNOWLEDGE ARCHIVE
+    </div>
+
+    <h1>
+
+      THE<br>
+
+      <span class="outline">
+        KNOWLEDGE
+      </span>
+
+      <br>
+
+      <span class="lime">
+        VAULT.
+      </span>
+
+    </h1>
+
+    <p class="hero-copy">
+
+      Mental models, execution systems and
+      psychological protocols for people who
+      refuse to waste their attention.
+
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- TOOLBAR -->
+
+<section style="padding:0 25px">
+
+  <div class="container">
+
+    <div class="toolbar">
+
+      <div class="filters">
+
+        <button class="filter active" data-filter="all">
+          ALL
+        </button>
+
+        <button class="filter" data-filter="psychology">
+          PSYCHOLOGY
+        </button>
+
+        <button class="filter" data-filter="focus">
+          FOCUS
+        </button>
+
+        <button class="filter" data-filter="execution">
+          EXECUTION
+        </button>
+
+        <button class="filter" data-filter="systems">
+          SYSTEMS
+        </button>
+
+      </div>
+
+      <input
+        class="search"
+        id="search"
+        type="search"
+        placeholder="SEARCH THE VAULT..."
+      >
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- VAULT -->
+
+<section class="vault">
+
+  <div class="container">
+
+    <div class="vault-header">
+
+      <div class="mono">
+        ARCHIVE / 2026
+      </div>
+
+      <div class="vault-count" id="count">
+        06 FILES
+      </div>
+
+    </div>
+
+
+    <div class="archive" id="archive">
+
+
+      <!-- 001 -->
+
+      <a
+        href="article-action-gap.html"
+        class="article"
+        data-category="execution"
+        data-title="the action gap"
+      >
+
+        <div class="number">
+          001
+        </div>
+
+        <div class="article-main">
+
+          <div class="article-category">
+            EXECUTION
+          </div>
+
+          <h2>
+            The Action Gap
+          </h2>
+
+        </div>
+
+        <div class="article-desc">
+          Why knowing what to do is
+          almost worthless until
+          you actually move.
+        </div>
+
+        <div class="article-meta">
+          06 MIN
+        </div>
+
+        <div class="open">
+          ↗
+        </div>
+
+      </a>
+
+
+      <!-- 002 -->
+
+      <a
+        href="article-digital-drug.html"
+        class="article"
+        data-category="focus"
+        data-title="the digital drug"
+      >
+
+        <div class="number">
+          002
+        </div>
+
+        <div class="article-main">
+
+          <div class="article-category">
+            FOCUS
+          </div>
+
+          <h2>
+            The Digital Drug
+          </h2>
+
+        </div>
+
+        <div class="article-desc">
+          Your attention is being
+          engineered. Learn how
+          to engineer it back.
+        </div>
+
+        <div class="article-meta">
+          08 MIN
+        </div>
+
+        <div class="open">
+          ↗
+        </div>
+
+      </a>
+
+
+      <!-- 003 -->
+
+      <a
+        href="article-user-churn.html"
+        class="article"
+        data-category="systems"
+        data-title="the user churn protocol"
+      >
+
+        <div class="number">
+          003
+        </div>
+
+        <div class="article-main">
+
+          <div class="article-category">
+            SYSTEMS
+          </div>
+
+          <h2>
+            The User Churn Protocol
+          </h2>
+
+        </div>
+
+        <div class="article-desc">
+          Stop treating distraction
+          like a personality problem.
+          Treat it like a system.
+        </div>
+
+        <div class="article-meta">
+          07 MIN
+        </div>
+
+        <div class="open">
+          ↗
+        </div>
+
+      </a>
+
+
+      <!-- 004 -->
+
+      <a
+        href="article-laser-focus.html"
+        class="article"
+        data-category="focus"
+        data-title="laser focus"
+      >
+
+        <div class="number">
+          004
+        </div>
+
+        <div class="article-main">
+
+          <div class="article-category">
+            FOCUS
+          </div>
+
+          <h2>
+            Laser Focus
+          </h2>
+
+        </div>
+
+        <div class="article-desc">
+          Build an environment where
+          deep work becomes the default.
+        </div>
+
+        <div class="article-meta">
+          05 MIN
+        </div>
+
+        <div class="open">
+          ↗
+        </div>
+
+      </a>
+
+
+      <!-- 005 -->
+
+      <a
+        href="article-too-hard.html"
+        class="article"
+        data-category="psychology"
+        data-title="the illusion of too hard"
+      >
+
+        <div class="number">
+          005
+        </div>
+
+        <div class="article-main">
+
+          <div class="article-category">
+            PSYCHOLOGY
+          </div>
+
+          <h2>
+            The Illusion of Too Hard
+          </h2>
+
+        </div>
+
+        <div class="article-desc">
+          Difficulty is often a perception
+          before it becomes a reality.
+        </div>
+
+        <div class="article-meta">
+          06 MIN
+        </div>
+
+        <div class="open">
+          ↗
+        </div>
+
+      </a>
+
+
+      <!-- 006 -->
+
+      <a
+        href="article-first-hour.html"
+        class="article"
+        data-category="systems"
+        data-title="protect the first hour"
+      >
+
+        <div class="number">
+          006
+        </div>
+
+        <div class="article-main">
+
+          <div class="article-category">
+            SYSTEMS
+          </div>
+
+          <h2>
+            Protect The First Hour
+          </h2>
+
+        </div>
+
+        <div class="article-desc">
+          Before the world gets access
+          to your attention, decide
+          where it goes.
+        </div>
+
+        <div class="article-meta">
+          04 MIN
+        </div>
+
+        <div class="open">
+          ↗
+        </div>
+
+      </a>
+
+
+    </div>
+
+    <div class="empty" id="empty">
+      NO SIGNAL FOUND IN THE VAULT.
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+  <div>FOCUSPULSE®</div>
+
+  <div>
+    CONTROL YOUR ATTENTION.
+  </div>
+
+</footer>
+
+
+<script>
+
+/* CARD SPOTLIGHT */
+
+document.querySelectorAll(".article")
+.forEach(card => {
+
+  card.addEventListener("mousemove", e => {
+
+    const rect = card.getBoundingClientRect();
+
+    const x =
+      ((e.clientX - rect.left) / rect.width) * 100;
+
+    card.style.setProperty("--x",x+"%");
+
+  });
+
+});
+
+
+/* FILTER + SEARCH */
+
+const buttons =
+  document.querySelectorAll(".filter");
+
+const articles =
+  document.querySelectorAll(".article");
+
+const search =
+  document.getElementById("search");
+
+const count =
+  document.getElementById("count");
+
+const empty =
+  document.getElementById("empty");
+
+let activeFilter = "all";
+
+
+function updateVault(){
+
+  const query =
+    search.value.toLowerCase().trim();
+
+  let visible = 0;
+
+  articles.forEach(article => {
+
+    const category =
+      article.dataset.category;
+
+    const title =
+      article.dataset.title;
+
+    const matchesFilter =
+      activeFilter === "all" ||
+      category === activeFilter;
+
+    const matchesSearch =
+      !query ||
+      title.includes(query) ||
+      category.includes(query);
+
+    if(matchesFilter && matchesSearch){
+
+      article.style.display = "grid";
+      visible++;
+
+    }else{
+
+      article.style.display = "none";
+
+    }
+
+  });
+
+  count.textContent =
+    String(visible).padStart(2,"0") + " FILES";
+
+  empty.style.display =
+    visible ? "none" : "block";
+
+}
+
+
+buttons.forEach(button => {
+
+  button.addEventListener("click",() => {
+
+    buttons.forEach(b =>
+      b.classList.remove("active")
+    );
+
+    button.classList.add("active");
+
+    activeFilter =
+      button.dataset.filter;
+
+    updateVault();
+
+  });
+
+});
+
+
+search.addEventListener(
+  "input",
+  updateVault
+);
+
+</script>
+
+</body>
+</html>
