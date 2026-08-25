@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Protocols — FocusPulse®</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root{
+  --bg:#050505;
+  --panel:#090909;
+  --fg:#f5f5ef;
+  --muted:#666;
+  --dim:#3c3c3c;
+  --line:rgba(255,255,255,.1);
+  --lime:#d8ff3e;
+  --red:#ff453a;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:"Space Grotesk",sans-serif;
+  overflow-x:hidden;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button{
+  font:inherit;
+}
+
+::selection{
+  background:var(--lime);
+  color:#000;
+}
+
+/* =========================
+   NAV
+========================= */
+
+.nav{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+
+  width:min(1200px,calc(100% - 30px));
+  height:62px;
+
+  padding:0 9px 0 22px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  border:1px solid var(--line);
+  border-radius:100px;
+
+  background:rgba(5,5,5,.72);
+  backdrop-filter:blur(25px);
+
+  z-index:1000;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:-1.5px;
+}
+
+.logo span{
+  color:var(--lime);
+}
+
+.logo sup{
+  color:#555;
+  font-size:8px;
+}
+
+.nav-links{
+  display:flex;
+  gap:28px;
+
+  color:#666;
+  font-size:10px;
+}
+
+.nav-links a{
+  transition:.3s;
+}
+
+.nav-links a:hover,
+.nav-links .active{
+  color:#fff;
+}
+
+.nav-cta{
+  padding:12px 18px;
+
+  border-radius:100px;
+
+  background:var(--lime);
+  color:#000;
+
+  font-size:10px;
+  font-weight:700;
+}
+
+/* =========================
+   BACKGROUND
+========================= */
+
+.grid{
+  position:fixed;
+  inset:0;
+
+  pointer-events:none;
+  z-index:-3;
+
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+
+  background-size:80px 80px;
+}
+
+.glow{
+  position:fixed;
+
+  width:500px;
+  height:500px;
+
+  border-radius:50%;
+
+  background:rgba(216,255,62,.04);
+
+  filter:blur(100px);
+
+  pointer-events:none;
+
+  top:10%;
+  right:-250px;
+
+  z-index:-2;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container{
+  width:min(1250px,100%);
+  margin:auto;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+  padding:
+    180px 30px 90px;
+}
+
+.label{
+  color:#444;
+
+  font-family:"DM Mono";
+  font-size:9px;
+
+  letter-spacing:2px;
+}
+
+.hero h1{
+  margin-top:38px;
+
+  font-size:clamp(75px,13vw,165px);
+
+  line-height:.75;
+
+  letter-spacing:-11px;
+
+  font-weight:500;
+}
+
+.hero h1 span{
+  color:var(--lime);
+}
+
+.hero-copy{
+  max-width:600px;
+
+  margin-top:55px;
+
+  color:#666;
+
+  font-size:14px;
+
+  line-height:1.9;
+}
+
+/* =========================
+   SCORE
+========================= */
+
+.score-section{
+  padding:0 30px 80px;
+}
+
+.score{
+  border:1px solid var(--line);
+
+  background:var(--panel);
+
+  display:grid;
+
+  grid-template-columns:1.3fr 1fr;
+}
+
+.score-main{
+  padding:35px;
+
+  border-right:1px solid var(--line);
+}
+
+.score-top{
+  display:flex;
+  justify-content:space-between;
+
+  color:#555;
+
+  font-family:"DM Mono";
+  font-size:8px;
+}
+
+.score-value{
+  margin-top:35px;
+
+  font-size:110px;
+
+  line-height:.8;
+
+  letter-spacing:-8px;
+}
+
+.score-value span{
+  color:var(--lime);
+
+  font-size:35px;
+
+  letter-spacing:-2px;
+}
+
+.score-bar{
+  margin-top:35px;
+
+  height:4px;
+
+  background:#171717;
+
+  overflow:hidden;
+}
+
+.score-fill{
+  width:0;
+  height:100%;
+
+  background:var(--lime);
+
+  transition:
+    width 1s cubic-bezier(.16,1,.3,1);
+}
+
+.score-note{
+  margin-top:15px;
+
+  color:#555;
+
+  font-family:"DM Mono";
+  font-size:8px;
+}
+
+.score-stats{
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+}
+
+.mini{
+  padding:28px;
+
+  border-bottom:1px solid var(--line);
+}
+
+.mini:nth-child(odd){
+  border-right:1px solid var(--line);
+}
+
+.mini:nth-last-child(-n+2){
+  border-bottom:0;
+}
+
+.mini-label{
+  color:#444;
+
+  font-family:"DM Mono";
+  font-size:8px;
+}
+
+.mini-number{
+  margin-top:22px;
+
+  font-size:35px;
+
+  letter-spacing:-2px;
+}
+
+.mini-number span{
+  color:var(--lime);
+}
+
+/* =========================
+   PROTOCOLS
+========================= */
+
+.protocol-section{
+  padding:
+    50px 30px 150px;
+}
+
+.section-head{
+  display:flex;
+
+  align-items:flex-end;
+  justify-content:space-between;
+
+  margin-bottom:45px;
+}
+
+.section-head h2{
+  margin-top:18px;
+
+  font-size:clamp(45px,7vw,80px);
+
+  line-height:.8;
+
+  letter-spacing:-6px;
+
+  font-weight:500;
+}
+
+.section-head p{
+  max-width:300px;
+
+  color:#555;
+
+  font-family:"DM Mono";
+  font-size:8px;
+
+  line-height:1.8;
+}
+
+/* =========================
+   PROTOCOL CARD
+========================= */
+
+.protocol{
+  border:1px solid var(--line);
+
+  margin-bottom:14px;
+
+  background:#080808;
+
+  transition:.4s;
+}
+
+.protocol:hover{
+  border-color:rgba(216,255,62,.22);
+}
+
+.protocol-head{
+  padding:22px 25px;
+
+  display:grid;
+
+  grid-template-columns:60px 1fr auto;
+
+  gap:20px;
+
+  align-items:center;
+
+  border-bottom:1px solid var(--line);
+
+  cursor:pointer;
+}
+
+.protocol-number{
+  color:#444;
+
+  font-family:"DM Mono";
+  font-size:9px;
+}
+
+.protocol-title{
+  font-size:18px;
+
+  font-weight:500;
+}
+
+.protocol-status{
+  color:#444;
+
+  font-family:"DM Mono";
+  font-size:8px;
+}
+
+.protocol-status.ready{
+  color:var(--lime);
+}
+
+.protocol-arrow{
+  width:30px;
+  height:30px;
+
+  border:1px solid var(--line);
+  border-radius:50%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:#555;
+
+  transition:.4s;
+}
+
+.protocol.open .protocol-arrow{
+  transform:rotate(180deg);
+
+  background:var(--lime);
+  color:#000;
+  border-color:var(--lime);
+}
+
+.protocol-body{
+  max-height:0;
+
+  overflow:hidden;
+
+  transition:
+    max-height .6s cubic-bezier(.16,1,.3,1);
+}
+
+.protocol.open .protocol-body{
+  max-height:700px;
+}
+
+.protocol-inner{
+  padding:30px 25px;
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:40px;
+}
+
+.protocol-description{
+  color:#666;
+
+  font-size:12px;
+
+  line-height:1.9;
+}
+
+.checklist{
+  display:flex;
+  flex-direction:column;
+
+  gap:9px;
+}
+
+.task{
+  padding:14px 15px;
+
+  display:flex;
+  align-items:center;
+  gap:13px;
+
+  border:1px solid var(--line);
+
+  cursor:pointer;
+
+  transition:.3s;
+}
+
+.task:hover{
+  border-color:#333;
+}
+
+.task input{
+  appearance:none;
+
+  width:16px;
+  height:16px;
+
+  border:1px solid #444;
+
+  border-radius:50%;
+
+  flex-shrink:0;
+
+  cursor:pointer;
+
+  position:relative;
+}
+
+.task input:checked{
+  background:var(--lime);
+
+  border-color:var(--lime);
+}
+
+.task input:checked::after{
+  content:"";
+
+  position:absolute;
+
+  width:6px;
+  height:3px;
+
+  left:4px;
+  top:5px;
+
+  border-left:2px solid #000;
+  border-bottom:2px solid #000;
+
+  transform:rotate(-45deg);
+}
+
+.task.done{
+  color:#555;
+  text-decoration:line-through;
+}
+
+.task span{
+  font-size:11px;
+}
+
+/* =========================
+   START
+========================= */
+
+.start{
+  margin-top:50px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:25px;
+
+  border:1px solid var(--line);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(216,255,62,.04),
+      transparent
+    );
+}
+
+.start-copy{
+  color:#666;
+
+  font-family:"DM Mono";
+  font-size:8px;
+
+  line-height:1.8;
+}
+
+.start-copy strong{
+  color:#aaa;
+}
+
+.start-button{
+  border:0;
+
+  padding:15px 22px;
+
+  border-radius:100px;
+
+  background:var(--lime);
+  color:#000;
+
+  font-size:10px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  transition:.35s;
+}
+
+.start-button:hover{
+  transform:translateY(-3px);
+
+  box-shadow:
+    0 15px 45px rgba(216,255,62,.14);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+  padding:30px;
+
+  border-top:1px solid var(--line);
+
+  display:flex;
+  justify-content:space-between;
+
+  color:#444;
+
+  font-family:"DM Mono";
+  font-size:9px;
+}
+
+/* =========================
+   REVEAL
+========================= */
+
+.reveal{
+  opacity:0;
+
+  transform:translateY(40px);
+
+  transition:
+    opacity .9s ease,
+    transform .9s cubic-bezier(.16,1,.3,1);
+}
+
+.reveal.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:800px){
+
+  .nav-links,
+  .nav-cta{
+    display:none;
+  }
+
+  .hero{
+    padding:
+      150px 20px 70px;
+  }
+
+  .hero h1{
+    font-size:21vw;
+    letter-spacing:-7px;
+  }
+
+  .score-section{
+    padding-left:20px;
+    padding-right:20px;
+  }
+
+  .score{
+    grid-template-columns:1fr;
+  }
+
+  .score-main{
+    border-right:0;
+    border-bottom:1px solid var(--line);
+  }
+
+  .score-value{
+    font-size:80px;
+  }
+
+  .protocol-section{
+    padding-left:20px;
+    padding-right:20px;
+  }
+
+  .section-head{
+    display:block;
+  }
+
+  .section-head p{
+    margin-top:25px;
+  }
+
+  .protocol-head{
+    grid-template-columns:35px 1fr 30px;
+  }
+
+  .protocol-status{
+    display:none;
+  }
+
+  .protocol-inner{
+    grid-template-columns:1fr;
+  }
+
+  .start{
+    display:block;
+  }
+
+  .start-button{
+    margin-top:25px;
+  }
+
+  footer{
+    display:block;
+    line-height:2;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="grid"></div>
+<div class="glow"></div>
+
+
+<!-- NAV -->
+
+<nav class="nav">
+
+  <a href="index.html" class="logo">
+    focus<span>pulse</span><sup>®</sup>
+  </a>
+
+  <div class="nav-links">
+
+    <a href="manifesto.html">
+      Manifesto
+    </a>
+
+    <a href="vault.html">
+      Vault
+    </a>
+
+    <a href="protocols.html" class="active">
+      Protocols
+    </a>
+
+  </div>
+
+  <a href="focus.html" class="nav-cta">
+    FOCUS MODE ↗
+  </a>
+
+</nav>
+
+
+<main>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+  <div class="container">
+
+    <div class="label">
+      FOCUSPULSE / ATTENTION OPERATING SYSTEM
+    </div>
+
+    <h1 class="reveal">
+      RUN
+      <br>
+      THE
+      <br>
+      <span>PROTOCOL.</span>
+    </h1>
+
+    <p class="hero-copy reveal">
+      Don't wait for motivation.
+      Configure the environment,
+      execute the system and let
+      consistency do the heavy lifting.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- SCORE -->
+
+<section class="score-section">
+
+  <div class="container">
+
+    <div class="score reveal">
+
+      <div class="score-main">
+
+        <div class="score-top">
+
+          <span>
+            ATTENTION SCORE
+          </span>
+
+          <span>
+            LIVE
+          </span>
+
+        </div>
+
+
+        <div class="score-value">
+          <span id="score">0</span>
+          <span>/100</span>
+        </div>
+
+
+        <div class="score-bar">
+
+          <div
+            class="score-fill"
+            id="scoreFill"
+          ></div>
+
+        </div>
+
+
+        <div class="score-note">
+          COMPLETE TASKS TO INCREASE YOUR SCORE
+        </div>
+
+      </div>
+
+
+      <div class="score-stats">
+
+        <div class="mini">
+
+          <div class="mini-label">
+            TASKS
+          </div>
+
+          <div class="mini-number">
+            <span id="doneCount">0</span>/15
+          </div>
+
+        </div>
+
+
+        <div class="mini">
+
+          <div class="mini-label">
+            PROTOCOLS
+          </div>
+
+          <div class="mini-number">
+            <span id="protocolCount">0</span>/5
+          </div>
+
+        </div>
+
+
+        <div class="mini">
+
+          <div class="mini-label">
+            STREAK
+          </div>
+
+          <div class="mini-number">
+            <span id="streak">01</span>
+          </div>
+
+        </div>
+
+
+        <div class="mini">
+
+          <div class="mini-label">
+            STATUS
+          </div>
+
+          <div class="mini-number">
+            <span id="status">READY</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- PROTOCOLS -->
+
+<section class="protocol-section">
+
+  <div class="container">
+
+    <div class="section-head">
+
+      <div>
+
+        <div class="label">
+          DAILY SYSTEM / 005
+        </div>
+
+        <h2>
+          FIVE
+          <br>
+          PROTOCOLS.
+        </h2>
+
+      </div>
+
+      <p>
+        Open each protocol,
+        execute the checklist,
+        and build your attention
+        system one action at a time.
+      </p>
+
+    </div>
+
+
+    <!-- PROTOCOL 01 -->
+
+    <div class="protocol open reveal">
+
+      <div class="protocol-head">
+
+        <div class="protocol-number">
+          001
+        </div>
+
+        <div class="protocol-title">
+          REMOVE THE NOISE
+        </div>
+
+        <div class="protocol-status ready">
+          ACTIVE
+        </div>
+
+        <div class="protocol-arrow">
+          ↓
+        </div>
+
+      </div>
+
+
+      <div class="protocol-body">
+
+        <div class="protocol-inner">
+
+          <p class="protocol-description">
+            Your first move isn't to focus harder.
+            It's to remove the things constantly
+            asking for your attention.
+          </p>
+
+
+          <div class="checklist">
+
+            <label class="task">
+              <input type="checkbox">
+              <span>Disable non-essential notifications.</span>
+            </label>
+
+            <label class="task">
+              <input type="checkbox">
+              <span>Remove distracting apps from your home screen.</span>
+            </label>
+
+            <label class="task">
+              <input type="checkbox">
+              <span>Close unused browser tabs.</span>
+            </label>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- PROTOCOL 02 -->
+
+    <div class="protocol reveal">
+
+      <div class="protocol-head">
+
+        <div class="protocol-number">
+          002
+        </div>
+
+        <div class="protocol-title">
+          BUILD THE ROOM
+        </div>
+
+        <div class="protocol-status">
+          LOCKED
+        </div>
+
+        <div class="protocol-arrow">
+          ↓
+        </div>
+
+      </div>
+
+
+      <div class="protocol-body">
+
+        <div class="protocol-inner">
+
+          <p class="protocol-description">
+            Your physical environment is part
+            of your attention system. Make the
+            desired behaviour obvious.
+          </p>
+
+
+          <div class="checklist">
+
+            <label class="task">
+              <input type="checkbox">
+              <span>Clear your primary workspace.</span>
+            </label>
+
+            <label class="task">
+              <input type="checkbox">
+              <span>Keep only today's task visible.</span>
+            </label>
+
+            <label class="task">
+              <input type="checkbox">
+              <span>Put your phone outside arm's reach.</span>
+            </label>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- PROTOCOL 03 -->
+
+    <div class="protocol reveal">
+
+      <div class="protocol-head">
+
+        <div class="protocol-number">
+          003
+        </div>
+
+        <div class="protocol-title">
+          SINGLE-TASK MODE
+        </div>
+
+        <div class="protocol-status">
+          LOCKED
+        </div>
+
+        <div class="protocol-arrow">
+          ↓
+        </div>
+
+      </div>
+
+
+      <div class="protocol-body">
+
+        <div class="protocol-inner">
+
+          <p class="protocol-description">
+            Multitasking feels productive because
+            you're constantly moving. Deep work
+            requires the opposite.
+          </p>
+
+
+          <div class="checklist">
+
+            <label class="task">
+              <input type="checkbox">
+              <span>Choose one clearly defined task.</span>
+            </label>
+
+            <label class="task">
+              <input type="checkbox">
+              <span>Set a 25 minute focus block.</span>
+            </label>
+
+            <label class="task">
+              <input type="checkbox">
+              <span>Do not switch contexts until the timer ends.</span>
+            </label>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- PROTOCOL 04 -->
+
+    <div class="protocol reveal">
+
+      <div class="protocol-head">
+
+        <div class="protocol-number">
+          004
+        </div>
+
+        <div class="protocol-title">
+          PROTECT THE MORNING
+        </div>
+
+        <div class="protocol-status">
+          LOCKED
+        </div>
+
+        <div class="protocol-arrow">
+          ↓
+        </div>
+
+      </div>
+
+
+      <div class="protocol-body">
+
+        <div class="protocol-inner">
+
+          <p class="protocol-description">
+            Don't let the internet decide what
+            deserves your attention before
+            you've decided it yourself.
+          </p>
+
+
+          <div class="checklist">
+
+            <label class="task">
+              <input type="checkbox">
+              <span>No social media for the first hour.</span>
+            </label>
+
+            <label class="task">
+              <input type="checkbox">
+              <span>Write your primary objective.</span>
+            </label>
+
+            <label class="task">
+              <input type="checkbox">
+              <span>Complete one meaningful task before consuming.</span>
+            </label>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- PROTOCOL 05 -->
+
+    <div class="protocol reveal">
+
+      <div class="protocol-head">
+
+        <div class="protocol-number">
+          005
+        </div>
+
+        <div class="protocol-title">
+          CLOSE THE LOOP
+        </div>
+
+        <div class="protocol-status">
+          LOCKED
+        </div>
+
+        <div class="protocol-arrow">
+          ↓
+        </div>
+
+      </div>
+
+
+      <div class="protocol-body">
+
+        <div class="protocol-inner">
+
+          <p class="protocol-description">
+            End the day by reducing cognitive
+            residue. Decide what matters tomorrow
+            before tomorrow arrives.
+          </p>
+
+
+          <div class="checklist">
+
+            <label class="task">
+              <input type="checkbox">
+              <span>Review today's unfinished work.</span>
+            </label>
+
+            <label class="task">
+              <input type="checkbox">
+              <span>Choose tomorrow's first task.</span>
+            </label>
+
+            <label class="task">
+              <input type="checkbox">
+              <span>End the workday deliberately.</span>
+            </label>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- START -->
+
+    <div class="start reveal">
+
+      <div class="start-copy">
+
+        SYSTEM STATUS:
+        <strong id="systemStatus">
+          READY
+        </strong>
+
+        <br>
+
+        COMPLETE ALL 15 TASKS TO
+        <strong>ACTIVATE FULL FOCUS.</strong>
+
+      </div>
+
+
+      <button
+        class="start-button"
+        onclick="startFocus()"
+      >
+        START FOCUS MODE ↗
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+  <div>
+    FOCUSPULSE® — 2026
+  </div>
+
+  <div>
+    BUILD THE SYSTEM. PROTECT THE ATTENTION.
+  </div>
+
+</footer>
+
+
+<script>
+
+/* =========================
+   PROTOCOL ACCORDION
+========================= */
+
+const protocols =
+document.querySelectorAll(".protocol");
+
+protocols.forEach(protocol=>{
+
+  const head =
+    protocol.querySelector(".protocol-head");
+
+  head.addEventListener("click",()=>{
+
+    protocol.classList.toggle("open");
+
+  });
+
+});
+
+
+/* =========================
+   TASK SYSTEM
+========================= */
+
+const tasks =
+document.querySelectorAll(".task input");
+
+const score =
+document.getElementById("score");
+
+const scoreFill =
+document.getElementById("scoreFill");
+
+const doneCount =
+document.getElementById("doneCount");
+
+const protocolCount =
+document.getElementById("protocolCount");
+
+const status =
+document.getElementById("status");
+
+const systemStatus =
+document.getElementById("systemStatus");
+
+
+function updateSystem(){
+
+  let done=0;
+
+  tasks.forEach(task=>{
+
+    if(task.checked){
+
+      done++;
+
+      task.parentElement.classList.add("done");
+
+    }else{
+
+      task.parentElement.classList.remove("done");
+
+    }
+
+  });
+
+
+  const percentage =
+    Math.round((done/tasks.length)*100);
+
+
+  score.textContent =
+    percentage;
+
+  scoreFill.style.width =
+    percentage+"%";
+
+  doneCount.textContent =
+    done;
+
+
+  /* Protocol completion */
+
+  let completedProtocols=0;
+
+  protocols.forEach(protocol=>{
+
+    const protocolTasks =
+      protocol.querySelectorAll("input");
+
+    const completed =
+      [...protocolTasks]
+      .every(task=>task.checked);
+
+    if(completed){
+
+      completedProtocols++;
+
+      protocol
+      .querySelector(".protocol-status")
+      .textContent="COMPLETE";
+
+      protocol
+      .querySelector(".protocol-status")
+      .classList.add("ready");
+
+    }
+
+  });
+
+
+  protocolCount.textContent =
+    completedProtocols;
+
+
+  /* Status */
+
+  if(percentage===100){
+
+    status.textContent="OPTIMAL";
+    systemStatus.textContent="FULLY ACTIVE";
+
+  }else if(percentage>=60){
+
+    status.textContent="STRONG";
+    systemStatus.textContent="SYSTEM ONLINE";
+
+  }else if(percentage>=20){
+
+    status.textContent="BUILDING";
+    systemStatus.textContent="IN PROGRESS";
+
+  }else{
+
+    status.textContent="READY";
+    systemStatus.textContent="READY";
+
+  }
+
+
+  localStorage.setItem(
+    "focuspulseTasks",
+    JSON.stringify(
+      [...tasks].map(task=>task.checked)
+    )
+  );
+
+}
+
+
+/* =========================
+   SAVE TASKS
+========================= */
+
+const saved =
+localStorage.getItem("focuspulseTasks");
+
+if(saved){
+
+  try{
+
+    const data =
+      JSON.parse(saved);
+
+    tasks.forEach((task,index)=>{
+
+      task.checked =
+        Boolean(data[index]);
+
+    });
+
+  }catch(e){}
+
+}
+
+tasks.forEach(task=>{
+
+  task.addEventListener(
+    "change",
+    updateSystem
+  );
+
+});
+
+updateSystem();
+
+
+/* =========================
+   START FOCUS
+========================= */
+
+function startFocus(){
+
+  window.location.href=
+    "focus.html";
+
+}
+
+
+/* =========================
+   REVEAL
+========================= */
+
+const observer =
+new IntersectionObserver(
+  entries=>{
+
+    entries.forEach(entry=>{
+
+      if(entry.isIntersecting){
+
+        entry.target.classList.add("show");
+
+      }
+
+    });
+
+  },
+  {
+    threshold:.1
+  }
+);
+
+document
+.querySelectorAll(".reveal")
+.forEach(el=>{
+  observer.observe(el);
+});
+
+
+/* =========================
+   SCORE ANIMATION
+========================= */
+
+setTimeout(()=>{
+
+  scoreFill.style.width =
+    score.textContent+"%";
+
+},500);
+
+</script>
+
+</body>
+</html>
