@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>The Action Gap — FocusPulse®</title>
+
+<meta name="description"
+content="The gap between knowing and doing. A FocusPulse transmission on execution.">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root{
+  --bg:#050505;
+  --fg:#f4f4ee;
+  --muted:#707070;
+  --dim:#3c3c3c;
+  --line:rgba(255,255,255,.10);
+  --lime:#d8ff3e;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:"Space Grotesk",sans-serif;
+  overflow-x:hidden;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+::selection{
+  background:var(--lime);
+  color:#000;
+}
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progress{
+  position:fixed;
+  top:0;
+  left:0;
+  width:0;
+  height:2px;
+  background:var(--lime);
+  z-index:9999;
+}
+
+/* =========================
+   CURSOR
+========================= */
+
+.cursor{
+  position:fixed;
+  width:12px;
+  height:12px;
+  border:1px solid var(--lime);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  z-index:9998;
+  transition:
+    width .25s ease,
+    height .25s ease,
+    background .25s ease;
+  mix-blend-mode:difference;
+}
+
+.cursor.active{
+  width:50px;
+  height:50px;
+  background:var(--lime);
+}
+
+/* =========================
+   NAV
+========================= */
+
+.nav{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+
+  width:min(1200px,calc(100% - 30px));
+  height:62px;
+
+  padding:0 9px 0 22px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  border:1px solid var(--line);
+  border-radius:100px;
+
+  background:rgba(5,5,5,.70);
+  backdrop-filter:blur(25px);
+
+  z-index:1000;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:-1.5px;
+}
+
+.logo span{
+  color:var(--lime);
+}
+
+.logo sup{
+  color:#555;
+  font-size:8px;
+}
+
+.nav-links{
+  display:flex;
+  gap:27px;
+  color:#666;
+  font-size:10px;
+}
+
+.nav-links a{
+  transition:.3s;
+}
+
+.nav-links a:hover{
+  color:#fff;
+}
+
+.nav-cta{
+  padding:12px 18px;
+  border-radius:100px;
+
+  background:var(--lime);
+  color:#000;
+
+  font-size:10px;
+  font-weight:700;
+}
+
+/* =========================
+   AMBIENT GRID
+========================= */
+
+.grid{
+  position:fixed;
+  inset:0;
+
+  pointer-events:none;
+  z-index:-3;
+
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,.025) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.025) 1px,
+      transparent 1px
+    );
+
+  background-size:80px 80px;
+
+  mask-image:
+    linear-gradient(
+      to bottom,
+      #000,
+      transparent 90%
+    );
+}
+
+.glow{
+  position:fixed;
+
+  width:500px;
+  height:500px;
+
+  border-radius:50%;
+
+  background:rgba(216,255,62,.045);
+
+  filter:blur(100px);
+
+  pointer-events:none;
+
+  transform:translate(-50%,-50%);
+
+  z-index:-2;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.article-hero{
+  min-height:100vh;
+
+  padding:
+    190px
+    30px
+    100px;
+
+  display:flex;
+  align-items:center;
+
+  border-bottom:1px solid var(--line);
+
+  position:relative;
+}
+
+.hero-inner{
+  width:min(1250px,100%);
+  margin:auto;
+}
+
+.meta{
+  display:flex;
+  gap:30px;
+  align-items:center;
+
+  color:#555;
+
+  font-family:"DM Mono";
+  font-size:9px;
+  letter-spacing:1.5px;
+}
+
+.meta .green{
+  color:var(--lime);
+}
+
+.hero-number{
+  position:absolute;
+
+  right:4vw;
+  bottom:4vw;
+
+  color:#111;
+
+  font-family:"Space Grotesk";
+
+  font-size:clamp(180px,35vw,520px);
+
+  line-height:.65;
+
+  font-weight:700;
+
+  letter-spacing:-30px;
+
+  pointer-events:none;
+
+  user-select:none;
+}
+
+.hero-title{
+  position:relative;
+  z-index:2;
+
+  margin-top:45px;
+
+  font-size:clamp(80px,14vw,180px);
+
+  line-height:.75;
+
+  letter-spacing:-12px;
+
+  font-weight:500;
+}
+
+.hero-title .outline{
+  color:transparent;
+  -webkit-text-stroke:1px rgba(255,255,255,.38);
+}
+
+.hero-title .lime{
+  color:var(--lime);
+}
+
+.hero-intro{
+  position:relative;
+  z-index:2;
+
+  max-width:570px;
+
+  margin-top:65px;
+
+  color:#777;
+
+  font-size:15px;
+
+  line-height:1.9;
+}
+
+/* =========================
+   ARTICLE LAYOUT
+========================= */
+
+.article-wrap{
+  width:min(1250px,100%);
+  margin:auto;
+
+  padding:
+    130px
+    30px
+    160px;
+
+  display:grid;
+
+  grid-template-columns:
+    220px
+    minmax(0,720px)
+    1fr;
+
+  gap:70px;
+}
+
+/* STICKY INFO */
+
+.side{
+  position:sticky;
+  top:120px;
+  align-self:start;
+}
+
+.side-label{
+  color:#444;
+
+  font-family:"DM Mono";
+  font-size:8px;
+  letter-spacing:1.5px;
+}
+
+.side-line{
+  width:45px;
+  height:1px;
+
+  background:var(--lime);
+
+  margin:18px 0;
+}
+
+.side p{
+  color:#555;
+
+  font-family:"DM Mono";
+
+  font-size:9px;
+
+  line-height:1.8;
+}
+
+/* ARTICLE */
+
+.article{
+  min-width:0;
+}
+
+.article p{
+  color:#aaa;
+
+  font-size:17px;
+
+  line-height:2;
+
+  margin-bottom:30px;
+}
+
+.article .lead{
+  color:#eee;
+
+  font-size:25px;
+
+  line-height:1.5;
+
+  letter-spacing:-.5px;
+
+  margin-bottom:60px;
+}
+
+.article h2{
+  margin-top:100px;
+  margin-bottom:28px;
+
+  font-size:clamp(40px,6vw,75px);
+
+  line-height:.9;
+
+  letter-spacing:-5px;
+
+  font-weight:500;
+}
+
+.article h2 span{
+  color:var(--lime);
+}
+
+.article-number{
+  margin-top:90px;
+  margin-bottom:20px;
+
+  color:var(--lime);
+
+  font-family:"DM Mono";
+
+  font-size:9px;
+
+  letter-spacing:2px;
+}
+
+/* =========================
+   BIG QUOTE
+========================= */
+
+.quote-section{
+  min-height:80vh;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:100px 30px;
+
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(216,255,62,.075),
+      transparent 43%
+    );
+
+  text-align:center;
+}
+
+.quote{
+  max-width:1100px;
+
+  font-size:clamp(55px,9vw,120px);
+
+  line-height:.87;
+
+  letter-spacing:-8px;
+
+  font-weight:500;
+}
+
+.quote span{
+  color:var(--lime);
+}
+
+/* =========================
+   EXECUTION BLOCK
+========================= */
+
+.execution{
+  margin-top:80px;
+
+  border:1px solid var(--line);
+
+  background:#080808;
+
+  padding:35px;
+
+  position:relative;
+  overflow:hidden;
+}
+
+.execution::after{
+  content:"";
+
+  position:absolute;
+
+  width:250px;
+  height:250px;
+
+  right:-100px;
+  bottom:-120px;
+
+  border-radius:50%;
+
+  background:rgba(216,255,62,.08);
+
+  filter:blur(50px);
+}
+
+.execution-label{
+  color:var(--lime);
+
+  font-family:"DM Mono";
+
+  font-size:9px;
+
+  letter-spacing:2px;
+}
+
+.execution h3{
+  margin-top:20px;
+
+  font-size:35px;
+
+  line-height:1;
+
+  letter-spacing:-2px;
+
+  font-weight:500;
+}
+
+.execution ul{
+  margin-top:30px;
+
+  list-style:none;
+}
+
+.execution li{
+  padding:17px 0;
+
+  border-top:1px solid var(--line);
+
+  color:#888;
+
+  font-size:13px;
+}
+
+.execution li::before{
+  content:"→";
+
+  color:var(--lime);
+
+  margin-right:12px;
+}
+
+/* =========================
+   END
+========================= */
+
+.end{
+  min-height:100vh;
+
+  padding:
+    140px 30px;
+
+  display:flex;
+  align-items:center;
+
+  border-top:1px solid var(--line);
+}
+
+.end-inner{
+  width:min(1250px,100%);
+  margin:auto;
+}
+
+.end-label{
+  color:#555;
+
+  font-family:"DM Mono";
+
+  font-size:9px;
+
+  letter-spacing:2px;
+}
+
+.end h2{
+  margin-top:40px;
+
+  font-size:clamp(70px,13vw,175px);
+
+  line-height:.76;
+
+  letter-spacing:-11px;
+
+  font-weight:500;
+}
+
+.end h2 span{
+  color:var(--lime);
+}
+
+.next{
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  margin-top:90px;
+
+  padding-top:25px;
+
+  border-top:1px solid var(--line);
+
+  color:#777;
+
+  font-family:"DM Mono";
+
+  font-size:9px;
+
+  letter-spacing:1px;
+
+  transition:.4s;
+}
+
+.next:hover{
+  color:var(--lime);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+  padding:30px;
+
+  border-top:1px solid var(--line);
+
+  display:flex;
+  justify-content:space-between;
+
+  color:#444;
+
+  font-family:"DM Mono";
+
+  font-size:9px;
+}
+
+/* =========================
+   REVEAL
+========================= */
+
+.reveal{
+  opacity:0;
+  transform:translateY(45px);
+
+  transition:
+    opacity 1s cubic-bezier(.16,1,.3,1),
+    transform 1s cubic-bezier(.16,1,.3,1);
+}
+
+.reveal.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:800px){
+
+  .nav-links,
+  .nav-cta{
+    display:none;
+  }
+
+  .article-hero{
+    padding:
+      150px
+      20px
+      90px;
+  }
+
+  .hero-title{
+    font-size:20vw;
+    letter-spacing:-7px;
+  }
+
+  .hero-number{
+    font-size:65vw;
+    right:-5vw;
+  }
+
+  .article-wrap{
+    display:block;
+
+    padding:
+      90px
+      20px
+      120px;
+  }
+
+  .side{
+    position:relative;
+    top:auto;
+
+    margin-bottom:60px;
+  }
+
+  .article p{
+    font-size:15px;
+  }
+
+  .article .lead{
+    font-size:21px;
+  }
+
+  .article h2{
+    letter-spacing:-3px;
+  }
+
+  .quote{
+    font-size:15vw;
+    letter-spacing:-5px;
+  }
+
+  .execution{
+    padding:25px;
+  }
+
+  .end{
+    padding:100px 20px;
+  }
+
+  .end h2{
+    font-size:20vw;
+    letter-spacing:-7px;
+  }
+
+  footer{
+    display:block;
+    line-height:2;
+  }
+
+  .cursor{
+    display:none;
+  }
+}
+
+/* REDUCED MOTION */
+
+@media(prefers-reduced-motion:reduce){
+
+  html{
+    scroll-behavior:auto;
+  }
+
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms!important;
+    transition-duration:.01ms!important;
+  }
+
+  .reveal{
+    opacity:1;
+    transform:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="progress"></div>
+<div class="grid"></div>
+<div class="glow"></div>
+<div class="cursor"></div>
+
+
+<!-- NAV -->
+
+<nav class="nav">
+
+  <a href="index.html" class="logo">
+    focus<span>pulse</span><sup>®</sup>
+  </a>
+
+  <div class="nav-links">
+
+    <a href="index.html">Home</a>
+
+    <a href="manifesto.html">Manifesto</a>
+
+    <a href="vault.html">Vault</a>
+
+    <a href="protocols.html">Protocols</a>
+
+  </div>
+
+  <a href="focus.html" class="nav-cta">
+    FOCUS MODE ↗
+  </a>
+
+</nav>
+
+
+<main>
+
+<!-- HERO -->
+
+<section class="article-hero">
+
+  <div class="hero-number">
+    001
+  </div>
+
+  <div class="hero-inner">
+
+    <div class="meta">
+
+      <span class="green">
+        TRANSMISSION 001
+      </span>
+
+      <span>
+        EXECUTION
+      </span>
+
+      <span>
+        06 MIN READ
+      </span>
+
+    </div>
+
+
+    <h1 class="hero-title reveal">
+
+      THE<br>
+
+      <span class="outline">
+        ACTION
+      </span>
+
+      <br>
+
+      <span class="lime">
+        GAP.
+      </span>
+
+    </h1>
+
+
+    <p class="hero-intro reveal">
+
+      You already know what you should do.
+
+      The problem isn't information.
+
+      The problem is the distance between
+      understanding something and actually
+      moving.
+
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- ARTICLE -->
+
+<section>
+
+  <div class="article-wrap">
+
+    <aside class="side">
+
+      <div class="side-label">
+        FOCUSPULSE / 001
+      </div>
+
+      <div class="side-line"></div>
+
+      <p>
+        CATEGORY<br>
+        EXECUTION
+        <br><br>
+        READING TIME<br>
+        06 MIN
+        <br><br>
+        STATUS<br>
+        ACTIVE
+      </p>
+
+    </aside>
+
+
+    <article class="article">
+
+
+      <p class="lead reveal">
+
+        There is a strange moment between
+        knowing and doing.
+
+        You understand the problem.
+        You understand the solution.
+        You might even understand exactly
+        what needs to happen next.
+
+        And yet...
+
+        nothing happens.
+
+      </p>
+
+
+      <p class="reveal">
+
+        We call this the Action Gap.
+
+        It is the distance between intention
+        and execution.
+
+        And modern life has become
+        exceptionally good at making
+        that distance comfortable.
+
+      </p>
+
+
+      <div class="article-number">
+        01 / INFORMATION
+      </div>
+
+      <h2 class="reveal">
+
+        YOU DON'T NEED
+        <span>
+          MORE
+        </span>
+        INFORMATION.
+
+      </h2>
+
+
+      <p class="reveal">
+
+        Think about how much you already know.
+
+        You know exercise is good for you.
+
+        You know sleep matters.
+
+        You know your phone distracts you.
+
+        You know the project should have
+        started yesterday.
+
+        You know what the next step is.
+
+      </p>
+
+
+      <p class="reveal">
+
+        Knowledge stopped being scarce a long
+        time ago.
+
+        The internet solved that problem.
+
+        Today, the scarce resource isn't
+        information.
+
+        It's attention directed toward action.
+
+      </p>
+
+
+      <div class="article-number">
+        02 / THE GAP
+      </div>
+
+      <h2 class="reveal">
+
+        THE GAP
+        <br>
+        FEELS
+        <span>
+          SMALL.
+        </span>
+      </h2>
+
+
+      <p class="reveal">
+
+        That's what makes it dangerous.
+
+        The gap rarely feels like a dramatic
+        failure.
+
+        It feels like:
+
+        “I'll do it later.”
+
+        “I'll research a little more.”
+
+        “I'll start tomorrow.”
+
+      </p>
+
+
+      <p class="reveal">
+
+        Each decision is tiny.
+
+        But tiny decisions repeated every day
+        become an entire lifestyle.
+
+      </p>
+
+
+      <!-- QUOTE -->
+
+      <section class="quote-section">
+
+        <div class="quote reveal">
+
+          THE DISTANCE BETWEEN
+
+          <span>
+            THINKING
+          </span>
+
+          AND
+
+          <span>
+            DOING
+          </span>
+
+          IS WHERE
+
+          <span>
+            LIVES CHANGE.
+          </span>
+
+        </div>
+
+      </section>
+
+
+      <div class="article-number">
+        03 / THE TRAP
+      </div>
+
+      <h2 class="reveal">
+
+        PREPARATION CAN
+        BECOME
+        <span>
+          PROCRASTINATION.
+        </span>
+
+      </h2>
+
+
+      <p class="reveal">
+
+        There is a sophisticated form of
+        procrastination that looks incredibly
+        productive.
+
+        More research.
+
+        More planning.
+
+        More tools.
+
+        More productivity videos.
+
+        More systems.
+
+      </p>
+
+
+      <p class="reveal">
+
+        It feels like progress because
+        your brain is receiving the reward
+        associated with progress.
+
+        But the output remains exactly
+        where it was.
+
+      </p>
+
+
+      <p class="reveal">
+
+        At some point the question has to
+        change from:
+
+        “What else do I need to know?”
+
+        to:
+
+        “What can I do right now?”
+
+      </p>
+
+
+      <div class="article-number">
+        04 / THE SWITCH
+      </div>
+
+      <h2 class="reveal">
+
+        SHRINK THE
+        <span>
+          FIRST STEP.
+        </span>
+
+      </h2>
+
+
+      <p class="reveal">
+
+        Huge goals create psychological
+        resistance.
+
+        “Build the company.”
+
+        “Write the book.”
+
+        “Get fit.”
+
+        “Learn the skill.”
+
+        These are identities disguised
+        as tasks.
+
+      </p>
+
+
+      <p class="reveal">
+
+        Replace them with something
+        almost embarrassingly small.
+
+        Open the document.
+
+        Write one sentence.
+
+        Put on the shoes.
+
+        Make the first call.
+
+        Start the timer.
+
+      </p>
+
+
+      <p class="reveal">
+
+        Action becomes easier when the
+        first action requires almost no
+        negotiation.
+
+      </p>
+
+
+      <!-- EXECUTION SYSTEM -->
+
+      <div class="execution reveal">
+
+        <div class="execution-label">
+          THE 10-MINUTE PROTOCOL
+        </div>
+
+        <h3>
+          DON'T FINISH IT.
+          <br>
+          JUST ENTER IT.
+        </h3>
+
+        <ul>
+
+          <li>
+            Remove every visible distraction.
+          </li>
+
+          <li>
+            Choose one concrete action.
+          </li>
+
+          <li>
+            Start a 10-minute timer.
+          </li>
+
+          <li>
+            Work until the timer ends.
+          </li>
+
+          <li>
+            Decide whether to continue.
+          </li>
+
+        </ul>
+
+      </div>
+
+
+      <div class="article-number">
+        05 / THE RULE
+      </div>
+
+      <h2 class="reveal">
+
+        ACTION FIRST.
+
+        <br>
+
+        <span>
+          MOTIVATION LATER.
+        </span>
+
+      </h2>
+
+
+      <p class="reveal">
+
+        Motivation is unreliable.
+
+        Action is not.
+
+        You don't need to feel ready
+        to begin.
+
+        Beginning is often what creates
+        the feeling of readiness.
+
+      </p>
+
+
+      <p class="reveal">
+
+        Momentum is not something you wait
+        for.
+
+        Momentum is something you manufacture.
+
+        One action.
+
+        Then another.
+
+        Then another.
+
+      </p>
+
+
+      <div class="article-number">
+        06 / FINAL TRANSMISSION
+      </div>
+
+      <h2 class="reveal">
+
+        CLOSE
+        <span>
+          THE GAP.
+        </span>
+
+      </h2>
+
+
+      <p class="reveal">
+
+        You will never know everything.
+
+        You will never feel completely ready.
+
+        There will always be another article,
+        another tool, another reason to wait.
+
+      </p>
+
+
+      <p class="reveal">
+
+        The advantage belongs to the person
+        who can turn understanding into
+        movement.
+
+      </p>
+
+
+      <p class="lead reveal">
+
+        Stop collecting permission.
+
+        Start creating evidence.
+
+      </p>
+
+
+    </article>
+
+  </div>
+
+</section>
+
+
+<!-- END -->
+
+<section class="end">
+
+  <div class="end-inner reveal">
+
+    <div class="end-label">
+      TRANSMISSION COMPLETE / 001
+    </div>
+
+    <h2>
+
+      KNOW.
+
+      <br>
+
+      <span>
+        MOVE.
+      </span>
+
+    </h2>
+
+
+    <a href="vault.html" class="next">
+
+      <span>
+        ← RETURN TO THE VAULT
+      </span>
+
+      <span>
+        ALL TRANSMISSIONS ↗
+      </span>
+
+    </a>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+  <div>
+    FOCUSPULSE®
+  </div>
+
+  <div>
+    CONTROL YOUR ATTENTION.
+  </div>
+
+</footer>
+
+
+<script>
+
+/* =========================
+   SCROLL PROGRESS
+========================= */
+
+const progress =
+  document.querySelector(".progress");
+
+window.addEventListener("scroll",()=>{
+
+  const top = window.scrollY;
+
+  const height =
+    document.documentElement.scrollHeight -
+    window.innerHeight;
+
+  const percent =
+    (top / height) * 100;
+
+  progress.style.width =
+    percent + "%";
+
+});
+
+
+/* =========================
+   REVEALS
+========================= */
+
+const observer =
+  new IntersectionObserver(
+    entries=>{
+
+      entries.forEach(entry=>{
+
+        if(entry.isIntersecting){
+
+          entry.target.classList.add("show");
+
+        }
+
+      });
+
+    },
+    {
+      threshold:.12
+    }
+  );
+
+document
+  .querySelectorAll(".reveal")
+  .forEach(el=>observer.observe(el));
+
+
+/* =========================
+   CURSOR
+========================= */
+
+const cursor =
+  document.querySelector(".cursor");
+
+document.addEventListener("mousemove",e=>{
+
+  cursor.style.left =
+    e.clientX + "px";
+
+  cursor.style.top =
+    e.clientY + "px";
+
+});
+
+
+document.querySelectorAll("a")
+.forEach(link=>{
+
+  link.addEventListener("mouseenter",()=>{
+    cursor.classList.add("active");
+  });
+
+  link.addEventListener("mouseleave",()=>{
+    cursor.classList.remove("active");
+  });
+
+});
+
+
+/* =========================
+   AMBIENT GLOW
+========================= */
+
+const glow =
+  document.querySelector(".glow");
+
+document.addEventListener("mousemove",e=>{
+
+  glow.animate(
+    {
+      left:e.clientX+"px",
+      top:e.clientY+"px"
+    },
+    {
+      duration:900,
+      fill:"forwards"
+    }
+  );
+
+});
+
+
+/* =========================
+   SUBTLE PARALLAX NUMBER
+========================= */
+
+const number =
+  document.querySelector(".hero-number");
+
+window.addEventListener("scroll",()=>{
+
+  const y =
+    window.scrollY * .12;
+
+  number.style.transform =
+    `translateY(${y}px)`;
+
+});
+
+</script>
+
+</body>
+</html>
