@@ -1,1 +1,1843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
+<meta name="description" content="FocusPulse — reclaim your attention. A digital publication about focus, systems and intentional living.">
+
+<title>FocusPulse® — Control Your Attention.</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root{
+  --bg:#050505;
+  --fg:#f5f5ef;
+  --muted:#777;
+  --dim:#3d3d3d;
+  --line:rgba(255,255,255,.1);
+  --lime:#d8ff3e;
+  --red:#ff453a;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:"Space Grotesk",sans-serif;
+  overflow-x:hidden;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+::selection{
+  background:var(--lime);
+  color:#000;
+}
+
+/* =========================
+   LOADER
+========================= */
+
+.loader{
+  position:fixed;
+  inset:0;
+  background:#050505;
+  z-index:10000;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  transition:
+    opacity .8s ease,
+    visibility .8s ease;
+}
+
+.loader.hide{
+  opacity:0;
+  visibility:hidden;
+}
+
+.loader-inner{
+  width:min(350px,80%);
+}
+
+.loader-top{
+  display:flex;
+  justify-content:space-between;
+
+  color:#555;
+
+  font-family:"DM Mono";
+  font-size:8px;
+  letter-spacing:2px;
+}
+
+.loader-bar{
+  height:2px;
+  background:#181818;
+
+  margin-top:20px;
+}
+
+.loader-fill{
+  height:100%;
+  width:0;
+  background:var(--lime);
+  transition:width 1.4s cubic-bezier(.16,1,.3,1);
+}
+
+.loader-number{
+  margin-top:12px;
+  text-align:right;
+
+  color:#555;
+
+  font-family:"DM Mono";
+  font-size:9px;
+}
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progress{
+  position:fixed;
+  top:0;
+  left:0;
+  width:0;
+  height:2px;
+
+  background:var(--lime);
+
+  z-index:9999;
+}
+
+/* =========================
+   NAV
+========================= */
+
+.nav{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+
+  width:min(1200px,calc(100% - 30px));
+  height:62px;
+
+  padding:0 9px 0 22px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  border:1px solid var(--line);
+  border-radius:100px;
+
+  background:rgba(5,5,5,.7);
+
+  backdrop-filter:blur(25px);
+
+  z-index:1000;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:-1.5px;
+}
+
+.logo span{
+  color:var(--lime);
+}
+
+.logo sup{
+  color:#555;
+  font-size:8px;
+}
+
+.nav-links{
+  display:flex;
+  gap:28px;
+
+  color:#666;
+  font-size:10px;
+}
+
+.nav-links a{
+  transition:.3s;
+}
+
+.nav-links a:hover{
+  color:#fff;
+}
+
+.nav-cta{
+  padding:12px 18px;
+
+  border-radius:100px;
+
+  background:var(--lime);
+  color:#000;
+
+  font-size:10px;
+  font-weight:700;
+
+  transition:.3s;
+}
+
+.nav-cta:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 35px rgba(216,255,62,.15);
+}
+
+/* =========================
+   BACKGROUND
+========================= */
+
+.grid{
+  position:fixed;
+  inset:0;
+
+  pointer-events:none;
+  z-index:-4;
+
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+
+  background-size:80px 80px;
+
+  mask-image:linear-gradient(#000,transparent 90%);
+}
+
+.glow{
+  position:absolute;
+
+  width:500px;
+  height:500px;
+
+  border-radius:50%;
+
+  background:rgba(216,255,62,.045);
+
+  filter:blur(100px);
+
+  pointer-events:none;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+  min-height:100vh;
+
+  padding:
+    180px 30px 100px;
+
+  position:relative;
+
+  display:flex;
+  align-items:center;
+
+  overflow:hidden;
+}
+
+.hero .glow{
+  top:15%;
+  right:-180px;
+}
+
+.container{
+  width:min(1250px,100%);
+  margin:auto;
+}
+
+.eyebrow{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  color:#555;
+
+  font-family:"DM Mono";
+  font-size:9px;
+
+  letter-spacing:2px;
+}
+
+.eyebrow::before{
+  content:"";
+
+  width:30px;
+  height:1px;
+
+  background:var(--lime);
+}
+
+.hero h1{
+  margin-top:42px;
+
+  font-size:clamp(80px,15vw,190px);
+
+  line-height:.7;
+
+  letter-spacing:-13px;
+
+  font-weight:500;
+}
+
+.hero h1 .outline{
+  color:transparent;
+
+  -webkit-text-stroke:1px rgba(255,255,255,.35);
+}
+
+.hero h1 .lime{
+  color:var(--lime);
+}
+
+.hero-bottom{
+  margin-top:70px;
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:80px;
+}
+
+.hero-copy{
+  max-width:530px;
+
+  color:#777;
+
+  font-size:15px;
+
+  line-height:1.9;
+}
+
+.hero-action{
+  display:flex;
+  justify-content:flex-end;
+  align-items:flex-end;
+}
+
+.primary{
+  display:inline-flex;
+  align-items:center;
+  gap:20px;
+
+  padding:17px 22px;
+
+  background:var(--lime);
+  color:#000;
+
+  border-radius:100px;
+
+  font-size:10px;
+  font-weight:700;
+
+  transition:.4s;
+}
+
+.primary:hover{
+  transform:translateY(-5px);
+
+  box-shadow:
+    0 25px 70px rgba(216,255,62,.16);
+}
+
+.primary span{
+  font-size:17px;
+}
+
+/* =========================
+   MARQUEE
+========================= */
+
+.marquee{
+  overflow:hidden;
+
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+
+  padding:18px 0;
+
+  color:#444;
+
+  font-family:"DM Mono";
+  font-size:9px;
+
+  letter-spacing:3px;
+
+  white-space:nowrap;
+}
+
+.marquee-track{
+  display:inline-block;
+
+  animation:marquee 25s linear infinite;
+}
+
+.marquee-track span{
+  margin:0 35px;
+}
+
+.marquee-track .active{
+  color:var(--lime);
+}
+
+@keyframes marquee{
+  from{
+    transform:translateX(0);
+  }
+
+  to{
+    transform:translateX(-50%);
+  }
+}
+
+/* =========================
+   INTRO
+========================= */
+
+.intro{
+  padding:
+    150px 30px;
+
+  border-bottom:1px solid var(--line);
+}
+
+.intro-grid{
+  display:grid;
+
+  grid-template-columns:1fr 1.5fr;
+
+  gap:100px;
+}
+
+.label{
+  color:#444;
+
+  font-family:"DM Mono";
+  font-size:9px;
+  letter-spacing:2px;
+}
+
+.intro h2{
+  max-width:850px;
+
+  font-size:clamp(48px,7vw,90px);
+
+  line-height:.9;
+
+  letter-spacing:-6px;
+
+  font-weight:500;
+}
+
+.intro h2 span{
+  color:var(--lime);
+}
+
+/* =========================
+   ARTICLES
+========================= */
+
+.vault{
+  padding:
+    130px 30px;
+
+  border-bottom:1px solid var(--line);
+}
+
+.section-top{
+  display:flex;
+
+  justify-content:space-between;
+  align-items:flex-end;
+
+  margin-bottom:60px;
+}
+
+.section-top h2{
+  margin-top:20px;
+
+  font-size:clamp(45px,6vw,75px);
+
+  line-height:.85;
+
+  letter-spacing:-5px;
+
+  font-weight:500;
+}
+
+.section-top a{
+  color:#555;
+
+  font-family:"DM Mono";
+  font-size:9px;
+
+  transition:.3s;
+}
+
+.section-top a:hover{
+  color:var(--lime);
+}
+
+.cards{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:14px;
+}
+
+.card{
+  min-height:500px;
+
+  padding:25px;
+
+  position:relative;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+
+  border:1px solid var(--line);
+
+  overflow:hidden;
+
+  background:
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(216,255,62,.05),
+      transparent 30%
+    );
+
+  transition:
+    transform .5s cubic-bezier(.16,1,.3,1),
+    border-color .5s;
+}
+
+.card:hover{
+  transform:translateY(-10px);
+  border-color:rgba(216,255,62,.35);
+}
+
+.card-number{
+  color:#444;
+
+  font-family:"DM Mono";
+  font-size:9px;
+}
+
+.card-tag{
+  color:var(--lime);
+
+  font-family:"DM Mono";
+  font-size:8px;
+
+  letter-spacing:2px;
+}
+
+.card h3{
+  margin-top:auto;
+
+  max-width:350px;
+
+  font-size:45px;
+
+  line-height:.88;
+
+  letter-spacing:-3px;
+
+  font-weight:500;
+}
+
+.card p{
+  margin-top:30px;
+
+  max-width:330px;
+
+  color:#666;
+
+  font-size:11px;
+
+  line-height:1.7;
+}
+
+.card-arrow{
+  position:absolute;
+
+  right:25px;
+  bottom:25px;
+
+  width:42px;
+  height:42px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:1px solid var(--line);
+  border-radius:50%;
+
+  color:#555;
+
+  transition:.4s;
+}
+
+.card:hover .card-arrow{
+  background:var(--lime);
+  color:#000;
+  border-color:var(--lime);
+}
+
+/* =========================
+   MANIFESTO
+========================= */
+
+.manifesto{
+  min-height:100vh;
+
+  padding:150px 30px;
+
+  display:flex;
+  align-items:center;
+
+  border-bottom:1px solid var(--line);
+
+  position:relative;
+  overflow:hidden;
+}
+
+.manifesto .glow{
+  left:-250px;
+  top:20%;
+}
+
+.manifesto-content{
+  position:relative;
+  z-index:2;
+}
+
+.manifesto h2{
+  max-width:1200px;
+
+  font-size:clamp(65px,10vw,130px);
+
+  line-height:.82;
+
+  letter-spacing:-8px;
+
+  font-weight:500;
+}
+
+.manifesto h2 span{
+  color:var(--lime);
+}
+
+.manifesto-meta{
+  margin-top:70px;
+
+  max-width:500px;
+
+  color:#666;
+
+  font-size:12px;
+
+  line-height:1.8;
+}
+
+/* =========================
+   PROTOCOL
+========================= */
+
+.protocol-section{
+  padding:140px 30px;
+
+  border-bottom:1px solid var(--line);
+}
+
+.protocol-grid{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:100px;
+
+  align-items:center;
+}
+
+.protocol-copy h2{
+  margin-top:25px;
+
+  font-size:clamp(50px,7vw,90px);
+
+  line-height:.85;
+
+  letter-spacing:-6px;
+
+  font-weight:500;
+}
+
+.protocol-copy h2 span{
+  color:var(--lime);
+}
+
+.protocol-copy p{
+  max-width:500px;
+
+  margin-top:40px;
+
+  color:#666;
+
+  font-size:14px;
+
+  line-height:1.9;
+}
+
+.protocol-box{
+  border:1px solid var(--line);
+
+  background:#080808;
+}
+
+.protocol-head{
+  padding:17px 20px;
+
+  display:flex;
+  justify-content:space-between;
+
+  border-bottom:1px solid var(--line);
+
+  color:#555;
+
+  font-family:"DM Mono";
+  font-size:8px;
+}
+
+.protocol-head span:last-child{
+  color:var(--lime);
+}
+
+.protocol-row{
+  padding:24px 20px;
+
+  display:grid;
+
+  grid-template-columns:40px 1fr auto;
+
+  gap:15px;
+
+  border-bottom:1px solid var(--line);
+
+  align-items:center;
+}
+
+.protocol-row:last-child{
+  border-bottom:0;
+}
+
+.protocol-num{
+  color:#444;
+
+  font-family:"DM Mono";
+  font-size:9px;
+}
+
+.protocol-name{
+  color:#aaa;
+
+  font-size:12px;
+}
+
+.check{
+  width:17px;
+  height:17px;
+
+  border:1px solid var(--lime);
+  border-radius:50%;
+
+  position:relative;
+}
+
+.check::after{
+  content:"";
+
+  position:absolute;
+
+  width:5px;
+  height:3px;
+
+  left:4px;
+  top:5px;
+
+  border-left:1px solid var(--lime);
+  border-bottom:1px solid var(--lime);
+
+  transform:rotate(-45deg);
+}
+
+/* =========================
+   CTA
+========================= */
+
+.cta{
+  min-height:85vh;
+
+  padding:120px 30px;
+
+  display:flex;
+  align-items:center;
+
+  text-align:center;
+
+  border-bottom:1px solid var(--line);
+}
+
+.cta-inner{
+  width:100%;
+}
+
+.cta .label{
+  display:block;
+}
+
+.cta h2{
+  margin:40px auto 0;
+
+  max-width:1100px;
+
+  font-size:clamp(65px,11vw,145px);
+
+  line-height:.78;
+
+  letter-spacing:-10px;
+
+  font-weight:500;
+}
+
+.cta h2 span{
+  color:var(--lime);
+}
+
+.cta p{
+  max-width:470px;
+
+  margin:50px auto 0;
+
+  color:#666;
+
+  font-size:12px;
+
+  line-height:1.8;
+}
+
+.cta .primary{
+  margin-top:45px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+  padding:30px;
+
+  display:flex;
+  justify-content:space-between;
+
+  color:#444;
+
+  font-family:"DM Mono";
+  font-size:9px;
+}
+
+/* =========================
+   REVEAL
+========================= */
+
+.reveal{
+  opacity:0;
+
+  transform:translateY(50px);
+
+  transition:
+    opacity 1s cubic-bezier(.16,1,.3,1),
+    transform 1s cubic-bezier(.16,1,.3,1);
+}
+
+.reveal.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:800px){
+
+  .nav-links,
+  .nav-cta{
+    display:none;
+  }
+
+  .hero{
+    padding:
+      150px 20px 90px;
+  }
+
+  .hero h1{
+    font-size:21vw;
+    letter-spacing:-7px;
+  }
+
+  .hero-bottom{
+    grid-template-columns:1fr;
+    gap:35px;
+  }
+
+  .hero-action{
+    justify-content:flex-start;
+  }
+
+  .intro{
+    padding-left:20px;
+    padding-right:20px;
+  }
+
+  .intro-grid{
+    grid-template-columns:1fr;
+    gap:45px;
+  }
+
+  .intro h2{
+    letter-spacing:-4px;
+  }
+
+  .vault{
+    padding-left:20px;
+    padding-right:20px;
+  }
+
+  .section-top{
+    display:block;
+  }
+
+  .section-top a{
+    display:block;
+    margin-top:25px;
+  }
+
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+  .card{
+    min-height:430px;
+  }
+
+  .manifesto{
+    padding-left:20px;
+    padding-right:20px;
+  }
+
+  .manifesto h2{
+    font-size:16vw;
+    letter-spacing:-5px;
+  }
+
+  .protocol-section{
+    padding-left:20px;
+    padding-right:20px;
+  }
+
+  .protocol-grid{
+    grid-template-columns:1fr;
+    gap:60px;
+  }
+
+  .protocol-copy h2{
+    letter-spacing:-4px;
+  }
+
+  .cta{
+    padding-left:20px;
+    padding-right:20px;
+  }
+
+  .cta h2{
+    font-size:16vw;
+    letter-spacing:-6px;
+  }
+
+  footer{
+    display:block;
+    line-height:2;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms!important;
+    transition-duration:.01ms!important;
+  }
+
+  .reveal{
+    opacity:1;
+    transform:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+
+<!-- LOADER -->
+
+<div class="loader">
+
+  <div class="loader-inner">
+
+    <div class="loader-top">
+
+      <span>
+        FOCUSPULSE®
+      </span>
+
+      <span>
+        INITIALIZING
+      </span>
+
+    </div>
+
+    <div class="loader-bar">
+
+      <div class="loader-fill"></div>
+
+    </div>
+
+    <div class="loader-number">
+      <span id="loadNumber">0</span>%
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="progress"></div>
+
+<div class="grid"></div>
+
+
+<!-- NAV -->
+
+<nav class="nav">
+
+  <a href="index.html" class="logo">
+    focus<span>pulse</span><sup>®</sup>
+  </a>
+
+  <div class="nav-links">
+
+    <a href="manifesto.html">
+      Manifesto
+    </a>
+
+    <a href="vault.html">
+      Vault
+    </a>
+
+    <a href="protocols.html">
+      Protocols
+    </a>
+
+  </div>
+
+  <a
+    href="focus.html"
+    class="nav-cta"
+  >
+    FOCUS MODE ↗
+  </a>
+
+</nav>
+
+
+<main>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+  <div class="glow"></div>
+
+  <div class="container">
+
+    <div class="eyebrow">
+      ATTENTION / SYSTEM / 001
+    </div>
+
+
+    <h1 class="reveal">
+
+      CONTROL
+
+      <br>
+
+      YOUR
+
+      <br>
+
+      <span class="outline">
+        ATTENTION.
+      </span>
+
+    </h1>
+
+
+    <div class="hero-bottom">
+
+      <p class="hero-copy reveal">
+
+        FocusPulse is a digital publication
+        for people who are tired of being
+        interrupted.
+
+        No productivity theatre.
+        No motivational noise.
+
+        Just better systems for your
+        most valuable resource:
+
+        <strong>attention.</strong>
+
+      </p>
+
+
+      <div class="hero-action reveal">
+
+        <a
+          href="manifesto.html"
+          class="primary"
+        >
+
+          READ THE MANIFESTO
+
+          <span>↗</span>
+
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- MARQUEE -->
+
+<div class="marquee">
+
+  <div class="marquee-track">
+
+    <span>FOCUS</span>
+    <span class="active">ATTENTION</span>
+    <span>DEPTH</span>
+    <span>DISCIPLINE</span>
+    <span>SILENCE</span>
+    <span>FOCUS</span>
+    <span class="active">ATTENTION</span>
+    <span>DEPTH</span>
+    <span>DISCIPLINE</span>
+    <span>SILENCE</span>
+
+    <span>FOCUS</span>
+    <span class="active">ATTENTION</span>
+    <span>DEPTH</span>
+    <span>DISCIPLINE</span>
+    <span>SILENCE</span>
+
+  </div>
+
+</div>
+
+
+<!-- INTRO -->
+
+<section class="intro">
+
+  <div class="container intro-grid">
+
+    <div>
+
+      <div class="label">
+        01 / THE PROBLEM
+      </div>
+
+    </div>
+
+
+    <h2 class="reveal">
+
+      Your attention is being
+      <span>
+        competed for
+      </span>
+
+      every second you're awake.
+
+    </h2>
+
+  </div>
+
+</section>
+
+
+<!-- VAULT -->
+
+<section class="vault">
+
+  <div class="container">
+
+    <div class="section-top">
+
+      <div>
+
+        <div class="label">
+          02 / THE VAULT
+        </div>
+
+        <h2>
+          READ THE
+          <br>
+          SIGNAL.
+        </h2>
+
+      </div>
+
+
+      <a href="vault.html">
+        VIEW ALL TRANSMISSIONS ↗
+      </a>
+
+    </div>
+
+
+    <div class="cards">
+
+
+      <!-- CARD 1 -->
+
+      <a
+        href="article-action-gap.html"
+        class="card reveal"
+      >
+
+        <div>
+
+          <div class="card-number">
+            001
+          </div>
+
+          <div class="card-tag">
+            FOCUS / 06 MIN
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <h3>
+            THE
+            <br>
+            ACTION
+            <br>
+            GAP.
+          </h3>
+
+          <p>
+            Why knowing what to do
+            isn't the same as doing it.
+          </p>
+
+        </div>
+
+
+        <div class="card-arrow">
+          ↗
+        </div>
+
+      </a>
+
+
+      <!-- CARD 2 -->
+
+      <a
+        href="article-digital-drug.html"
+        class="card reveal"
+      >
+
+        <div>
+
+          <div class="card-number">
+            002
+          </div>
+
+          <div class="card-tag">
+            DIGITAL / 08 MIN
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <h3>
+            THE
+            <br>
+            DIGITAL
+            <br>
+            DRUG.
+          </h3>
+
+          <p>
+            Novelty is addictive.
+            Your attention knows it.
+          </p>
+
+        </div>
+
+
+        <div class="card-arrow">
+          ↗
+        </div>
+
+      </a>
+
+
+      <!-- CARD 3 -->
+
+      <a
+        href="article-user-churn.html"
+        class="card reveal"
+      >
+
+        <div>
+
+          <div class="card-number">
+            003
+          </div>
+
+          <div class="card-tag">
+            SYSTEMS / 07 MIN
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <h3>
+            USER
+            <br>
+            CHURN.
+          </h3>
+
+          <p>
+            Stop fighting your environment.
+            Redesign it.
+          </p>
+
+        </div>
+
+
+        <div class="card-arrow">
+          ↗
+        </div>
+
+      </a>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- MANIFESTO -->
+
+<section class="manifesto">
+
+  <div class="glow"></div>
+
+  <div class="container manifesto-content">
+
+    <div class="label">
+      03 / THE BELIEF
+    </div>
+
+
+    <h2 class="reveal">
+
+      YOU DON'T NEED
+
+      <br>
+
+      MORE
+
+      <span>
+        MOTIVATION.
+      </span>
+
+      <br>
+
+      YOU NEED
+
+      <br>
+
+      LESS
+
+      <span>
+        NOISE.
+      </span>
+
+    </h2>
+
+
+    <p class="manifesto-meta reveal">
+
+      Focus is not a personality trait.
+
+      It is an environment,
+      a system and a series of
+      decisions made before
+      distraction arrives.
+
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- PROTOCOL -->
+
+<section class="protocol-section">
+
+  <div class="container protocol-grid">
+
+
+    <div class="protocol-copy">
+
+      <div class="label">
+        04 / THE PROTOCOL
+      </div>
+
+
+      <h2 class="reveal">
+
+        BUILD A
+
+        <br>
+
+        LIFE THAT
+
+        <br>
+
+        PROTECTS
+
+        <span>
+          FOCUS.
+        </span>
+
+      </h2>
+
+
+      <p class="reveal">
+
+        A practical operating system for
+        reducing digital noise, creating
+        deeper work sessions and making
+        attention intentional again.
+
+      </p>
+
+
+      <a
+        href="protocols.html"
+        class="primary"
+      >
+        EXPLORE PROTOCOLS
+        <span>↗</span>
+      </a>
+
+    </div>
+
+
+    <div class="protocol-box reveal">
+
+      <div class="protocol-head">
+
+        <span>
+          FOCUS PROTOCOL / 001
+        </span>
+
+        <span>
+          ACTIVE
+        </span>
+
+      </div>
+
+
+      <div class="protocol-row">
+
+        <div class="protocol-num">
+          01
+        </div>
+
+        <div class="protocol-name">
+          Remove unnecessary notifications
+        </div>
+
+        <div class="check"></div>
+
+      </div>
+
+
+      <div class="protocol-row">
+
+        <div class="protocol-num">
+          02
+        </div>
+
+        <div class="protocol-name">
+          Create a distraction-free workspace
+        </div>
+
+        <div class="check"></div>
+
+      </div>
+
+
+      <div class="protocol-row">
+
+        <div class="protocol-num">
+          03
+        </div>
+
+        <div class="protocol-name">
+          Work in single-task sessions
+        </div>
+
+        <div class="check"></div>
+
+      </div>
+
+
+      <div class="protocol-row">
+
+        <div class="protocol-num">
+          04
+        </div>
+
+        <div class="protocol-name">
+          Schedule deliberate digital breaks
+        </div>
+
+        <div class="check"></div>
+
+      </div>
+
+
+      <div class="protocol-row">
+
+        <div class="protocol-num">
+          05
+        </div>
+
+        <div class="protocol-name">
+          Protect the first hour of your day
+        </div>
+
+        <div class="check"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- CTA -->
+
+<section class="cta">
+
+  <div class="cta-inner">
+
+    <span class="label">
+      05 / BEGIN
+    </span>
+
+
+    <h2 class="reveal">
+
+      YOUR
+
+      <br>
+
+      ATTENTION
+
+      <br>
+
+      IS
+
+      <span>
+        YOURS.
+      </span>
+
+    </h2>
+
+
+    <p class="reveal">
+
+      Start with one focused session.
+
+      No account.
+      No noise.
+      No complicated system.
+
+    </p>
+
+
+    <a
+      href="focus.html"
+      class="primary reveal"
+    >
+      ENTER FOCUS MODE
+      <span>↗</span>
+    </a>
+
+  </div>
+
+</section>
+
+
+</main>
+
+
+<footer>
+
+  <div>
+    FOCUSPULSE® — 2026
+  </div>
+
+  <div>
+    CONTROL YOUR ATTENTION.
+  </div>
+
+</footer>
+
+
+<script>
+
+/* =========================
+   LOADER
+========================= */
+
+const loader =
+document.querySelector(".loader");
+
+const fill =
+document.querySelector(".loader-fill");
+
+const loadNumber =
+document.getElementById("loadNumber");
+
+let progressValue=0;
+
+const loaderTimer=setInterval(()=>{
+
+  progressValue+=4;
+
+  fill.style.width=
+    progressValue+"%";
+
+  loadNumber.textContent=
+    progressValue;
+
+  if(progressValue>=100){
+
+    clearInterval(loaderTimer);
+
+    setTimeout(()=>{
+
+      loader.classList.add("hide");
+
+    },350);
+
+  }
+
+},22);
+
+
+/* =========================
+   SCROLL PROGRESS
+========================= */
+
+const scrollProgress =
+document.querySelector(".progress");
+
+window.addEventListener("scroll",()=>{
+
+  const top=window.scrollY;
+
+  const height=
+    document.documentElement.scrollHeight-
+    window.innerHeight;
+
+  scrollProgress.style.width=
+    ((top/height)*100)+"%";
+
+});
+
+
+/* =========================
+   REVEAL
+========================= */
+
+const revealObserver=
+new IntersectionObserver(
+  entries=>{
+
+    entries.forEach(entry=>{
+
+      if(entry.isIntersecting){
+
+        entry.target.classList.add("show");
+
+      }
+
+    });
+
+  },
+  {
+    threshold:.12
+  }
+);
+
+document
+.querySelectorAll(".reveal")
+.forEach(el=>{
+  revealObserver.observe(el);
+});
+
+
+/* =========================
+   MOUSE GLOW
+========================= */
+
+const glow =
+document.querySelector(".hero .glow");
+
+window.addEventListener("mousemove",e=>{
+
+  const x =
+    (e.clientX/window.innerWidth)*100;
+
+  const y =
+    (e.clientY/window.innerHeight)*100;
+
+  glow.style.left=
+    `calc(${x}% - 250px)`;
+
+  glow.style.top=
+    `calc(${y}% - 250px)`;
+
+});
+
+
+/* =========================
+   CARD TILT
+========================= */
+
+document
+.querySelectorAll(".card")
+.forEach(card=>{
+
+  card.addEventListener(
+    "mousemove",
+    e=>{
+
+      const rect=
+        card.getBoundingClientRect();
+
+      const x=
+        e.clientX-rect.left;
+
+      const y=
+        e.clientY-rect.top;
+
+      const rotateY=
+        ((x/rect.width)-.5)*5;
+
+      const rotateX=
+        ((y/rect.height)-.5)*-5;
+
+      card.style.transform=
+        `perspective(900px)
+         rotateX(${rotateX}deg)
+         rotateY(${rotateY}deg)
+         translateY(-8px)`;
+
+    }
+  );
+
+  card.addEventListener(
+    "mouseleave",
+    ()=>{
+      card.style.transform="";
+    }
+  );
+
+});
+
+
+</script>
+
+</body>
+</html>
