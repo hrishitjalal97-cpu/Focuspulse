@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Focus Mode — FocusPulse®</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root{
+  --bg:#050505;
+  --fg:#f5f5ef;
+  --muted:#555;
+  --line:rgba(255,255,255,.1);
+  --lime:#d8ff3e;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html,body{
+  width:100%;
+  min-height:100%;
+}
+
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:"Space Grotesk",sans-serif;
+  overflow-x:hidden;
+}
+
+button,input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+::selection{
+  background:var(--lime);
+  color:#000;
+}
+
+/* BACKGROUND */
+
+.grid{
+  position:fixed;
+  inset:0;
+  z-index:-3;
+  pointer-events:none;
+
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+
+  background-size:80px 80px;
+}
+
+.ambient{
+  position:fixed;
+
+  width:550px;
+  height:550px;
+
+  border-radius:50%;
+
+  background:rgba(216,255,62,.035);
+
+  filter:blur(100px);
+
+  top:50%;
+  left:50%;
+
+  transform:translate(-50%,-50%);
+
+  transition:
+    width 1s ease,
+    height 1s ease,
+    background 1s ease;
+
+  pointer-events:none;
+  z-index:-2;
+}
+
+body.running .ambient{
+  width:750px;
+  height:750px;
+  background:rgba(216,255,62,.06);
+}
+
+/* NAV */
+
+.nav{
+  position:fixed;
+
+  top:20px;
+  left:50%;
+
+  transform:translateX(-50%);
+
+  width:min(1200px,calc(100% - 30px));
+
+  height:62px;
+
+  padding:0 9px 0 22px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  border:1px solid var(--line);
+  border-radius:100px;
+
+  background:rgba(5,5,5,.7);
+
+  backdrop-filter:blur(25px);
+
+  z-index:100;
+}
+
+.logo{
+  color:#fff;
+  text-decoration:none;
+
+  font-size:20px;
+  font-weight:700;
+
+  letter-spacing:-1.5px;
+}
+
+.logo span{
+  color:var(--lime);
+}
+
+.logo sup{
+  color:#555;
+  font-size:8px;
+}
+
+.nav-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.nav-link{
+  color:#555;
+
+  padding:11px 15px;
+
+  font-family:"DM Mono";
+  font-size:8px;
+
+  border:1px solid transparent;
+  border-radius:100px;
+
+  text-decoration:none;
+
+  transition:.3s;
+}
+
+.nav-link:hover{
+  color:#fff;
+  border-color:var(--line);
+}
+
+/* MAIN */
+
+main{
+  min-height:100vh;
+
+  padding:
+    150px 25px 70px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.focus-shell{
+  width:min(1100px,100%);
+}
+
+/* HEADER */
+
+.focus-header{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+
+  margin-bottom:35px;
+}
+
+.eyebrow{
+  color:#444;
+
+  font-family:"DM Mono";
+  font-size:9px;
+
+  letter-spacing:2px;
+}
+
+.focus-header h1{
+  margin-top:17px;
+
+  font-size:clamp(45px,7vw,85px);
+
+  line-height:.8;
+
+  letter-spacing:-6px;
+
+  font-weight:500;
+}
+
+.focus-header h1 span{
+  color:var(--lime);
+}
+
+.session-info{
+  text-align:right;
+
+  color:#444;
+
+  font-family:"DM Mono";
+  font-size:8px;
+
+  line-height:2;
+}
+
+/* SESSION NAME */
+
+.session-input{
+  width:100%;
+
+  margin-bottom:15px;
+
+  padding:18px 20px;
+
+  background:#090909;
+
+  border:1px solid var(--line);
+
+  outline:none;
+
+  color:#fff;
+
+  font-family:"DM Mono";
+  font-size:10px;
+
+  transition:.3s;
+}
+
+.session-input:focus{
+  border-color:rgba(216,255,62,.35);
+}
+
+.session-input::placeholder{
+  color:#444;
+}
+
+/* TIMER */
+
+.timer-panel{
+  position:relative;
+
+  min-height:560px;
+
+  border:1px solid var(--line);
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(216,255,62,.035),
+      transparent 45%
+    ),
+    #080808;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  overflow:hidden;
+}
+
+.timer-panel::before{
+  content:"";
+
+  position:absolute;
+  inset:15px;
+
+  border:1px solid rgba(255,255,255,.025);
+
+  pointer-events:none;
+}
+
+/* TIMER RING */
+
+.timer-ring{
+  width:min(430px,72vw);
+  aspect-ratio:1;
+
+  position:relative;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+}
+
+svg{
+  position:absolute;
+  inset:0;
+
+  width:100%;
+  height:100%;
+
+  transform:rotate(-90deg);
+}
+
+circle{
+  fill:none;
+
+  stroke-width:1;
+}
+
+.ring-bg{
+  stroke:rgba(255,255,255,.07);
+}
+
+.ring-progress{
+  stroke:var(--lime);
+
+  stroke-linecap:round;
+
+  stroke-dasharray:1000;
+
+  stroke-dashoffset:1000;
+
+  transition:
+    stroke-dashoffset .5s linear;
+}
+
+.timer-content{
+  position:relative;
+
+  text-align:center;
+}
+
+.time{
+  font-family:"DM Mono";
+
+  font-size:clamp(65px,11vw,125px);
+
+  line-height:.9;
+
+  letter-spacing:-8px;
+
+  font-weight:400;
+}
+
+.time span{
+  color:#555;
+}
+
+.phase{
+  margin-top:20px;
+
+  color:#555;
+
+  font-family:"DM Mono";
+
+  font-size:8px;
+
+  letter-spacing:3px;
+}
+
+/* CONTROLS */
+
+.controls{
+  margin-top:45px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:10px;
+}
+
+.control{
+  min-width:52px;
+  height:48px;
+
+  padding:0 18px;
+
+  border:1px solid var(--line);
+
+  background:#0b0b0b;
+
+  color:#777;
+
+  font-family:"DM Mono";
+
+  font-size:8px;
+
+  transition:.3s;
+}
+
+.control:hover{
+  color:#fff;
+  border-color:#333;
+}
+
+.control.primary{
+  min-width:150px;
+
+  border-color:var(--lime);
+
+  background:var(--lime);
+
+  color:#000;
+
+  font-weight:500;
+}
+
+.control.primary:hover{
+  box-shadow:
+    0 10px 35px rgba(216,255,62,.12);
+
+  transform:translateY(-2px);
+}
+
+/* PRESETS */
+
+.presets{
+  margin-top:15px;
+
+  display:flex;
+
+  justify-content:center;
+
+  gap:7px;
+}
+
+.preset{
+  padding:9px 12px;
+
+  border:1px solid var(--line);
+
+  background:transparent;
+
+  color:#444;
+
+  font-family:"DM Mono";
+
+  font-size:7px;
+
+  transition:.3s;
+}
+
+.preset:hover,
+.preset.active{
+  color:var(--lime);
+
+  border-color:
+    rgba(216,255,62,.35);
+}
+
+/* BOTTOM STATS */
+
+.bottom{
+  margin-top:15px;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:15px;
+}
+
+.stat{
+  padding:22px;
+
+  border:1px solid var(--line);
+
+  background:#080808;
+}
+
+.stat-label{
+  color:#444;
+
+  font-family:"DM Mono";
+
+  font-size:8px;
+}
+
+.stat-value{
+  margin-top:15px;
+
+  font-size:24px;
+
+  letter-spacing:-1px;
+}
+
+.stat-value span{
+  color:var(--lime);
+}
+
+/* COMPLETE */
+
+.complete{
+  position:fixed;
+
+  inset:0;
+
+  z-index:500;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  padding:20px;
+
+  background:rgba(0,0,0,.88);
+
+  backdrop-filter:blur(25px);
+
+  opacity:0;
+  visibility:hidden;
+
+  transition:.5s;
+}
+
+.complete.show{
+  opacity:1;
+  visibility:visible;
+}
+
+.complete-card{
+  width:min(600px,100%);
+
+  padding:60px 35px;
+
+  border:1px solid rgba(216,255,62,.3);
+
+  background:#080808;
+
+  text-align:center;
+
+  transform:translateY(30px);
+
+  transition:.6s;
+}
+
+.complete.show .complete-card{
+  transform:translateY(0);
+}
+
+.complete-mark{
+  color:var(--lime);
+
+  font-family:"DM Mono";
+
+  font-size:10px;
+
+  letter-spacing:3px;
+}
+
+.complete h2{
+  margin-top:25px;
+
+  font-size:clamp(50px,9vw,90px);
+
+  line-height:.8;
+
+  letter-spacing:-7px;
+
+  font-weight:500;
+}
+
+.complete p{
+  margin:30px auto 35px;
+
+  max-width:430px;
+
+  color:#666;
+
+  font-size:12px;
+
+  line-height:1.8;
+}
+
+.complete-close{
+  padding:14px 22px;
+
+  border:0;
+
+  background:var(--lime);
+
+  color:#000;
+
+  font-size:9px;
+
+  font-weight:700;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+  .nav{
+    height:56px;
+  }
+
+  .nav-right .nav-link{
+    display:none;
+  }
+
+  main{
+    padding:
+      125px 15px 35px;
+  }
+
+  .focus-header{
+    display:block;
+  }
+
+  .session-info{
+    text-align:left;
+    margin-top:20px;
+  }
+
+  .timer-panel{
+    min-height:500px;
+  }
+
+  .timer-ring{
+    width:82vw;
+  }
+
+  .controls{
+    margin-top:30px;
+  }
+
+  .control.primary{
+    min-width:120px;
+  }
+
+  .bottom{
+    grid-template-columns:1fr;
+  }
+
+  .time{
+    letter-spacing:-5px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="grid"></div>
+<div class="ambient"></div>
+
+
+<!-- NAV -->
+
+<nav class="nav">
+
+  <a href="index.html" class="logo">
+    focus<span>pulse</span><sup>®</sup>
+  </a>
+
+  <div class="nav-right">
+
+    <a href="protocols.html" class="nav-link">
+      PROTOCOLS
+    </a>
+
+    <a href="vault.html" class="nav-link">
+      VAULT
+    </a>
+
+  </div>
+
+</nav>
+
+
+<main>
+
+  <div class="focus-shell">
+
+
+    <!-- HEADER -->
+
+    <header class="focus-header">
+
+      <div>
+
+        <div class="eyebrow">
+          FOCUSPULSE / FOCUS MODE
+        </div>
+
+        <h1>
+          ENTER
+          <br>
+          <span>THE ZONE.</span>
+        </h1>
+
+      </div>
+
+
+      <div class="session-info">
+
+        SESSION
+        <span id="sessionNumber">001</span>
+
+        <br>
+
+        STATUS:
+        <span id="statusText">READY</span>
+
+      </div>
+
+    </header>
+
+
+    <!-- SESSION -->
+
+    <input
+      id="sessionName"
+      class="session-input"
+      type="text"
+      maxlength="80"
+      placeholder="WHAT ARE YOU FOCUSING ON?"
+    >
+
+
+    <!-- TIMER -->
+
+    <section class="timer-panel">
+
+      <div class="timer-ring">
+
+        <svg viewBox="0 0 360 360">
+
+          <circle
+            class="ring-bg"
+            cx="180"
+            cy="180"
+            r="159"
+          />
+
+          <circle
+            id="ringProgress"
+            class="ring-progress"
+            cx="180"
+            cy="180"
+            r="159"
+          />
+
+        </svg>
+
+
+        <div class="timer-content">
+
+          <div class="time" id="time">
+            25<span>:00</span>
+          </div>
+
+          <div class="phase" id="phase">
+            READY TO FOCUS
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- CONTROLS -->
+
+      <div class="controls">
+
+        <button
+          class="control"
+          id="resetBtn"
+        >
+          RESET
+        </button>
+
+        <button
+          class="control primary"
+          id="startBtn"
+        >
+          START SESSION
+        </button>
+
+        <button
+          class="control"
+          id="skipBtn"
+        >
+          SKIP
+        </button>
+
+      </div>
+
+
+      <!-- PRESETS -->
+
+      <div class="presets">
+
+        <button
+          class="preset active"
+          data-minutes="25"
+        >
+          25M
+        </button>
+
+        <button
+          class="preset"
+          data-minutes="45"
+        >
+          45M
+        </button>
+
+        <button
+          class="preset"
+          data-minutes="60"
+        >
+          60M
+        </button>
+
+        <button
+          class="preset"
+          data-minutes="90"
+        >
+          90M
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- STATS -->
+
+    <section class="bottom">
+
+      <div class="stat">
+
+        <div class="stat-label">
+          TODAY
+        </div>
+
+        <div class="stat-value">
+          <span id="todayMinutes">0</span>
+          MIN
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-label">
+          COMPLETED
+        </div>
+
+        <div class="stat-value">
+          <span id="completedSessions">0</span>
+          SESSIONS
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-label">
+          STREAK
+        </div>
+
+        <div class="stat-value">
+          <span id="streak">01</span>
+          DAYS
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+
+<!-- COMPLETE MODAL -->
+
+<div class="complete" id="complete">
+
+  <div class="complete-card">
+
+    <div class="complete-mark">
+      SESSION COMPLETE / 001
+    </div>
+
+    <h2>
+      YOU
+      <br>
+      <span style="color:var(--lime)">
+        SHOWED UP.
+      </span>
+    </h2>
+
+    <p id="completeText">
+      Another block of uninterrupted attention
+      is now in the bank. Protect the momentum.
+    </p>
+
+    <button
+      class="complete-close"
+      id="closeComplete"
+    >
+      CONTINUE
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const timeEl =
+  document.getElementById("time");
+
+const phaseEl =
+  document.getElementById("phase");
+
+const startBtn =
+  document.getElementById("startBtn");
+
+const resetBtn =
+  document.getElementById("resetBtn");
+
+const skipBtn =
+  document.getElementById("skipBtn");
+
+const ring =
+  document.getElementById("ringProgress");
+
+const statusText =
+  document.getElementById("statusText");
+
+const sessionName =
+  document.getElementById("sessionName");
+
+const complete =
+  document.getElementById("complete");
+
+const closeComplete =
+  document.getElementById("closeComplete");
+
+const todayMinutes =
+  document.getElementById("todayMinutes");
+
+const completedSessions =
+  document.getElementById("completedSessions");
+
+const streak =
+  document.getElementById("streak");
+
+const sessionNumber =
+  document.getElementById("sessionNumber");
+
+
+/* =========================
+   TIMER STATE
+========================= */
+
+let selectedMinutes = 25;
+
+let totalSeconds =
+  selectedMinutes * 60;
+
+let remainingSeconds =
+  totalSeconds;
+
+let timer = null;
+
+let running = false;
+
+
+/* SVG */
+
+const circumference =
+  2 * Math.PI * 159;
+
+ring.style.strokeDasharray =
+  circumference;
+
+ring.style.strokeDashoffset =
+  circumference;
+
+
+/* =========================
+   STORAGE
+========================= */
+
+function getNumber(key){
+
+  return Number(
+    localStorage.getItem(key) || 0
+  );
+
+}
+
+function setNumber(key,value){
+
+  localStorage.setItem(
+    key,
+    String(value)
+  );
+
+}
+
+
+/* =========================
+   DATE
+========================= */
+
+function todayKey(){
+
+  const date =
+    new Date();
+
+  return date
+    .toISOString()
+    .slice(0,10);
+
+}
+
+
+/* =========================
+   DISPLAY
+========================= */
+
+function updateDisplay(){
+
+  const minutes =
+    Math.floor(
+      remainingSeconds / 60
+    );
+
+  const seconds =
+    remainingSeconds % 60;
+
+  timeEl.innerHTML =
+    String(minutes).padStart(2,"0")
+    +
+    "<span>:</span>"
+    +
+    String(seconds).padStart(2,"0");
+
+
+  const progress =
+    1 -
+    remainingSeconds /
+    totalSeconds;
+
+  ring.style.strokeDashoffset =
+    circumference *
+    (1 - progress);
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+function start(){
+
+  if(running){
+    return;
+  }
+
+  running=true;
+
+  document.body.classList.add("running");
+
+  startBtn.textContent =
+    "PAUSE SESSION";
+
+  phaseEl.textContent =
+    "DEEP WORK IN PROGRESS";
+
+  statusText.textContent =
+    "ACTIVE";
+
+  timer =
+    setInterval(()=>{
+
+      if(remainingSeconds > 0){
+
+        remainingSeconds--;
+
+        updateDisplay();
+
+      }else{
+
+        completeSession();
+
+      }
+
+    },1000);
+
+}
+
+
+/* =========================
+   PAUSE
+========================= */
+
+function pause(){
+
+  running=false;
+
+  clearInterval(timer);
+
+  document.body.classList.remove(
+    "running"
+  );
+
+  startBtn.textContent =
+    "RESUME SESSION";
+
+  phaseEl.textContent =
+    "SESSION PAUSED";
+
+  statusText.textContent =
+    "PAUSED";
+
+}
+
+
+/* =========================
+   START / PAUSE
+========================= */
+
+startBtn.addEventListener(
+  "click",
+  ()=>{
+
+    if(running){
+
+      pause();
+
+    }else{
+
+      start();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+  "click",
+  resetTimer
+);
+
+function resetTimer(){
+
+  clearInterval(timer);
+
+  running=false;
+
+  document.body.classList.remove(
+    "running"
+  );
+
+  totalSeconds =
+    selectedMinutes * 60;
+
+  remainingSeconds =
+    totalSeconds;
+
+  startBtn.textContent =
+    "START SESSION";
+
+  phaseEl.textContent =
+    "READY TO FOCUS";
+
+  statusText.textContent =
+    "READY";
+
+  updateDisplay();
+
+}
+
+
+/* =========================
+   SKIP
+========================= */
+
+skipBtn.addEventListener(
+  "click",
+  ()=>{
+
+    if(
+      confirm(
+        "Skip this session?"
+      )
+    ){
+
+      resetTimer();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   PRESETS
+========================= */
+
+document
+.querySelectorAll(".preset")
+.forEach(button=>{
+
+  button.addEventListener(
+    "click",
+    ()=>{
+
+      document
+      .querySelectorAll(".preset")
+      .forEach(btn=>{
+        btn.classList.remove(
+          "active"
+        );
+      });
+
+      button.classList.add(
+        "active"
+      );
+
+      selectedMinutes =
+        Number(
+          button.dataset.minutes
+        );
+
+      resetTimer();
+
+    }
+  );
+
+});
+
+
+/* =========================
+   COMPLETE
+========================= */
+
+function completeSession(){
+
+  clearInterval(timer);
+
+  running=false;
+
+  document.body.classList.remove(
+    "running"
+  );
+
+  phaseEl.textContent =
+    "SESSION COMPLETE";
+
+  statusText.textContent =
+    "COMPLETE";
+
+  startBtn.textContent =
+    "START SESSION";
+
+
+  /* completed sessions */
+
+  const sessions =
+    getNumber(
+      "focuspulseSessions"
+    ) + 1;
+
+  setNumber(
+    "focuspulseSessions",
+    sessions
+  );
+
+
+  /* today's minutes */
+
+  const key =
+    "focuspulseMinutes_" +
+    todayKey();
+
+  const minutes =
+    getNumber(key) +
+    selectedMinutes;
+
+  setNumber(key,minutes);
+
+
+  updateStats();
+
+
+  complete.classList.add(
+    "show"
+  );
+
+}
+
+
+/* =========================
+   CLOSE MODAL
+========================= */
+
+closeComplete.addEventListener(
+  "click",
+  ()=>{
+
+    complete.classList.remove(
+      "show"
+    );
+
+    resetTimer();
+
+  }
+);
+
+
+/* =========================
+   STATS
+========================= */
+
+function updateStats(){
+
+  todayMinutes.textContent =
+    getNumber(
+      "focuspulseMinutes_" +
+      todayKey()
+    );
+
+  completedSessions.textContent =
+    getNumber(
+      "focuspulseSessions"
+    );
+
+}
+
+
+/* =========================
+   SESSION NAME
+========================= */
+
+sessionName.value =
+  localStorage.getItem(
+    "focuspulseSessionName"
+  ) || "";
+
+sessionName.addEventListener(
+  "input",
+  ()=>{
+
+    localStorage.setItem(
+      "focuspulseSessionName",
+      sessionName.value
+    );
+
+  }
+);
+
+
+/* =========================
+   SESSION NUMBER
+========================= */
+
+sessionNumber.textContent =
+  String(
+    getNumber(
+      "focuspulseSessions"
+    ) + 1
+  ).padStart(3,"0");
+
+
+/* =========================
+   KEYBOARD SHORTCUTS
+========================= */
+
+document.addEventListener(
+  "keydown",
+  event=>{
+
+    if(
+      event.target.tagName ===
+      "INPUT"
+    ){
+      return;
+    }
+
+    if(
+      event.code ===
+      "Space"
+    ){
+
+      event.preventDefault();
+
+      if(running){
+
+        pause();
+
+      }else{
+
+        start();
+
+      }
+
+    }
+
+    if(
+      event.key.toLowerCase()
+      === "r"
+    ){
+
+      resetTimer();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   INIT
+========================= */
+
+updateDisplay();
+updateStats();
+
+</script>
+
+</body>
+</html>
