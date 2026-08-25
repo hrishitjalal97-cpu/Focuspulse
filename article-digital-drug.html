@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>The Digital Drug — FocusPulse®</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root{
+  --bg:#050505;
+  --fg:#f5f5ef;
+  --muted:#727272;
+  --line:rgba(255,255,255,.1);
+  --lime:#d8ff3e;
+  --red:#ff3b30;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:"Space Grotesk",sans-serif;
+  overflow-x:hidden;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+::selection{
+  background:var(--lime);
+  color:#000;
+}
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progress{
+  position:fixed;
+  top:0;
+  left:0;
+  height:2px;
+  width:0;
+  background:var(--lime);
+  z-index:9999;
+}
+
+/* =========================
+   NAV
+========================= */
+
+.nav{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+
+  width:min(1200px,calc(100% - 30px));
+  height:62px;
+
+  padding:0 9px 0 22px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  border:1px solid var(--line);
+  border-radius:100px;
+
+  background:rgba(5,5,5,.72);
+  backdrop-filter:blur(25px);
+
+  z-index:1000;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:-1.5px;
+}
+
+.logo span{
+  color:var(--lime);
+}
+
+.logo sup{
+  color:#555;
+  font-size:8px;
+}
+
+.nav-links{
+  display:flex;
+  gap:27px;
+  color:#666;
+  font-size:10px;
+}
+
+.nav-links a{
+  transition:.3s;
+}
+
+.nav-links a:hover{
+  color:#fff;
+}
+
+.nav-cta{
+  padding:12px 18px;
+  border-radius:100px;
+
+  background:var(--lime);
+  color:#000;
+
+  font-size:10px;
+  font-weight:700;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.grid{
+  position:fixed;
+  inset:0;
+
+  pointer-events:none;
+  z-index:-4;
+
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+
+  background-size:80px 80px;
+
+  mask-image:
+    linear-gradient(#000,transparent 90%);
+}
+
+/* =========================
+   NOISE
+========================= */
+
+.noise{
+  position:fixed;
+  inset:-50%;
+
+  pointer-events:none;
+  z-index:9998;
+
+  opacity:.035;
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  animation:noise .15s steps(2) infinite;
+}
+
+@keyframes noise{
+  0%{transform:translate(0,0)}
+  25%{transform:translate(3%,2%)}
+  50%{transform:translate(-2%,4%)}
+  75%{transform:translate(4%,-3%)}
+  100%{transform:translate(-3%,-2%)}
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+  min-height:100vh;
+
+  padding:180px 30px 100px;
+
+  display:flex;
+  align-items:center;
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+.container{
+  width:min(1250px,100%);
+  margin:auto;
+}
+
+.meta{
+  color:#555;
+
+  font-family:"DM Mono";
+
+  font-size:9px;
+
+  letter-spacing:2px;
+}
+
+.hero h1{
+  margin-top:40px;
+
+  font-size:clamp(70px,14vw,185px);
+
+  line-height:.72;
+
+  letter-spacing:-12px;
+
+  font-weight:500;
+
+  position:relative;
+}
+
+.hero h1 .outline{
+  color:transparent;
+
+  -webkit-text-stroke:
+    1px rgba(255,255,255,.35);
+}
+
+.hero h1 .lime{
+  color:var(--lime);
+}
+
+.glitch{
+  position:relative;
+}
+
+.glitch::before,
+.glitch::after{
+  content:attr(data-text);
+
+  position:absolute;
+
+  left:0;
+  top:0;
+
+  width:100%;
+
+  overflow:hidden;
+
+  pointer-events:none;
+
+  opacity:.35;
+}
+
+.glitch::before{
+  color:#ff004c;
+  transform:translate(3px,0);
+  clip-path:inset(20% 0 65% 0);
+  animation:glitch1 2.4s infinite;
+}
+
+.glitch::after{
+  color:#00eaff;
+  transform:translate(-3px,0);
+  clip-path:inset(65% 0 15% 0);
+  animation:glitch2 1.8s infinite;
+}
+
+@keyframes glitch1{
+  0%,90%,100%{transform:translate(3px,0)}
+  92%{transform:translate(-8px,2px)}
+  94%{transform:translate(5px,-2px)}
+}
+
+@keyframes glitch2{
+  0%,86%,100%{transform:translate(-3px,0)}
+  88%{transform:translate(7px,-2px)}
+  91%{transform:translate(-5px,2px)}
+}
+
+.hero-copy{
+  max-width:570px;
+
+  margin-top:65px;
+
+  color:#777;
+
+  font-size:15px;
+
+  line-height:1.9;
+}
+
+/* =========================
+   INTERRUPT METER
+========================= */
+
+.meter-section{
+  padding:80px 30px 130px;
+
+  border-top:1px solid var(--line);
+}
+
+.meter{
+  margin-top:45px;
+
+  border:1px solid var(--line);
+
+  background:#080808;
+
+  padding:25px;
+
+  position:relative;
+}
+
+.meter-top{
+  display:flex;
+  justify-content:space-between;
+
+  color:#555;
+
+  font-family:"DM Mono";
+
+  font-size:9px;
+}
+
+.meter-track{
+  height:6px;
+
+  margin-top:30px;
+
+  background:#171717;
+
+  overflow:hidden;
+}
+
+.meter-fill{
+  width:0;
+
+  height:100%;
+
+  background:var(--red);
+
+  transition:width 2s cubic-bezier(.16,1,.3,1);
+}
+
+.meter-number{
+  margin-top:25px;
+
+  font-size:70px;
+
+  letter-spacing:-5px;
+}
+
+/* =========================
+   ARTICLE
+========================= */
+
+.article-wrap{
+  width:min(1250px,100%);
+  margin:auto;
+
+  padding:
+    100px 30px 160px;
+
+  display:grid;
+
+  grid-template-columns:220px minmax(0,720px) 1fr;
+
+  gap:70px;
+}
+
+.side{
+  position:sticky;
+  top:120px;
+  align-self:start;
+}
+
+.side-label{
+  color:#444;
+
+  font-family:"DM Mono";
+
+  font-size:8px;
+
+  letter-spacing:2px;
+}
+
+.side-line{
+  width:45px;
+  height:1px;
+
+  background:var(--lime);
+
+  margin:18px 0;
+}
+
+.side p{
+  color:#555;
+
+  font-family:"DM Mono";
+
+  font-size:9px;
+
+  line-height:1.9;
+}
+
+.article p{
+  color:#aaa;
+
+  font-size:17px;
+
+  line-height:2;
+
+  margin-bottom:30px;
+}
+
+.article .lead{
+  color:#eee;
+
+  font-size:26px;
+
+  line-height:1.5;
+
+  margin-bottom:65px;
+}
+
+.article h2{
+  margin-top:100px;
+  margin-bottom:28px;
+
+  font-size:clamp(42px,6vw,78px);
+
+  line-height:.88;
+
+  letter-spacing:-5px;
+
+  font-weight:500;
+}
+
+.article h2 span{
+  color:var(--lime);
+}
+
+.index{
+  margin-top:90px;
+  margin-bottom:20px;
+
+  color:var(--lime);
+
+  font-family:"DM Mono";
+
+  font-size:9px;
+
+  letter-spacing:2px;
+}
+
+/* =========================
+   FULLSCREEN STATEMENTS
+========================= */
+
+.statement{
+  min-height:85vh;
+
+  padding:100px 30px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+
+  border-top:1px solid var(--line);
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(216,255,62,.06),
+      transparent 42%
+    );
+}
+
+.statement h2{
+  max-width:1100px;
+
+  font-size:clamp(55px,9vw,125px);
+
+  line-height:.86;
+
+  letter-spacing:-8px;
+
+  font-weight:500;
+}
+
+.statement h2 span{
+  color:var(--lime);
+}
+
+/* =========================
+   DISTRACTION WALL
+========================= */
+
+.wall{
+  min-height:80vh;
+
+  padding:100px 30px;
+
+  border-top:1px solid var(--line);
+
+  overflow:hidden;
+}
+
+.wall-title{
+  color:#555;
+
+  font-family:"DM Mono";
+
+  font-size:9px;
+
+  letter-spacing:2px;
+
+  margin-bottom:35px;
+}
+
+.words{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.word{
+  border:1px solid #191919;
+
+  padding:12px 18px;
+
+  color:#303030;
+
+  font-family:"DM Mono";
+
+  font-size:11px;
+
+  transition:.4s;
+}
+
+.word:hover{
+  color:var(--lime);
+
+  border-color:var(--lime);
+
+  transform:translateY(-5px) rotate(-1deg);
+}
+
+/* =========================
+   FINAL
+========================= */
+
+.final{
+  min-height:100vh;
+
+  padding:120px 30px;
+
+  display:flex;
+  align-items:center;
+
+  border-top:1px solid var(--line);
+}
+
+.final h2{
+  margin-top:40px;
+
+  font-size:clamp(70px,13vw,175px);
+
+  line-height:.76;
+
+  letter-spacing:-11px;
+
+  font-weight:500;
+}
+
+.final h2 span{
+  color:var(--lime);
+}
+
+.final-link{
+  display:inline-flex;
+
+  margin-top:70px;
+
+  padding:17px 24px;
+
+  border-radius:100px;
+
+  background:var(--lime);
+
+  color:#000;
+
+  font-size:10px;
+
+  font-weight:700;
+
+  transition:.4s;
+}
+
+.final-link:hover{
+  transform:translateY(-5px);
+
+  box-shadow:
+    0 20px 70px rgba(216,255,62,.2);
+}
+
+/* =========================
+   REVEAL
+========================= */
+
+.reveal{
+  opacity:0;
+
+  transform:translateY(55px);
+
+  transition:
+    opacity 1s cubic-bezier(.16,1,.3,1),
+    transform 1s cubic-bezier(.16,1,.3,1);
+}
+
+.reveal.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+  padding:30px;
+
+  border-top:1px solid var(--line);
+
+  display:flex;
+
+  justify-content:space-between;
+
+  color:#444;
+
+  font-family:"DM Mono";
+
+  font-size:9px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:800px){
+
+  .nav-links,
+  .nav-cta{
+    display:none;
+  }
+
+  .hero{
+    padding:
+      150px 20px 80px;
+  }
+
+  .hero h1{
+    font-size:20vw;
+    letter-spacing:-7px;
+  }
+
+  .meter-section{
+    padding-left:20px;
+    padding-right:20px;
+  }
+
+  .article-wrap{
+    display:block;
+
+    padding:
+      90px 20px 120px;
+  }
+
+  .side{
+    position:relative;
+    top:auto;
+
+    margin-bottom:60px;
+  }
+
+  .article p{
+    font-size:15px;
+  }
+
+  .article .lead{
+    font-size:21px;
+  }
+
+  .article h2{
+    letter-spacing:-3px;
+  }
+
+  .statement{
+    padding-left:20px;
+    padding-right:20px;
+  }
+
+  .statement h2{
+    font-size:14vw;
+    letter-spacing:-5px;
+  }
+
+  .final{
+    padding:100px 20px;
+  }
+
+  .final h2{
+    font-size:20vw;
+    letter-spacing:-7px;
+  }
+
+  footer{
+    display:block;
+    line-height:2;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+
+  html{
+    scroll-behavior:auto;
+  }
+
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms!important;
+    transition-duration:.01ms!important;
+  }
+
+  .reveal{
+    opacity:1;
+    transform:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="progress"></div>
+<div class="grid"></div>
+<div class="noise"></div>
+
+
+<!-- NAV -->
+
+<nav class="nav">
+
+  <a href="index.html" class="logo">
+    focus<span>pulse</span><sup>®</sup>
+  </a>
+
+  <div class="nav-links">
+
+    <a href="index.html">Home</a>
+
+    <a href="manifesto.html">Manifesto</a>
+
+    <a href="vault.html">Vault</a>
+
+    <a href="protocols.html">Protocols</a>
+
+  </div>
+
+  <a href="focus.html" class="nav-cta">
+    FOCUS MODE ↗
+  </a>
+
+</nav>
+
+
+<main>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+  <div class="container">
+
+    <div class="meta">
+      TRANSMISSION 002 / FOCUS / 08 MIN READ
+    </div>
+
+    <h1 class="reveal">
+
+      THE
+
+      <br>
+
+      <span
+        class="outline glitch"
+        data-text="DIGITAL"
+      >
+        DIGITAL
+      </span>
+
+      <br>
+
+      <span class="lime">
+        DRUG.
+      </span>
+
+    </h1>
+
+    <p class="hero-copy reveal">
+
+      Your phone doesn't need to convince you
+      to use it.
+
+      It only needs to make putting it down
+      slightly uncomfortable.
+
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- METER -->
+
+<section class="meter-section">
+
+  <div class="container">
+
+    <div class="meta">
+      ATTENTION INTERRUPT INDEX
+    </div>
+
+    <div class="meter">
+
+      <div class="meter-top">
+
+        <span>
+          CURRENT SIGNAL
+        </span>
+
+        <span>
+          LIVE
+        </span>
+
+      </div>
+
+      <div class="meter-track">
+        <div class="meter-fill"></div>
+      </div>
+
+      <div class="meter-number">
+        <span id="meterNumber">0</span>%
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ARTICLE -->
+
+<section>
+
+  <div class="article-wrap">
+
+    <aside class="side">
+
+      <div class="side-label">
+        FOCUSPULSE / 002
+      </div>
+
+      <div class="side-line"></div>
+
+      <p>
+        CATEGORY<br>
+        FOCUS
+        <br><br>
+        READING TIME<br>
+        08 MIN
+        <br><br>
+        SIGNAL<br>
+        HIGH
+      </p>
+
+    </aside>
+
+
+    <article class="article">
+
+
+      <p class="lead reveal">
+
+        The most powerful drug in your pocket
+        isn't a chemical.
+
+        It's novelty.
+
+        A new message.
+        A new video.
+        A new notification.
+        A new piece of information.
+
+        Again.
+
+        Again.
+
+        Again.
+
+      </p>
+
+
+      <p class="reveal">
+
+        Digital products have become
+        extraordinarily good at creating
+        tiny moments of anticipation.
+
+        You don't open the application
+        because you have something important
+        to do.
+
+        You open it because there might be
+        something new.
+
+      </p>
+
+
+      <div class="index">
+        01 / THE LOOP
+      </div>
+
+      <h2 class="reveal">
+
+        CHECK.
+
+        <span>
+          SCROLL.
+        </span>
+
+        <br>
+
+        REFRESH.
+
+      </h2>
+
+
+      <p class="reveal">
+
+        The loop is simple.
+
+        Trigger curiosity.
+
+        Deliver novelty.
+
+        Remove the novelty.
+
+        Trigger curiosity again.
+
+      </p>
+
+
+      <p class="reveal">
+
+        The important part isn't the content.
+
+        The important part is the possibility
+        that the next piece of content might
+        be interesting.
+
+      </p>
+
+    </article>
+
+  </div>
+
+</section>
+
+
+<!-- BIG STATEMENT -->
+
+<section class="statement">
+
+  <h2 class="reveal">
+
+    YOU ARE NOT
+    <span>
+      BORED.
+    </span>
+
+    <br>
+
+    YOU ARE
+    <span>
+      OVERSTIMULATED.
+    </span>
+
+  </h2>
+
+</section>
+
+
+<!-- MORE ARTICLE -->
+
+<section>
+
+  <div class="article-wrap">
+
+    <div></div>
+
+    <article class="article">
+
+      <div class="index">
+        02 / THE COST
+      </div>
+
+      <h2 class="reveal">
+
+        NOVELTY
+        <br>
+
+        DESTROYS
+        <span>
+          DEPTH.
+        </span>
+
+      </h2>
+
+
+      <p class="reveal">
+
+        Deep work feels strange after
+        constant stimulation.
+
+        Reading ten pages feels slow.
+
+        Sitting with a difficult problem
+        feels uncomfortable.
+
+        Silence starts feeling like
+        something is missing.
+
+      </p>
+
+
+      <p class="reveal">
+
+        This is where many people make
+        the wrong conclusion.
+
+        They think they have lost
+        discipline.
+
+        Sometimes they have simply
+        trained their brain to expect
+        interruption.
+
+      </p>
+
+
+      <div class="index">
+        03 / THE RESET
+      </div>
+
+      <h2 class="reveal">
+
+        MAKE
+        <span>
+          BOREDOM
+        </span>
+
+        NORMAL
+        AGAIN.
+
+      </h2>
+
+
+      <p class="reveal">
+
+        You don't need to disappear
+        into a mountain.
+
+        Start smaller.
+
+        Eat without your phone.
+
+        Walk without headphones.
+
+        Wait without opening an app.
+
+        Work without checking messages
+        every four minutes.
+
+      </p>
+
+
+      <p class="reveal">
+
+        Give your attention enough silence
+        to become yours again.
+
+      </p>
+
+    </article>
+
+  </div>
+
+</section>
+
+
+<!-- DISTRACTION WALL -->
+
+<section class="wall">
+
+  <div class="container">
+
+    <div class="wall-title">
+      THINGS THAT WANT YOUR ATTENTION
+    </div>
+
+    <div class="words">
+
+      <div class="word">NOTIFICATIONS</div>
+      <div class="word">SHORT VIDEOS</div>
+      <div class="word">EMAIL</div>
+      <div class="word">NEWS</div>
+      <div class="word">MESSAGES</div>
+      <div class="word">TRENDS</div>
+      <div class="word">COMMENTS</div>
+      <div class="word">RECOMMENDATIONS</div>
+      <div class="word">ALGORITHMS</div>
+      <div class="word">UPDATES</div>
+      <div class="word">FOMO</div>
+      <div class="word">ENDLESS SCROLL</div>
+      <div class="word">GROUP CHATS</div>
+      <div class="word">BREAKING NEWS</div>
+      <div class="word">NEW CONTENT</div>
+      <div class="word">NEW MESSAGE</div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- FINAL -->
+
+<section class="final">
+
+  <div class="container">
+
+    <div class="meta">
+      TRANSMISSION COMPLETE / 002
+    </div>
+
+    <h2 class="reveal">
+
+      TAKE BACK
+
+      <br>
+
+      YOUR
+
+      <br>
+
+      <span>
+        ATTENTION.
+      </span>
+
+    </h2>
+
+    <a href="vault.html" class="final-link">
+      ← RETURN TO THE VAULT
+    </a>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+  <div>
+    FOCUSPULSE®
+  </div>
+
+  <div>
+    CONTROL YOUR ATTENTION.
+  </div>
+
+</footer>
+
+
+<script>
+
+/* =========================
+   SCROLL PROGRESS
+========================= */
+
+const progress =
+document.querySelector(".progress");
+
+window.addEventListener("scroll",()=>{
+
+  const top=window.scrollY;
+
+  const height=
+    document.documentElement.scrollHeight-
+    window.innerHeight;
+
+  progress.style.width=
+    ((top/height)*100)+"%";
+
+});
+
+
+/* =========================
+   REVEAL
+========================= */
+
+const observer=
+new IntersectionObserver(
+  entries=>{
+
+    entries.forEach(entry=>{
+
+      if(entry.isIntersecting){
+
+        entry.target.classList.add("show");
+
+      }
+
+    });
+
+  },
+  {
+    threshold:.12
+  }
+);
+
+document
+.querySelectorAll(".reveal")
+.forEach(el=>observer.observe(el));
+
+
+/* =========================
+   ATTENTION METER
+========================= */
+
+const meter=
+document.querySelector(".meter-fill");
+
+const number=
+document.getElementById("meterNumber");
+
+let started=false;
+
+const meterObserver=
+new IntersectionObserver(
+  entries=>{
+
+    if(
+      entries[0].isIntersecting &&
+      !started
+    ){
+
+      started=true;
+
+      meter.style.width="87%";
+
+      let value=0;
+
+      const interval=
+      setInterval(()=>{
+
+        value+=1;
+
+        number.textContent=value;
+
+        if(value>=87){
+
+          clearInterval(interval);
+
+        }
+
+      },18);
+
+    }
+
+  }
+);
+
+meterObserver.observe(
+  document.querySelector(".meter")
+);
+
+
+/* =========================
+   MOUSE GLITCH
+========================= */
+
+const glitch=
+document.querySelector(".glitch");
+
+document.addEventListener("mousemove",e=>{
+
+  const x=
+    (e.clientX/window.innerWidth-.5)*4;
+
+  const y=
+    (e.clientY/window.innerHeight-.5)*4;
+
+  glitch.style.transform=
+    `translate(${x}px,${y}px)`;
+
+});
+
+</script>
+
+</body>
+</html>
