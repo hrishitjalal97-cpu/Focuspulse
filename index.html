@@ -1,468 +1,92 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>FocusPulse — Control Your Attention</title>
-  <meta name="description" content="FocusPulse is a minimalist system for protecting attention and executing with intention.">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="favicon.png" type="image/png">
-</head>
-
-<body>
-
-  <div class="scroll-progress" id="scrollProgress"></div>
-
-  <!-- NAV -->
-  <header class="nav" id="navbar">
-
-    <a href="#top" class="brand">
-      <span class="brand-mark">◉</span>
-      focuspulse<sup>®</sup>
-    </a>
-
-    <nav class="nav-links">
-      <a href="#system">System</a>
-      <a href="#vault">Vault</a>
-      <a href="#protocols">Protocols</a>
-      <a href="#manifesto">Manifesto</a>
-    </nav>
-
-    <a href="#focus" class="nav-button">
-      Focus
-      <span>↗</span>
-    </a>
-
-  </header>
-
-
-  <main id="top">
-
-    <!-- HERO -->
-    <section class="hero">
-
-      <div class="hero-top reveal">
-        <span class="status-dot"></span>
-        SYSTEM ONLINE
-      </div>
-
-      <div class="hero-grid">
-
-        <div class="hero-copy">
-
-          <p class="eyebrow reveal">
-            ATTENTION / EXECUTION / CONTROL
-          </p>
-
-          <h1 class="hero-title reveal">
-            CONTROL
-            <span>YOUR</span>
-            <em>ATTENTION.</em>
-          </h1>
-
-          <p class="hero-description reveal">
-            FocusPulse is a simple operating system for people
-            who are tired of consuming and ready to execute.
-          </p>
-
-          <div class="hero-actions reveal">
-            <a href="#focus" class="primary-button">
-              Enter Focus Mode
-              <span>→</span>
-            </a>
-
-            <a href="#system" class="text-button">
-              Explore system
-              <span>↓</span>
-            </a>
-          </div>
-
-        </div>
-
-
-        <!-- PRODUCT PREVIEW -->
-        <div class="hero-product reveal">
-
-          <div class="product-top">
-            <span>FOCUS MODE</span>
-            <span class="live"><i></i> LIVE</span>
-          </div>
-
-          <div class="product-center">
-
-            <div class="timer-ring">
-              <div class="ring-inner">
-                <span class="timer-small">SESSION</span>
-                <strong id="heroTimer">25:00</strong>
-                <span class="timer-state">READY</span>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="product-bottom">
-            <span>DEEP WORK</span>
-            <button id="heroStart">START SESSION</button>
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="hero-scroll">
-        <span>SCROLL TO EXPLORE</span>
-        <span class="scroll-line"></span>
-      </div>
-
-    </section>
-
-
-    <!-- SYSTEM -->
-    <section class="section system-section" id="system">
-
-      <div class="section-head reveal">
-        <span class="section-number">01</span>
-
-        <div>
-          <p class="section-label">THE SYSTEM</p>
-
-          <h2>
-            Less noise.
-            <br>
-            <span>More execution.</span>
-          </h2>
-        </div>
-      </div>
-
-
-      <div class="bento-grid">
-
-        <article class="bento-card large reveal">
-          <span class="card-index">01 / FOCUS</span>
-
-          <div class="card-visual focus-visual">
-            <div class="visual-circle">
-              <span>25</span>
-              <small>MIN</small>
-            </div>
-          </div>
-
-          <div class="card-content">
-            <h3>Protect your attention.</h3>
-            <p>
-              Enter a distraction-free environment and give
-              one task your complete attention.
-            </p>
-          </div>
-        </article>
-
-
-        <article class="bento-card reveal">
-          <span class="card-index">02 / VAULT</span>
-
-          <div class="mini-lines">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-
-          <div class="card-content">
-            <h3>Build your knowledge.</h3>
-            <p>
-              Ideas worth remembering,
-              organized without the clutter.
-            </p>
-          </div>
-        </article>
-
-
-        <article class="bento-card reveal">
-          <span class="card-index">03 / PROTOCOLS</span>
-
-          <div class="protocol-visual">
-            <span>01</span>
-            <span>02</span>
-            <span>03</span>
-          </div>
-
-          <div class="card-content">
-            <h3>Turn intention into action.</h3>
-            <p>
-              Simple protocols designed to
-              eliminate the gap between knowing and doing.
-            </p>
-          </div>
-        </article>
-
-      </div>
-
-    </section>
-
-
-    <!-- FOCUS -->
-    <section class="focus-section" id="focus">
-
-      <div class="focus-header reveal">
-        <p class="section-label">FOCUS ENGINE</p>
-
-        <h2>
-          DO THE WORK.
-        </h2>
-
-        <p>
-          One task. One session. Nothing else.
-        </p>
-      </div>
-
-
-      <div class="focus-console reveal">
-
-        <div class="console-top">
-          <span>FOCUSPULSE / SESSION 001</span>
-          <span id="sessionStatus">READY</span>
-        </div>
-
-        <div class="console-main">
-
-          <div class="big-timer" id="timer">
-            25:00
-          </div>
-
-          <div class="timer-label">
-            DEEP WORK SESSION
-          </div>
-
-          <div class="timer-actions">
-            <button id="startBtn" class="timer-primary">
-              START
-            </button>
-
-            <button id="resetBtn" class="timer-secondary">
-              RESET
-            </button>
-          </div>
-
-        </div>
-
-        <div class="console-bottom">
-          <span>SESSIONS COMPLETED</span>
-          <strong id="sessionCount">0</strong>
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- VAULT -->
-    <section class="section vault-section" id="vault">
-
-      <div class="section-head reveal">
-
-        <span class="section-number">02</span>
-
-        <div>
-          <p class="section-label">KNOWLEDGE VAULT</p>
-
-          <h2>
-            Think less.
-            <br>
-            <span>Remember more.</span>
-          </h2>
-        </div>
-
-      </div>
-
-
-      <div class="vault-grid">
-
-        <a href="article-action-gap.html" class="vault-item reveal">
-          <span>01</span>
-
-          <div>
-            <small>EXECUTION</small>
-            <h3>The Action Gap</h3>
-            <p>
-              Why knowing what to do isn't enough.
-            </p>
-          </div>
-
-          <b>↗</b>
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="loader-inner">
+    <div class="loader-top">
+      <span>FOCUSPULSE</span>
+      <span>INITIALIZING</span>
+    </div>
+
+    <div class="loader-bar">
+      <div class="loader-fill" id="loaderFill"></div>
+    </div>
+
+    <div class="loader-number" id="loaderNumber">
+      0%
+    </div>
+  </div>
+</div>
+
+<!-- SCROLL PROGRESS -->
+<div class="progress" id="progress"></div>
+
+<!-- BACKGROUND -->
+<div class="grid"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#" class="logo">
+    focus<span>pulse</span><sup>®</sup>
+  </a>
+
+  <div class="nav-links">
+    <a href="#manifesto">Manifesto</a>
+    <a href="#vault">Vault</a>
+    <a href="#protocols">Protocols</a>
+  </div>
+
+  <a href="focus.html" class="nav-cta">
+    ENTER FOCUS →
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="glow"></div>
+
+  <div class="container">
+
+    <div class="eyebrow">
+      CONTROL YOUR ATTENTION
+    </div>
+
+    <h1>
+      FOCUS<br>
+      <span class="outline">IS A</span><br>
+      <span class="lime">CHOICE.</span>
+    </h1>
+
+    <div class="hero-bottom">
+
+      <p class="hero-copy">
+        The world is engineered to capture your attention.
+        FocusPulse exists to help you take it back.
+        Build systems. Remove noise. Execute.
+      </p>
+
+      <div class="hero-action">
+        <a href="#vault" class="primary">
+          EXPLORE THE SYSTEM
+          <span>↓</span>
         </a>
-
-
-        <a href="article-digital-drug.html" class="vault-item reveal">
-          <span>02</span>
-
-          <div>
-            <small>ATTENTION</small>
-            <h3>The Digital Drug</h3>
-            <p>
-              Your attention is being engineered.
-            </p>
-          </div>
-
-          <b>↗</b>
-        </a>
-
-
-        <a href="article-user-churn.html" class="vault-item reveal">
-          <span>03</span>
-
-          <div>
-            <small>SYSTEMS</small>
-            <h3>User Churn Protocol</h3>
-            <p>
-              Understand why people stop showing up.
-            </p>
-          </div>
-
-          <b>↗</b>
-        </a>
-
-      </div>
-
-    </section>
-
-
-    <!-- PROTOCOLS -->
-    <section class="section protocols-section" id="protocols">
-
-      <div class="section-head reveal">
-
-        <span class="section-number">03</span>
-
-        <div>
-          <p class="section-label">PROTOCOLS</p>
-
-          <h2>
-            Systems beat
-            <br>
-            <span>motivation.</span>
-          </h2>
-        </div>
-
-      </div>
-
-
-      <div class="protocol-list">
-
-        <div class="protocol-row reveal">
-          <span>01</span>
-
-          <div>
-            <h3>Remove the obvious.</h3>
-            <p>
-              Remove distractions before asking yourself
-              to resist them.
-            </p>
-          </div>
-
-          <b>→</b>
-        </div>
-
-
-        <div class="protocol-row reveal">
-          <span>02</span>
-
-          <div>
-            <h3>Define the next action.</h3>
-            <p>
-              Make the first step so obvious that
-              starting requires almost no thought.
-            </p>
-          </div>
-
-          <b>→</b>
-        </div>
-
-
-        <div class="protocol-row reveal">
-          <span>03</span>
-
-          <div>
-            <h3>Start before motivation.</h3>
-            <p>
-              Action creates momentum.
-              Motivation usually follows.
-            </p>
-          </div>
-
-          <b>→</b>
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- MANIFESTO -->
-    <section class="manifesto" id="manifesto">
-
-      <div class="manifesto-inner reveal">
-
-        <p class="section-label">THE MANIFESTO</p>
-
-        <h2>
-          Your attention
-          <span>is your life.</span>
-        </h2>
-
-        <p class="manifesto-copy">
-          Every notification asks for a piece of you.
-          Every distraction creates a small gap between
-          intention and action.
-          FocusPulse exists to close that gap.
-        </p>
-
-        <div class="manifesto-line"></div>
-
-        <span class="manifesto-final">
-          STOP THINKING. START EXECUTING.
-        </span>
-
-      </div>
-
-    </section>
-
-  </main>
-
-
-  <!-- FOOTER -->
-  <footer>
-
-    <div class="footer-inner">
-
-      <div>
-        <a href="#top" class="brand footer-brand">
-          <span class="brand-mark">◉</span>
-          focuspulse<sup>®</sup>
-        </a>
-
-        <p>
-          Empowering the 10% who execute.
-        </p>
-      </div>
-
-      <div class="footer-right">
-        <span>FOCUSPULSE © 2026</span>
-        <a href="#top">BACK TO TOP ↑</a>
       </div>
 
     </div>
+  </div>
+</section>
 
-  </footer>
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span>FOCUS</span>
+    <span>DISCIPLINE</span>
+    <span class="active">EXECUTION</span>
+    <span>ATTENTION</span>
+    <span>INTENTION</span>
 
-
-  <script src="script.js"></script>
-
-</body>
-</html>
+    <span>FOCUS</span>
+    <span>DISCIPLINE</span>
+    <span class="active">EXECUTION</span>
+    <span>ATTENTION</span>
+    <span>INTENTION</span>
+  </div>
+</div>
