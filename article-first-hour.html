@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050505">
+<meta name="description" content="The First Hour — FocusPulse Field Note">
+<title>The First Hour — FocusPulse</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+--bg:#050505;
+--panel:#0a0a0a;
+--panel2:#0e0e0e;
+--text:#f4f4ef;
+--muted:#777;
+--muted2:#4c4c4c;
+--line:rgba(255,255,255,.1);
+--lime:#d8ff3e;
+--max:1180px;
+--ease:cubic-bezier(.16,1,.3,1);
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html{
+scroll-behavior:smooth;
+background:var(--bg);
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+font-family:"DM Sans",sans-serif;
+overflow-x:hidden;
+}
+
+body:before{
+content:"";
+position:fixed;
+inset:0;
+pointer-events:none;
+z-index:-2;
+background-image:
+linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+background-size:80px 80px;
+mask-image:linear-gradient(to bottom,#000,transparent);
+}
+
+body:after{
+content:"";
+position:fixed;
+inset:0;
+pointer-events:none;
+z-index:9999;
+opacity:.035;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+a{
+color:inherit;
+text-decoration:none;
+}
+
+::selection{
+background:var(--lime);
+color:#000;
+}
+
+::-webkit-scrollbar{
+width:7px;
+}
+
+::-webkit-scrollbar-track{
+background:#050505;
+}
+
+::-webkit-scrollbar-thumb{
+background:#292929;
+border-radius:99px;
+}
+
+.container{
+width:min(var(--max),calc(100% - 40px));
+margin:auto;
+}
+
+.progress{
+position:fixed;
+top:0;
+left:0;
+height:2px;
+width:0;
+background:var(--lime);
+z-index:10000;
+box-shadow:0 0 20px rgba(216,255,62,.4);
+}
+
+.nav{
+position:fixed;
+top:18px;
+left:50%;
+transform:translateX(-50%);
+width:min(1120px,calc(100% - 28px));
+height:64px;
+padding:8px 9px 8px 22px;
+border:1px solid var(--line);
+border-radius:100px;
+background:rgba(5,5,5,.72);
+backdrop-filter:blur(25px);
+-webkit-backdrop-filter:blur(25px);
+z-index:1000;
+display:flex;
+align-items:center;
+justify-content:space-between;
+transition:.4s var(--ease);
+}
+
+.nav.scrolled{
+background:rgba(5,5,5,.92);
+border-color:rgba(255,255,255,.16);
+}
+
+.logo{
+font-family:"Space Grotesk";
+font-size:21px;
+font-weight:700;
+letter-spacing:-1.5px;
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.logo span span{
+color:var(--lime);
+}
+
+.logo sup{
+color:#555;
+font-size:8px;
+}
+
+.logo-mark{
+width:22px;
+height:22px;
+border:2px solid #eee;
+border-radius:50%;
+position:relative;
+}
+
+.logo-mark:before{
+content:"";
+position:absolute;
+width:6px;
+height:6px;
+border-radius:50%;
+background:var(--lime);
+left:6px;
+top:6px;
+}
+
+.nav-links{
+display:flex;
+gap:28px;
+color:#777;
+font-size:11px;
+}
+
+.nav-links a{
+transition:.3s;
+}
+
+.nav-links a:hover{
+color:#fff;
+}
+
+.nav-cta{
+padding:12px 18px;
+background:var(--lime);
+color:#000;
+border-radius:100px;
+font-size:11px;
+font-weight:700;
+transition:.35s var(--ease);
+}
+
+.nav-cta:hover{
+transform:translateY(-3px);
+box-shadow:0 15px 50px rgba(216,255,62,.18);
+}
+
+.hero{
+padding:190px 0 100px;
+min-height:88vh;
+display:flex;
+align-items:center;
+}
+
+.hero-inner{
+width:100%;
+}
+
+.eyebrow{
+display:inline-flex;
+align-items:center;
+gap:9px;
+padding:8px 13px;
+border:1px solid var(--line);
+border-radius:100px;
+color:#777;
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
+}
+
+.dot{
+width:6px;
+height:6px;
+border-radius:50%;
+background:var(--lime);
+box-shadow:0 0 15px var(--lime);
+}
+
+.hero h1{
+font-family:"Space Grotesk";
+font-size:clamp(65px,11vw,145px);
+line-height:.82;
+letter-spacing:-9px;
+font-weight:500;
+max-width:1050px;
+margin-top:38px;
+}
+
+.outline{
+color:transparent;
+-webkit-text-stroke:1px rgba(255,255,255,.4);
+}
+
+.lime{
+color:var(--lime);
+}
+
+.meta{
+display:flex;
+align-items:flex-end;
+justify-content:space-between;
+gap:50px;
+margin-top:55px;
+}
+
+.intro{
+max-width:580px;
+color:#777;
+font-size:14px;
+line-height:1.9;
+}
+
+.article-meta{
+display:flex;
+gap:28px;
+color:#555;
+font-size:9px;
+letter-spacing:1.5px;
+text-transform:uppercase;
+white-space:nowrap;
+}
+
+.article-layout{
+display:grid;
+grid-template-columns:minmax(0,760px) 220px;
+gap:100px;
+align-items:start;
+}
+
+.article-body{
+font-size:16px;
+line-height:1.95;
+color:#999;
+}
+
+.article-body p{
+margin-bottom:28px;
+}
+
+.article-body h2{
+font-family:"Space Grotesk";
+font-size:38px;
+line-height:.95;
+letter-spacing:-2px;
+font-weight:500;
+color:#f4f4ef;
+margin:90px 0 25px;
+}
+
+.article-body h3{
+font-family:"Space Grotesk";
+font-size:25px;
+letter-spacing:-1px;
+color:#f4f4ef;
+margin:55px 0 18px;
+}
+
+.article-body strong{
+color:#eee;
+font-weight:600;
+}
+
+.article-body em{
+color:var(--lime);
+font-style:normal;
+}
+
+.quote{
+margin:80px 0;
+padding:35px 0 35px 28px;
+border-left:2px solid var(--lime);
+font-family:"Space Grotesk";
+font-size:34px;
+line-height:1.08;
+letter-spacing:-1.5px;
+color:#eee;
+}
+
+.highlight{
+margin:55px 0;
+padding:30px;
+border:1px solid var(--line);
+border-radius:24px;
+background:radial-gradient(circle at 20% 0%,rgba(216,255,62,.07),transparent 40%),#090909;
+}
+
+.highlight-label{
+font-size:9px;
+color:var(--lime);
+letter-spacing:2px;
+text-transform:uppercase;
+margin-bottom:15px;
+}
+
+.highlight p{
+margin:0;
+color:#aaa;
+}
+
+.sidebar{
+position:sticky;
+top:110px;
+}
+
+.side-label{
+font-size:9px;
+color:#555;
+letter-spacing:2px;
+text-transform:uppercase;
+margin-bottom:18px;
+}
+
+.side-line{
+height:1px;
+background:var(--line);
+margin-bottom:18px;
+}
+
+.side-link{
+display:block;
+font-size:11px;
+color:#666;
+padding:9px 0;
+transition:.3s;
+}
+
+.side-link:hover{
+color:var(--lime);
+padding-left:5px;
+}
+
+.progress-card{
+margin-top:35px;
+padding:22px;
+border:1px solid var(--line);
+border-radius:20px;
+background:#090909;
+}
+
+.progress-card span{
+display:block;
+font-size:9px;
+color:#555;
+letter-spacing:1.5px;
+text-transform:uppercase;
+}
+
+.progress-card strong{
+display:block;
+font-family:"Space Grotesk";
+font-size:28px;
+font-weight:500;
+margin-top:7px;
+}
+
+.reading-line{
+height:2px;
+background:#1c1c1c;
+margin-top:15px;
+overflow:hidden;
+}
+
+.reading-line span{
+display:block;
+height:100%;
+width:0;
+background:var(--lime);
+}
+
+.bottom-nav{
+margin-top:140px;
+padding:35px 0;
+border-top:1px solid var(--line);
+border-bottom:1px solid var(--line);
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.bottom-card{
+padding:25px;
+border:1px solid var(--line);
+border-radius:24px;
+background:#090909;
+transition:.45s var(--ease);
+}
+
+.bottom-card:hover{
+transform:translateY(-6px);
+border-color:rgba(216,255,62,.25);
+}
+
+.bottom-label{
+font-size:9px;
+letter-spacing:2px;
+color:#555;
+text-transform:uppercase;
+}
+
+.bottom-title{
+font-family:"Space Grotesk";
+font-size:24px;
+line-height:1;
+letter-spacing:-1px;
+margin-top:18px;
+}
+
+.bottom-arrow{
+color:var(--lime);
+margin-top:25px;
+font-size:11px;
+}
+
+footer{
+padding:55px 0;
+}
+
+.footer-inner{
+display:flex;
+justify-content:space-between;
+gap:30px;
+}
+
+.footer-copy{
+font-size:10px;
+color:#444;
+}
+
+.footer-links{
+display:flex;
+gap:25px;
+font-size:10px;
+color:#555;
+}
+
+.footer-links a:hover{
+color:#fff;
+}
+
+.reveal{
+opacity:0;
+transform:translateY(30px);
+transition:opacity .9s var(--ease),transform .9s var(--ease);
+}
+
+.reveal.visible{
+opacity:1;
+transform:none;
+}
+
+@media(max-width:850px){
+
+.nav-links{
+display:none;
+}
+
+.hero{
+padding-top:150px;
+}
+
+.hero h1{
+letter-spacing:-6px;
+}
+
+.meta{
+display:block;
+}
+
+.article-meta{
+margin-top:30px;
+}
+
+.article-layout{
+grid-template-columns:1fr;
+}
+
+.sidebar{
+display:none;
+}
+
+}
+
+@media(max-width:600px){
+
+.container{
+width:calc(100% - 28px);
+}
+
+.nav{
+top:10px;
+height:58px;
+padding-left:16px;
+}
+
+.nav-cta{
+display:none;
+}
+
+.hero{
+padding-top:135px;
+padding-bottom:70px;
+}
+
+.hero h1{
+font-size:62px;
+letter-spacing:-5px;
+}
+
+.intro{
+font-size:13px;
+}
+
+.article-body{
+font-size:15px;
+}
+
+.article-body h2{
+font-size:32px;
+}
+
+.quote{
+font-size:27px;
+margin:60px 0;
+}
+
+.bottom-nav{
+grid-template-columns:1fr;
+}
+
+.footer-inner{
+display:block;
+}
+
+.footer-links{
+margin-top:25px;
+flex-wrap:wrap;
+}
+
+}
+
+@media(prefers-reduced-motion:reduce){
+
+*{
+scroll-behavior:auto!important;
+transition:none!important;
+animation:none!important;
+}
+
+.reveal{
+opacity:1;
+transform:none;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="progress" id="progress"></div>
+
+<header class="nav" id="nav">
+
+<a href="index.html" class="logo">
+
+<span class="logo-mark"></span>
+
+<span>
+focus<span>pulse</span><sup>®</sup>
+</span>
+
+</a>
+
+<nav class="nav-links">
+
+<a href="index.html">Home</a>
+<a href="manifesto.html">Manifesto</a>
+<a href="vault.html">Vault</a>
+<a href="protocols.html">Protocols</a>
+<a href="focus.html">Focus</a>
+
+</nav>
+
+<a href="focus.html" class="nav-cta">
+ENTER FOCUS →
+</a>
+
+</header>
+
+
+<main>
+
+<section class="hero">
+
+<div class="container hero-inner">
+
+<div class="eyebrow reveal">
+<span class="dot"></span>
+FIELD NOTE / 04
+</div>
+
+<h1 class="reveal">
+THE<br>
+<span class="outline">FIRST</span><br>
+<span class="lime">HOUR.</span>
+</h1>
+
+<div class="meta reveal">
+
+<p class="intro">
+The first hour of your day is more important than most people realise.
+Before the world gets access to your attention, you have a short window
+where your mind is still yours.
+</p>
+
+<div class="article-meta">
+<span>FOCUS</span>
+<span>8 MIN READ</span>
+<span>2026</span>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="section">
+
+<div class="container">
+
+<div class="article-layout">
+
+<article class="article-body">
+
+<p class="reveal">
+Most people don't start their day.
+They <strong>react to it.</strong>
+</p>
+
+<p class="reveal">
+The alarm goes off. A notification appears. Someone has sent a message.
+A feed refreshes. A headline demands attention. One small check becomes
+ten minutes, ten minutes becomes thirty, and suddenly the day has already
+started without you.
+</p>
+
+<p class="reveal">
+The problem isn't the phone.
+The problem is that your first decision of the day is often
+<strong>letting somebody else decide what deserves your attention.</strong>
+</p>
+
+
+<h2 class="reveal">
+YOUR FIRST HOUR<br>
+SETS THE DEFAULT.
+</h2>
+
+<p class="reveal">
+Think of attention like a blank surface.
+Whatever touches it first leaves an impression.
+</p>
+
+<p class="reveal">
+If the first thing you consume is noise, your brain starts looking for
+more noise. If the first thing you do is respond, your brain learns to
+wait for something external to tell it what comes next.
+</p>
+
+<p class="reveal">
+But if the first thing you do is deliberate, something changes.
+You begin the day from a position of <em>agency</em>.
+</p>
+
+
+<div class="quote reveal">
+"You don't need to win the whole day.<br>
+You need to win the first decision."
+</div>
+
+
+<h2 class="reveal">
+THE PHONE<br>
+IS NOT THE ENEMY.
+</h2>
+
+<p class="reveal">
+This isn't another article telling you to throw your phone away.
+That's too easy.
+</p>
+
+<p class="reveal">
+The real skill is learning to use technology without allowing it to
+choose your priorities.
+</p>
+
+<p class="reveal">
+Your phone can be a camera, a notebook, a calendar, a communication
+device, a map, a library or a powerful work tool.
+</p>
+
+<p class="reveal">
+But the moment you open it without knowing why, the environment begins
+making decisions for you.
+</p>
+
+
+<div class="highlight reveal">
+
+<div class="highlight-label">
+THE RULE
+</div>
+
+<p>
+Before opening a screen, know what you are opening it <strong>for.</strong>
+If you cannot answer that in one sentence, wait.
+</p>
+
+</div>
+
+
+<h2 class="reveal">
+DESIGN A<br>
+<strong>FIRST HOUR.</strong>
+</h2>
+
+<p class="reveal">
+You don't need a complicated morning routine.
+You need a sequence that protects your attention.
+</p>
+
+<h3 class="reveal">
+01 — WAKE UP WITHOUT INPUT
+</h3>
+
+<p class="reveal">
+Give yourself a few minutes before consuming information.
+No news. No social media. No random messages.
+Let your own thoughts arrive first.
+</p>
+
+<h3 class="reveal">
+02 — MOVE
+</h3>
+
+<p class="reveal">
+Walk. Stretch. Exercise. Make your body participate in the beginning of
+the day instead of immediately putting your brain into consumption mode.
+</p>
+
+<h3 class="reveal">
+03 — WRITE THE ONE THING
+</h3>
+
+<p class="reveal">
+Ask yourself:
+<strong>"If I only complete one meaningful thing today, what should it be?"</strong>
+</p>
+
+<p class="reveal">
+Not ten goals.
+Not a twenty-item productivity system.
+One meaningful outcome.
+</p>
+
+<h3 class="reveal">
+04 — START BEFORE CONSUMING
+</h3>
+
+<p class="reveal">
+This is the important part.
+Before watching, scrolling or browsing, create something.
+Write the paragraph.
+Solve the problem.
+Study the chapter.
+Build the feature.
+Make the call.
+</p>
+
+<p class="reveal">
+Give yourself evidence that you are capable of acting before you spend
+the day consuming other people's output.
+</p>
+
+
+<h2 class="reveal">
+THE FIRST HOUR<br>
+IS A <span class="lime">VOTE.</span>
+</h2>
+
+<p class="reveal">
+Every morning you cast a vote for the person you are becoming.
+</p>
+
+<p class="reveal">
+When you repeatedly choose distraction first, you reinforce a distracted
+identity.
+When you repeatedly choose deliberate action first, you reinforce an
+identity built around execution.
+</p>
+
+<p class="reveal">
+One morning doesn't change your life.
+But a hundred mornings with the same first decision can.
+</p>
+
+
+<div class="quote reveal">
+"Protect the first hour.<br>
+The rest of the day becomes easier."
+</div>
+
+
+<h2 class="reveal">
+TOMORROW MORNING.
+</h2>
+
+<p class="reveal">
+Don't download another productivity app.
+Don't create another complicated routine.
+Don't watch another video about discipline.
+</p>
+
+<p class="reveal">
+Tomorrow, wake up.
+Keep the phone away.
+Drink some water.
+Move your body.
+Write down one important thing.
+Then work on it before the world gets a vote.
+</p>
+
+<p class="reveal">
+That's it.
+</p>
+
+<p class="reveal">
+The goal isn't to make your morning perfect.
+The goal is to make your first decision <em>intentional.</em>
+</p>
+
+
+<div class="highlight reveal">
+
+<div class="highlight-label">
+FOCUSPULSE PRINCIPLE
+</div>
+
+<p>
+<strong>Don't start your day by asking what the world wants from you.</strong>
+Start by deciding what deserves your attention.
+</p>
+
+</div>
+
+
+<div class="bottom-nav reveal">
+
+<a href="article-action-gap.html" class="bottom-card">
+
+<div class="bottom-label">
+← PREVIOUS
+</div>
+
+<div class="bottom-title">
+The Action Gap
+</div>
+
+<div class="bottom-arrow">
+READ ARTICLE →
+</div>
+
+</a>
+
+
+<a href="article-digital-drug.html" class="bottom-card">
+
+<div class="bottom-label">
+NEXT →
+</div>
+
+<div class="bottom-title">
+The Digital Drug
+</div>
+
+<div class="bottom-arrow">
+READ ARTICLE →
+</div>
+
+</a>
+
+</div>
+
+</article>
+
+
+<aside class="sidebar">
+
+<div class="side-label">
+ARTICLE
+</div>
+
+<div class="side-line"></div>
+
+<a class="side-link" href="#top">
+The First Hour
+</a>
+
+<a class="side-link" href="#top">
+Attention
+</a>
+
+<a class="side-link" href="#top">
+Digital Noise
+</a>
+
+<a class="side-link" href="#top">
+The First Decision
+</a>
+
+<div class="progress-card">
+
+<span>READING</span>
+
+<strong id="readingPercent">
+0%
+</strong>
+
+<div class="reading-line">
+<span id="readingLine"></span>
+</div>
+
+</div>
+
+</aside>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+<div class="container footer-inner">
+
+<div class="footer-copy">
+© <span id="year"></span> FocusPulse — Empowering the 10% who execute.
+</div>
+
+<div class="footer-links">
+
+<a href="index.html">Home</a>
+<a href="vault.html">Vault</a>
+<a href="protocols.html">Protocols</a>
+<a href="focus.html">Focus</a>
+
+</div>
+
+</div>
+
+</footer>
+
+
+<script>
+
+"use strict";
+
+
+/* ================================
+SCROLL PROGRESS
+================================ */
+
+const progress =
+document.getElementById("progress");
+
+const readingLine =
+document.getElementById("readingLine");
+
+const readingPercent =
+document.getElementById("readingPercent");
+
+function updateProgress(){
+
+const scrollTop =
+window.scrollY;
+
+const documentHeight =
+document.documentElement.scrollHeight -
+window.innerHeight;
+
+const percent =
+documentHeight > 0
+? (scrollTop / documentHeight) * 100
+: 0;
+
+progress.style.width =
+percent + "%";
+
+readingLine.style.width =
+percent + "%";
+
+readingPercent.textContent =
+Math.round(percent) + "%";
+
+}
+
+window.addEventListener(
+"scroll",
+updateProgress,
+{passive:true}
+);
+
+updateProgress();
+
+
+/* ================================
+HEADER
+================================ */
+
+const nav =
+document.getElementById("nav");
+
+function updateHeader(){
+
+if(window.scrollY > 25){
+
+nav.classList.add("scrolled");
+
+}else{
+
+nav.classList.remove("scrolled");
+
+}
+
+}
+
+window.addEventListener(
+"scroll",
+updateHeader,
+{passive:true}
+);
+
+updateHeader();
+
+
+/* ================================
+REVEAL
+================================ */
+
+const revealItems =
+document.querySelectorAll(".reveal");
+
+const reducedMotion =
+window.matchMedia(
+"(prefers-reduced-motion: reduce)"
+).matches;
+
+
+if(
+"IntersectionObserver" in window &&
+!reducedMotion
+){
+
+const observer =
+new IntersectionObserver(
+(entries, observer) => {
+
+entries.forEach(entry => {
+
+if(!entry.isIntersecting)
+return;
+
+entry.target.classList.add(
+"visible"
+);
+
+observer.unobserve(
+entry.target
+);
+
+});
+
+},
+{
+threshold:.12,
+rootMargin:
+"0px 0px -50px 0px"
+}
+);
+
+revealItems.forEach(
+item => observer.observe(item)
+);
+
+}else{
+
+revealItems.forEach(
+item => item.classList.add("visible")
+);
+
+}
+
+
+/* ================================
+YEAR
+================================ */
+
+document.getElementById("year")
+.textContent =
+new Date().getFullYear();
+
+
+/* ================================
+KEYBOARD
+================================ */
+
+document.addEventListener(
+"keydown",
+event => {
+
+if(event.key === "Escape"){
+
+document.activeElement?.blur();
+
+}
+
+});
+
+
+/* ================================
+EXTERNAL LINK SAFETY
+================================ */
+
+document
+.querySelectorAll('a[href^="http"]')
+.forEach(link => {
+
+if(
+link.hostname !==
+window.location.hostname
+){
+
+link.target = "_blank";
+
+link.rel =
+"noopener noreferrer";
+
+}
+
+});
+
+
+/* ================================
+IMAGE PERFORMANCE
+================================ */
+
+document
+.querySelectorAll("img")
+.forEach(image => {
+
+if(!image.hasAttribute("loading")){
+
+image.setAttribute(
+"loading",
+"lazy"
+);
+
+}
+
+});
+
+
+</script>
+
+</body>
+</html>
