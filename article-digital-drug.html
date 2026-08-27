@@ -3,1189 +3,1393 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#050505">
+<meta name="description" content="The Digital Drug — FocusPulse. Take back your attention.">
 
 <title>The Digital Drug — FocusPulse®</title>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+<style>
 :root{
-  --bg:#050505;
-  --fg:#f5f5ef;
-  --muted:#727272;
-  --line:rgba(255,255,255,.1);
-  --lime:#d8ff3e;
-  --red:#ff3b30;
+--bg:#050505;
+--panel:#090909;
+--text:#f4f4ef;
+--muted:#777;
+--line:rgba(255,255,255,.10);
+--lime:#d8ff3e;
+--ease:cubic-bezier(.16,1,.3,1);
 }
 
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
 html{
-  scroll-behavior:smooth;
+scroll-behavior:smooth;
+background:var(--bg);
 }
 
 body{
-  background:var(--bg);
-  color:var(--fg);
-  font-family:"Space Grotesk",sans-serif;
-  overflow-x:hidden;
+background:var(--bg);
+color:var(--text);
+font-family:"DM Sans",sans-serif;
+overflow-x:hidden;
+}
+
+body:before{
+content:"";
+position:fixed;
+inset:0;
+z-index:-2;
+pointer-events:none;
+background-image:
+linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+background-size:80px 80px;
+mask-image:linear-gradient(to bottom,black,transparent);
+}
+
+body:after{
+content:"";
+position:fixed;
+inset:0;
+z-index:9999;
+pointer-events:none;
+opacity:.035;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 a{
-  color:inherit;
-  text-decoration:none;
+color:inherit;
+text-decoration:none;
 }
 
 ::selection{
-  background:var(--lime);
-  color:#000;
+background:var(--lime);
+color:#000;
 }
 
-/* =========================
-   PROGRESS
-========================= */
+::-webkit-scrollbar{
+width:7px;
+}
+
+::-webkit-scrollbar-track{
+background:#050505;
+}
+
+::-webkit-scrollbar-thumb{
+background:#292929;
+border-radius:50px;
+}
+
+/* PROGRESS */
 
 .progress{
-  position:fixed;
-  top:0;
-  left:0;
-  height:2px;
-  width:0;
-  background:var(--lime);
-  z-index:9999;
+position:fixed;
+top:0;
+left:0;
+width:0;
+height:2px;
+z-index:10000;
+background:var(--lime);
+box-shadow:0 0 18px rgba(216,255,62,.5);
 }
 
-/* =========================
-   NAV
-========================= */
+/* NAV */
 
 .nav{
-  position:fixed;
-  top:20px;
-  left:50%;
-  transform:translateX(-50%);
+position:fixed;
+top:18px;
+left:50%;
+transform:translateX(-50%);
+z-index:1000;
+width:min(1120px,calc(100% - 28px));
+height:64px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:8px 9px 8px 22px;
+border:1px solid var(--line);
+border-radius:100px;
+background:rgba(5,5,5,.72);
+backdrop-filter:blur(25px);
+-webkit-backdrop-filter:blur(25px);
+transition:.4s var(--ease);
+}
 
-  width:min(1200px,calc(100% - 30px));
-  height:62px;
-
-  padding:0 9px 0 22px;
-
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-
-  border:1px solid var(--line);
-  border-radius:100px;
-
-  background:rgba(5,5,5,.72);
-  backdrop-filter:blur(25px);
-
-  z-index:1000;
+.nav.scrolled{
+background:rgba(5,5,5,.94);
+border-color:rgba(255,255,255,.16);
+box-shadow:0 20px 80px rgba(0,0,0,.35);
 }
 
 .logo{
-  font-size:20px;
-  font-weight:700;
-  letter-spacing:-1.5px;
+display:flex;
+align-items:center;
+gap:8px;
+font-family:"Space Grotesk";
+font-size:21px;
+font-weight:700;
+letter-spacing:-1.5px;
 }
 
-.logo span{
-  color:var(--lime);
+.logo-mark{
+width:22px;
+height:22px;
+border:2px solid #eee;
+border-radius:50%;
+position:relative;
+}
+
+.logo-mark:before{
+content:"";
+position:absolute;
+width:6px;
+height:6px;
+left:6px;
+top:6px;
+border-radius:50%;
+background:var(--lime);
+box-shadow:0 0 12px var(--lime);
+}
+
+.logo-text span{
+color:var(--lime);
 }
 
 .logo sup{
-  color:#555;
-  font-size:8px;
+color:#555;
+font-size:8px;
 }
 
 .nav-links{
-  display:flex;
-  gap:27px;
-  color:#666;
-  font-size:10px;
+display:flex;
+gap:28px;
+color:#777;
+font-size:11px;
 }
 
 .nav-links a{
-  transition:.3s;
+transition:.3s ease;
 }
 
 .nav-links a:hover{
-  color:#fff;
+color:#fff;
 }
 
 .nav-cta{
-  padding:12px 18px;
-  border-radius:100px;
-
-  background:var(--lime);
-  color:#000;
-
-  font-size:10px;
-  font-weight:700;
+padding:12px 18px;
+background:var(--lime);
+color:#000;
+border-radius:100px;
+font-size:11px;
+font-weight:700;
+transition:.35s var(--ease);
 }
 
-/* =========================
-   GRID
-========================= */
-
-.grid{
-  position:fixed;
-  inset:0;
-
-  pointer-events:none;
-  z-index:-4;
-
-  background-image:
-    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
-
-  background-size:80px 80px;
-
-  mask-image:
-    linear-gradient(#000,transparent 90%);
+.nav-cta:hover{
+transform:translateY(-3px);
+box-shadow:0 15px 50px rgba(216,255,62,.2);
 }
 
-/* =========================
-   NOISE
-========================= */
-
-.noise{
-  position:fixed;
-  inset:-50%;
-
-  pointer-events:none;
-  z-index:9998;
-
-  opacity:.035;
-
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-
-  animation:noise .15s steps(2) infinite;
-}
-
-@keyframes noise{
-  0%{transform:translate(0,0)}
-  25%{transform:translate(3%,2%)}
-  50%{transform:translate(-2%,4%)}
-  75%{transform:translate(4%,-3%)}
-  100%{transform:translate(-3%,-2%)}
-}
-
-/* =========================
-   HERO
-========================= */
-
-.hero{
-  min-height:100vh;
-
-  padding:180px 30px 100px;
-
-  display:flex;
-  align-items:center;
-
-  position:relative;
-
-  overflow:hidden;
-}
+/* CONTAINER */
 
 .container{
-  width:min(1250px,100%);
-  margin:auto;
+width:min(1180px,calc(100% - 40px));
+margin:auto;
 }
 
-.meta{
-  color:#555;
+/* HERO */
 
-  font-family:"DM Mono";
+.hero{
+min-height:88vh;
+padding:190px 0 100px;
+display:flex;
+align-items:center;
+}
 
-  font-size:9px;
+.eyebrow{
+display:inline-flex;
+align-items:center;
+gap:9px;
+padding:8px 13px;
+border:1px solid var(--line);
+border-radius:100px;
+color:#777;
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
+}
 
-  letter-spacing:2px;
+.dot{
+width:6px;
+height:6px;
+border-radius:50%;
+background:var(--lime);
+box-shadow:0 0 15px var(--lime);
 }
 
 .hero h1{
-  margin-top:40px;
-
-  font-size:clamp(70px,14vw,185px);
-
-  line-height:.72;
-
-  letter-spacing:-12px;
-
-  font-weight:500;
-
-  position:relative;
+margin-top:38px;
+max-width:1100px;
+font-family:"Space Grotesk";
+font-size:clamp(72px,12vw,155px);
+line-height:.80;
+letter-spacing:-10px;
+font-weight:500;
 }
 
-.hero h1 .outline{
-  color:transparent;
-
-  -webkit-text-stroke:
-    1px rgba(255,255,255,.35);
+.outline{
+color:transparent;
+-webkit-text-stroke:1px rgba(255,255,255,.42);
 }
 
-.hero h1 .lime{
-  color:var(--lime);
+.lime{
+color:var(--lime);
 }
 
-.glitch{
-  position:relative;
+.hero-bottom{
+margin-top:55px;
+display:flex;
+align-items:flex-end;
+justify-content:space-between;
+gap:50px;
 }
 
-.glitch::before,
-.glitch::after{
-  content:attr(data-text);
-
-  position:absolute;
-
-  left:0;
-  top:0;
-
-  width:100%;
-
-  overflow:hidden;
-
-  pointer-events:none;
-
-  opacity:.35;
+.intro{
+max-width:590px;
+color:var(--muted);
+font-size:14px;
+line-height:1.9;
 }
 
-.glitch::before{
-  color:#ff004c;
-  transform:translate(3px,0);
-  clip-path:inset(20% 0 65% 0);
-  animation:glitch1 2.4s infinite;
+.meta{
+display:flex;
+gap:28px;
+white-space:nowrap;
+color:#555;
+font-size:9px;
+letter-spacing:1.6px;
+text-transform:uppercase;
 }
 
-.glitch::after{
-  color:#00eaff;
-  transform:translate(-3px,0);
-  clip-path:inset(65% 0 15% 0);
-  animation:glitch2 1.8s infinite;
+/* ARTICLE */
+
+.article-section{
+padding:70px 0 130px;
 }
 
-@keyframes glitch1{
-  0%,90%,100%{transform:translate(3px,0)}
-  92%{transform:translate(-8px,2px)}
-  94%{transform:translate(5px,-2px)}
+.article-layout{
+display:grid;
+grid-template-columns:minmax(0,760px) 220px;
+gap:100px;
+align-items:start;
 }
 
-@keyframes glitch2{
-  0%,86%,100%{transform:translate(-3px,0)}
-  88%{transform:translate(7px,-2px)}
-  91%{transform:translate(-5px,2px)}
+.article-body{
+color:#999;
+font-size:16px;
+line-height:1.95;
 }
 
-.hero-copy{
-  max-width:570px;
-
-  margin-top:65px;
-
-  color:#777;
-
-  font-size:15px;
-
-  line-height:1.9;
+.article-body p{
+margin-bottom:28px;
 }
 
-/* =========================
-   INTERRUPT METER
-========================= */
-
-.meter-section{
-  padding:80px 30px 130px;
-
-  border-top:1px solid var(--line);
+.article-body strong{
+color:#eee;
+font-weight:600;
 }
 
-.meter{
-  margin-top:45px;
-
-  border:1px solid var(--line);
-
-  background:#080808;
-
-  padding:25px;
-
-  position:relative;
+.article-body em{
+color:var(--lime);
+font-style:normal;
 }
 
-.meter-top{
-  display:flex;
-  justify-content:space-between;
+/* OPENING */
 
-  color:#555;
-
-  font-family:"DM Mono";
-
-  font-size:9px;
+.opening{
+margin:45px 0 75px;
+padding:35px;
+border:1px solid var(--line);
+border-radius:28px;
+background:
+radial-gradient(circle at 0% 0%,rgba(216,255,62,.08),transparent 40%),
+var(--panel);
 }
 
-.meter-track{
-  height:6px;
-
-  margin-top:30px;
-
-  background:#171717;
-
-  overflow:hidden;
+.opening-label{
+margin-bottom:15px;
+color:var(--lime);
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
 }
 
-.meter-fill{
-  width:0;
-
-  height:100%;
-
-  background:var(--red);
-
-  transition:width 2s cubic-bezier(.16,1,.3,1);
+.opening p{
+margin:0;
+color:#ddd;
+font-family:"Space Grotesk";
+font-size:24px;
+line-height:1.15;
+letter-spacing:-1px;
 }
 
-.meter-number{
-  margin-top:25px;
+/* SECTION */
 
-  font-size:70px;
-
-  letter-spacing:-5px;
+.section-marker{
+display:flex;
+align-items:center;
+gap:15px;
+margin-top:95px;
+margin-bottom:18px;
+color:var(--lime);
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
 }
 
-/* =========================
-   ARTICLE
-========================= */
-
-.article-wrap{
-  width:min(1250px,100%);
-  margin:auto;
-
-  padding:
-    100px 30px 160px;
-
-  display:grid;
-
-  grid-template-columns:220px minmax(0,720px) 1fr;
-
-  gap:70px;
+.section-marker:after{
+content:"";
+width:55px;
+height:1px;
+background:rgba(216,255,62,.35);
 }
 
-.side{
-  position:sticky;
-  top:120px;
-  align-self:start;
+.article-body h2{
+margin:0 0 27px;
+color:#f4f4ef;
+font-family:"Space Grotesk";
+font-size:clamp(38px,5vw,65px);
+line-height:.88;
+letter-spacing:-4px;
+font-weight:500;
 }
 
-.side-label{
-  color:#444;
+/* QUOTE */
 
-  font-family:"DM Mono";
-
-  font-size:8px;
-
-  letter-spacing:2px;
+.quote{
+margin:75px 0;
+padding:30px 0 30px 28px;
+border-left:2px solid var(--lime);
+color:#eee;
+font-family:"Space Grotesk";
+font-size:clamp(27px,4vw,39px);
+line-height:1.05;
+letter-spacing:-1.5px;
 }
 
-.side-line{
-  width:45px;
-  height:1px;
+/* SIGNAL CARD */
 
-  background:var(--lime);
-
-  margin:18px 0;
+.signal-card{
+margin:55px 0 70px;
+padding:30px;
+border:1px solid var(--line);
+border-radius:28px;
+background:#090909;
 }
 
-.side p{
-  color:#555;
-
-  font-family:"DM Mono";
-
-  font-size:9px;
-
-  line-height:1.9;
+.signal-title{
+color:#555;
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
+margin-bottom:25px;
 }
 
-.article p{
-  color:#aaa;
-
-  font-size:17px;
-
-  line-height:2;
-
-  margin-bottom:30px;
+.signal-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
 }
 
-.article .lead{
-  color:#eee;
-
-  font-size:26px;
-
-  line-height:1.5;
-
-  margin-bottom:65px;
+.signal{
+padding:18px;
+border:1px solid var(--line);
+border-radius:16px;
+color:#aaa;
+font-size:11px;
+transition:.35s var(--ease);
 }
 
-.article h2{
-  margin-top:100px;
-  margin-bottom:28px;
-
-  font-size:clamp(42px,6vw,78px);
-
-  line-height:.88;
-
-  letter-spacing:-5px;
-
-  font-weight:500;
+.signal:hover{
+transform:translateY(-4px);
+border-color:rgba(216,255,62,.25);
+color:#fff;
 }
 
-.article h2 span{
-  color:var(--lime);
+.signal span{
+display:block;
+color:var(--lime);
+font-size:8px;
+letter-spacing:1px;
+margin-bottom:8px;
 }
 
-.index{
-  margin-top:90px;
-  margin-bottom:20px;
+/* ATTENTION INDEX */
 
-  color:var(--lime);
-
-  font-family:"DM Mono";
-
-  font-size:9px;
-
-  letter-spacing:2px;
+.index-card{
+margin:60px 0;
+padding:32px;
+border:1px solid var(--line);
+border-radius:28px;
+background:
+radial-gradient(circle at 50% 0%,rgba(216,255,62,.08),transparent 55%),
+#090909;
 }
 
-/* =========================
-   FULLSCREEN STATEMENTS
-========================= */
-
-.statement{
-  min-height:85vh;
-
-  padding:100px 30px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  text-align:center;
-
-  border-top:1px solid var(--line);
-
-  background:
-    radial-gradient(
-      circle at center,
-      rgba(216,255,62,.06),
-      transparent 42%
-    );
+.index-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
-.statement h2{
-  max-width:1100px;
-
-  font-size:clamp(55px,9vw,125px);
-
-  line-height:.86;
-
-  letter-spacing:-8px;
-
-  font-weight:500;
+.index-label{
+color:#666;
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
 }
 
-.statement h2 span{
-  color:var(--lime);
+.index-live{
+color:var(--lime);
+font-size:9px;
+letter-spacing:1px;
 }
 
-/* =========================
-   DISTRACTION WALL
-========================= */
-
-.wall{
-  min-height:80vh;
-
-  padding:100px 30px;
-
-  border-top:1px solid var(--line);
-
-  overflow:hidden;
+.index-number{
+margin-top:20px;
+font-family:"Space Grotesk";
+font-size:90px;
+line-height:.8;
+letter-spacing:-7px;
 }
 
-.wall-title{
-  color:#555;
-
-  font-family:"DM Mono";
-
-  font-size:9px;
-
-  letter-spacing:2px;
-
-  margin-bottom:35px;
+.index-number span{
+color:var(--lime);
 }
 
-.words{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
+.index-bar{
+height:3px;
+margin-top:30px;
+background:#202020;
+overflow:hidden;
 }
 
-.word{
-  border:1px solid #191919;
-
-  padding:12px 18px;
-
-  color:#303030;
-
-  font-family:"DM Mono";
-
-  font-size:11px;
-
-  transition:.4s;
+.index-bar span{
+display:block;
+width:78%;
+height:100%;
+background:var(--lime);
+box-shadow:0 0 18px rgba(216,255,62,.4);
 }
 
-.word:hover{
-  color:var(--lime);
+/* LIST */
 
-  border-color:var(--lime);
-
-  transform:translateY(-5px) rotate(-1deg);
+.attention-list{
+margin:55px 0 70px;
+border:1px solid var(--line);
+border-radius:28px;
+overflow:hidden;
+background:#090909;
 }
 
-/* =========================
-   FINAL
-========================= */
+.attention-item{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:20px 25px;
+border-bottom:1px solid var(--line);
+transition:.35s ease;
+}
+
+.attention-item:last-child{
+border-bottom:0;
+}
+
+.attention-item:hover{
+background:rgba(216,255,62,.025);
+padding-left:30px;
+}
+
+.attention-item span:first-child{
+color:#ddd;
+font-size:12px;
+}
+
+.attention-item span:last-child{
+color:#444;
+font-size:9px;
+letter-spacing:1.5px;
+}
+
+/* FINAL */
 
 .final{
-  min-height:100vh;
+margin-top:100px;
+padding:65px 40px;
+text-align:center;
+border:1px solid var(--line);
+border-radius:32px;
+background:
+radial-gradient(circle at center,rgba(216,255,62,.09),transparent 55%),
+#080808;
+}
 
-  padding:120px 30px;
-
-  display:flex;
-  align-items:center;
-
-  border-top:1px solid var(--line);
+.final-label{
+color:var(--lime);
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
 }
 
 .final h2{
-  margin-top:40px;
-
-  font-size:clamp(70px,13vw,175px);
-
-  line-height:.76;
-
-  letter-spacing:-11px;
-
-  font-weight:500;
+margin-top:25px;
+font-family:"Space Grotesk";
+font-size:clamp(55px,9vw,105px);
+letter-spacing:-7px;
+line-height:.8;
+font-weight:500;
 }
 
-.final h2 span{
-  color:var(--lime);
+.final p{
+max-width:500px;
+margin:30px auto 0;
+color:#777;
 }
 
-.final-link{
-  display:inline-flex;
+/* SIDEBAR */
 
-  margin-top:70px;
-
-  padding:17px 24px;
-
-  border-radius:100px;
-
-  background:var(--lime);
-
-  color:#000;
-
-  font-size:10px;
-
-  font-weight:700;
-
-  transition:.4s;
+.sidebar{
+position:sticky;
+top:110px;
 }
 
-.final-link:hover{
-  transform:translateY(-5px);
-
-  box-shadow:
-    0 20px 70px rgba(216,255,62,.2);
+.side-label{
+margin-bottom:18px;
+color:#555;
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
 }
 
-/* =========================
-   REVEAL
-========================= */
-
-.reveal{
-  opacity:0;
-
-  transform:translateY(55px);
-
-  transition:
-    opacity 1s cubic-bezier(.16,1,.3,1),
-    transform 1s cubic-bezier(.16,1,.3,1);
+.side-line{
+height:1px;
+margin-bottom:12px;
+background:var(--line);
 }
 
-.reveal.show{
-  opacity:1;
-  transform:translateY(0);
+.side-link{
+display:block;
+padding:9px 0;
+color:#666;
+font-size:11px;
+transition:.3s;
 }
 
-/* =========================
-   FOOTER
-========================= */
+.side-link:hover{
+color:var(--lime);
+transform:translateX(5px);
+}
+
+.progress-card{
+margin-top:35px;
+padding:22px;
+border:1px solid var(--line);
+border-radius:20px;
+background:#090909;
+}
+
+.progress-card span{
+display:block;
+color:#555;
+font-size:9px;
+letter-spacing:1.5px;
+text-transform:uppercase;
+}
+
+.progress-card strong{
+display:block;
+margin-top:7px;
+color:#eee;
+font-family:"Space Grotesk";
+font-size:28px;
+font-weight:500;
+}
+
+.reading-line{
+height:2px;
+margin-top:15px;
+background:#1d1d1d;
+overflow:hidden;
+}
+
+.reading-line span{
+display:block;
+width:0;
+height:100%;
+background:var(--lime);
+}
+
+/* BOTTOM */
+
+.bottom-nav{
+margin-top:120px;
+padding-top:35px;
+border-top:1px solid var(--line);
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+}
+
+.bottom-card{
+min-height:190px;
+padding:27px;
+border:1px solid var(--line);
+border-radius:25px;
+background:#090909;
+transition:.45s var(--ease);
+}
+
+.bottom-card:hover{
+transform:translateY(-7px);
+border-color:rgba(216,255,62,.25);
+}
+
+.bottom-label{
+color:#555;
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
+}
+
+.bottom-title{
+margin-top:22px;
+color:#eee;
+font-family:"Space Grotesk";
+font-size:27px;
+line-height:1;
+letter-spacing:-1.3px;
+}
+
+.bottom-arrow{
+margin-top:30px;
+color:var(--lime);
+font-size:10px;
+letter-spacing:1px;
+}
+
+/* FOOTER */
 
 footer{
-  padding:30px;
-
-  border-top:1px solid var(--line);
-
-  display:flex;
-
-  justify-content:space-between;
-
-  color:#444;
-
-  font-family:"DM Mono";
-
-  font-size:9px;
+padding:55px 0;
+border-top:1px solid var(--line);
 }
 
-/* =========================
-   MOBILE
-========================= */
+.footer{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:25px;
+}
 
-@media(max-width:800px){
+.footer-copy{
+color:#444;
+font-size:10px;
+}
 
-  .nav-links,
-  .nav-cta{
-    display:none;
-  }
+.footer-links{
+display:flex;
+flex-wrap:wrap;
+gap:25px;
+color:#555;
+font-size:10px;
+}
 
-  .hero{
-    padding:
-      150px 20px 80px;
-  }
+.footer-links a:hover{
+color:#fff;
+}
 
-  .hero h1{
-    font-size:20vw;
-    letter-spacing:-7px;
-  }
+/* REVEAL */
 
-  .meter-section{
-    padding-left:20px;
-    padding-right:20px;
-  }
+.reveal{
+opacity:0;
+transform:translateY(30px);
+transition:
+opacity .9s var(--ease),
+transform .9s var(--ease);
+}
 
-  .article-wrap{
-    display:block;
+.reveal.visible{
+opacity:1;
+transform:none;
+}
 
-    padding:
-      90px 20px 120px;
-  }
+/* MOBILE */
 
-  .side{
-    position:relative;
-    top:auto;
+@media(max-width:850px){
 
-    margin-bottom:60px;
-  }
+.nav-links{
+display:none;
+}
 
-  .article p{
-    font-size:15px;
-  }
+.hero{
+padding-top:150px;
+}
 
-  .article .lead{
-    font-size:21px;
-  }
+.hero h1{
+letter-spacing:-6px;
+}
 
-  .article h2{
-    letter-spacing:-3px;
-  }
+.hero-bottom{
+display:block;
+}
 
-  .statement{
-    padding-left:20px;
-    padding-right:20px;
-  }
+.meta{
+margin-top:28px;
+}
 
-  .statement h2{
-    font-size:14vw;
-    letter-spacing:-5px;
-  }
+.article-layout{
+grid-template-columns:1fr;
+}
 
-  .final{
-    padding:100px 20px;
-  }
+.sidebar{
+display:none;
+}
 
-  .final h2{
-    font-size:20vw;
-    letter-spacing:-7px;
-  }
+.signal-grid{
+grid-template-columns:1fr 1fr;
+}
 
-  footer{
-    display:block;
-    line-height:2;
-  }
+}
+
+@media(max-width:600px){
+
+.container{
+width:calc(100% - 28px);
+}
+
+.nav{
+top:10px;
+height:58px;
+padding-left:16px;
+}
+
+.nav-cta{
+display:none;
+}
+
+.hero{
+min-height:auto;
+padding:135px 0 80px;
+}
+
+.hero h1{
+font-size:62px;
+letter-spacing:-5px;
+}
+
+.intro{
+font-size:13px;
+}
+
+.article-body{
+font-size:15px;
+}
+
+.article-body h2{
+letter-spacing:-2.5px;
+}
+
+.opening{
+padding:25px;
+}
+
+.opening p{
+font-size:20px;
+}
+
+.quote{
+font-size:27px;
+}
+
+.signal-grid{
+grid-template-columns:1fr;
+}
+
+.index-number{
+font-size:75px;
+}
+
+.final{
+padding:50px 22px;
+}
+
+.final h2{
+letter-spacing:-5px;
+}
+
+.bottom-nav{
+grid-template-columns:1fr;
+}
+
+.footer{
+display:block;
+}
+
+.footer-links{
+margin-top:25px;
+}
+
 }
 
 @media(prefers-reduced-motion:reduce){
 
-  html{
-    scroll-behavior:auto;
-  }
+*{
+scroll-behavior:auto!important;
+transition:none!important;
+}
 
-  *,
-  *::before,
-  *::after{
-    animation-duration:.01ms!important;
-    transition-duration:.01ms!important;
-  }
+.reveal{
+opacity:1;
+transform:none;
+}
 
-  .reveal{
-    opacity:1;
-    transform:none;
-  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="progress"></div>
-<div class="grid"></div>
-<div class="noise"></div>
+<div class="progress" id="progress"></div>
 
+<header class="nav" id="nav">
 
-<!-- NAV -->
+<a href="index.html" class="logo">
 
-<nav class="nav">
+<span class="logo-mark"></span>
 
-  <a href="index.html" class="logo">
-    focus<span>pulse</span><sup>®</sup>
-  </a>
+<span class="logo-text">
+focus<span>pulse</span><sup>®</sup>
+</span>
 
-  <div class="nav-links">
+</a>
 
-    <a href="index.html">Home</a>
+<nav class="nav-links">
 
-    <a href="manifesto.html">Manifesto</a>
-
-    <a href="vault.html">Vault</a>
-
-    <a href="protocols.html">Protocols</a>
-
-  </div>
-
-  <a href="focus.html" class="nav-cta">
-    FOCUS MODE ↗
-  </a>
+<a href="index.html">Home</a>
+<a href="manifesto.html">Manifesto</a>
+<a href="vault.html">Vault</a>
+<a href="protocols.html">Protocols</a>
+<a href="focus.html">Focus</a>
 
 </nav>
+
+<a href="focus.html" class="nav-cta">
+ENTER FOCUS →
+</a>
+
+</header>
 
 
 <main>
 
-
-<!-- HERO -->
-
 <section class="hero">
 
-  <div class="container">
+<div class="container">
 
-    <div class="meta">
-      TRANSMISSION 002 / FOCUS / 08 MIN READ
-    </div>
+<div class="eyebrow reveal">
+<span class="dot"></span>
+TRANSMISSION 002
+</div>
 
-    <h1 class="reveal">
+<h1 class="reveal">
 
-      THE
+THE<br>
 
-      <br>
+<span class="outline">
+DIGITAL
+</span><br>
 
-      <span
-        class="outline glitch"
-        data-text="DIGITAL"
-      >
-        DIGITAL
-      </span>
+<span class="lime">
+DRUG.
+</span>
 
-      <br>
+</h1>
 
-      <span class="lime">
-        DRUG.
-      </span>
+<div class="hero-bottom reveal">
 
-    </h1>
+<p class="intro">
+Your phone doesn't need to convince you to use it.
+It only needs to make putting it down slightly uncomfortable.
+</p>
 
-    <p class="hero-copy reveal">
+<div class="meta">
 
-      Your phone doesn't need to convince you
-      to use it.
+<span>FOCUS</span>
+<span>08 MIN READ</span>
+<span>HIGH SIGNAL</span>
 
-      It only needs to make putting it down
-      slightly uncomfortable.
+</div>
 
-    </p>
+</div>
 
-  </div>
-
-</section>
-
-
-<!-- METER -->
-
-<section class="meter-section">
-
-  <div class="container">
-
-    <div class="meta">
-      ATTENTION INTERRUPT INDEX
-    </div>
-
-    <div class="meter">
-
-      <div class="meter-top">
-
-        <span>
-          CURRENT SIGNAL
-        </span>
-
-        <span>
-          LIVE
-        </span>
-
-      </div>
-
-      <div class="meter-track">
-        <div class="meter-fill"></div>
-      </div>
-
-      <div class="meter-number">
-        <span id="meterNumber">0</span>%
-      </div>
-
-    </div>
-
-  </div>
+</div>
 
 </section>
 
 
-<!-- ARTICLE -->
+<section class="article-section">
 
-<section>
+<div class="container">
 
-  <div class="article-wrap">
+<div class="article-layout">
 
-    <aside class="side">
+<article class="article-body">
 
-      <div class="side-label">
-        FOCUSPULSE / 002
-      </div>
+<div class="opening reveal">
 
-      <div class="side-line"></div>
+<div class="opening-label">
+FOCUSPULSE / 002
+</div>
 
-      <p>
-        CATEGORY<br>
-        FOCUS
-        <br><br>
-        READING TIME<br>
-        08 MIN
-        <br><br>
-        SIGNAL<br>
-        HIGH
-      </p>
+<p>
+The most powerful drug in your pocket isn't a chemical.
+It's novelty.
+</p>
 
-    </aside>
+</div>
 
 
-    <article class="article">
+<div class="index-card reveal">
 
+<div class="index-top">
 
-      <p class="lead reveal">
+<div class="index-label">
+ATTENTION INTERRUPT INDEX
+</div>
 
-        The most powerful drug in your pocket
-        isn't a chemical.
+<div class="index-live">
+● CURRENT SIGNAL LIVE
+</div>
 
-        It's novelty.
+</div>
 
-        A new message.
-        A new video.
-        A new notification.
-        A new piece of information.
+<div class="index-number">
+78<span>%</span>
+</div>
 
-        Again.
+<div class="index-bar">
+<span></span>
+</div>
 
-        Again.
+</div>
 
-        Again.
 
-      </p>
+<div class="section-marker reveal" id="loop">
+01 / THE LOOP
+</div>
 
+<h2 class="reveal">
+CHECK.<br>
+SCROLL.<br>
+REFRESH.
+</h2>
 
-      <p class="reveal">
+<p class="reveal">
+The loop is simple.
+Trigger curiosity. Deliver novelty.
+Remove the novelty. Trigger curiosity again.
+</p>
 
-        Digital products have become
-        extraordinarily good at creating
-        tiny moments of anticipation.
+<p class="reveal">
+The important part isn't the content.
+The important part is the possibility that the next piece
+of content might be interesting.
+</p>
 
-        You don't open the application
-        because you have something important
-        to do.
+<div class="quote reveal">
+YOU ARE NOT BORED.<br>
+YOU ARE OVERSTIMULATED.
+</div>
 
-        You open it because there might be
-        something new.
 
-      </p>
+<div class="section-marker reveal" id="cost">
+02 / THE COST
+</div>
 
+<h2 class="reveal">
+NOVELTY<br>
+DESTROYS DEPTH.
+</h2>
 
-      <div class="index">
-        01 / THE LOOP
-      </div>
+<p class="reveal">
+Deep work feels strange after constant stimulation.
+Reading ten pages feels slow.
+Sitting with a difficult problem feels uncomfortable.
+Silence starts feeling like something is missing.
+</p>
 
-      <h2 class="reveal">
+<p class="reveal">
+This is where many people make the wrong conclusion.
+They think they have lost discipline.
+Sometimes they have simply trained their brain to expect interruption.
+</p>
 
-        CHECK.
 
-        <span>
-          SCROLL.
-        </span>
+<div class="signal-card reveal">
 
-        <br>
+<div class="signal-title">
+THE ATTENTION TAX
+</div>
+
+<div class="signal-grid">
+
+<div class="signal">
+<span>01</span>
+INTERRUPTION
+</div>
+
+<div class="signal">
+<span>02</span>
+NOVELTY
+</div>
+
+<div class="signal">
+<span>03</span>
+ANTICIPATION
+</div>
+
+<div class="signal">
+<span>04</span>
+REFRESH
+</div>
+
+<div class="signal">
+<span>05</span>
+REPEAT
+</div>
+
+<div class="signal">
+<span>06</span>
+DISTRACTION
+</div>
+
+</div>
+
+</div>
+
+
+<div class="section-marker reveal" id="reset">
+03 / THE RESET
+</div>
+
+<h2 class="reveal">
+MAKE BOREDOM<br>
+NORMAL AGAIN.
+</h2>
+
+<p class="reveal">
+You don't need to disappear into a mountain.
+Start smaller.
+</p>
+
+<p class="reveal">
+Eat without your phone.
+Walk without headphones.
+Wait without opening an app.
+Work without checking messages every four minutes.
+</p>
+
+<p class="reveal">
+Give your attention enough silence to become yours again.
+</p>
+
+
+<div class="attention-list reveal">
+
+<div class="attention-item">
+<span>NOTIFICATIONS</span>
+<span>INTERRUPT</span>
+</div>
+
+<div class="attention-item">
+<span>SHORT VIDEOS</span>
+<span>NOVELTY</span>
+</div>
+
+<div class="attention-item">
+<span>EMAIL</span>
+<span>CHECK</span>
+</div>
+
+<div class="attention-item">
+<span>NEWS</span>
+<span>REFRESH</span>
+</div>
+
+<div class="attention-item">
+<span>MESSAGES</span>
+<span>INTERRUPT</span>
+</div>
+
+<div class="attention-item">
+<span>TRENDS</span>
+<span>NOVELTY</span>
+</div>
+
+<div class="attention-item">
+<span>COMMENTS</span>
+<span>REWARD</span>
+</div>
+
+<div class="attention-item">
+<span>RECOMMENDATIONS</span>
+<span>ALGORITHM</span>
+</div>
+
+<div class="attention-item">
+<span>FOMO</span>
+<span>ANTICIPATION</span>
+</div>
+
+<div class="attention-item">
+<span>ENDLESS SCROLL</span>
+<span>LOOP</span>
+</div>
+
+<div class="attention-item">
+<span>GROUP CHATS</span>
+<span>INTERRUPT</span>
+</div>
+
+<div class="attention-item">
+<span>NEW CONTENT</span>
+<span>NOVELTY</span>
+</div>
+
+</div>
+
+
+<div class="section-marker reveal" id="control">
+04 / THE CONTROL
+</div>
+
+<h2 class="reveal">
+YOUR ATTENTION<br>
+IS A RESOURCE.
+</h2>
 
-        REFRESH.
+<p class="reveal">
+Every notification asks for a small piece of it.
+Every refresh asks for another.
+Every recommendation creates another possible direction.
+</p>
+
+<p class="reveal">
+The problem isn't that technology exists.
+The problem begins when you stop choosing where your attention goes.
+</p>
+
+<div class="quote reveal">
+WHAT GETS YOUR ATTENTION<br>
+GETS A PIECE OF YOUR LIFE.
+</div>
 
-      </h2>
 
+<div class="section-marker reveal" id="reset-protocol">
+05 / THE RESET PROTOCOL
+</div>
 
-      <p class="reveal">
+<h2 class="reveal">
+CREATE<br>
+FRICTION.
+</h2>
 
-        The loop is simple.
+<p class="reveal">
+Make distraction slightly harder and focus slightly easier.
+</p>
 
-        Trigger curiosity.
+<div class="signal-card reveal">
 
-        Deliver novelty.
+<div class="signal-title">
+ATTENTION RESET
+</div>
 
-        Remove the novelty.
+<div class="signal-grid">
 
-        Trigger curiosity again.
+<div class="signal">
+<span>01</span>
+TURN OFF NONESSENTIAL NOTIFICATIONS
+</div>
 
-      </p>
+<div class="signal">
+<span>02</span>
+MOVE DISTRACTING APPS AWAY
+</div>
 
+<div class="signal">
+<span>03</span>
+KEEP YOUR PHONE OUT OF REACH
+</div>
 
-      <p class="reveal">
+<div class="signal">
+<span>04</span>
+CREATE PHONE-FREE WORK BLOCKS
+</div>
 
-        The important part isn't the content.
+<div class="signal">
+<span>05</span>
+ALLOW YOURSELF TO BE BORED
+</div>
 
-        The important part is the possibility
-        that the next piece of content might
-        be interesting.
+<div class="signal">
+<span>06</span>
+RETURN TO ONE TASK
+</div>
 
-      </p>
+</div>
 
-    </article>
+</div>
 
-  </div>
 
-</section>
+<div class="section-marker reveal" id="final">
+06 / FINAL TRANSMISSION
+</div>
 
+<h2 class="reveal">
+TAKE BACK<br>
+<span class="lime">YOUR ATTENTION.</span>
+</h2>
 
-<!-- BIG STATEMENT -->
+<p class="reveal">
+You don't need to delete the internet.
+You don't need to reject technology.
+You need to stop giving every system automatic access to your attention.
+</p>
 
-<section class="statement">
+<p class="reveal">
+Attention becomes yours again when you decide where it goes.
+</p>
 
-  <h2 class="reveal">
 
-    YOU ARE NOT
-    <span>
-      BORED.
-    </span>
+<div class="final reveal">
 
-    <br>
+<div class="final-label">
+TRANSMISSION COMPLETE / 002
+</div>
 
-    YOU ARE
-    <span>
-      OVERSTIMULATED.
-    </span>
+<h2>
+TAKE BACK<br>
+<span class="lime">YOUR ATTENTION.</span>
+</h2>
 
-  </h2>
+<p>
+The goal isn't less technology.
+The goal is more control.
+</p>
 
-</section>
+</div>
 
 
-<!-- MORE ARTICLE -->
+<div class="bottom-nav reveal">
 
-<section>
+<a href="vault.html" class="bottom-card">
 
-  <div class="article-wrap">
+<div class="bottom-label">
+← RETURN
+</div>
 
-    <div></div>
+<div class="bottom-title">
+Knowledge Vault
+</div>
 
-    <article class="article">
+<div class="bottom-arrow">
+ALL TRANSMISSIONS →
+</div>
 
-      <div class="index">
-        02 / THE COST
-      </div>
+</a>
 
-      <h2 class="reveal">
 
-        NOVELTY
-        <br>
+<a href="article-user-churn.html" class="bottom-card">
 
-        DESTROYS
-        <span>
-          DEPTH.
-        </span>
+<div class="bottom-label">
+NEXT TRANSMISSION →
+</div>
 
-      </h2>
+<div class="bottom-title">
+User Churn Protocol
+</div>
 
+<div class="bottom-arrow">
+READ 003 →
+</div>
 
-      <p class="reveal">
+</a>
 
-        Deep work feels strange after
-        constant stimulation.
+</div>
 
-        Reading ten pages feels slow.
+</article>
 
-        Sitting with a difficult problem
-        feels uncomfortable.
 
-        Silence starts feeling like
-        something is missing.
+<aside class="sidebar">
 
-      </p>
+<div class="side-label">
+TRANSMISSION 002
+</div>
 
+<div class="side-line"></div>
 
-      <p class="reveal">
+<a href="#loop" class="side-link">
+01 / The Loop
+</a>
 
-        This is where many people make
-        the wrong conclusion.
+<a href="#cost" class="side-link">
+02 / The Cost
+</a>
 
-        They think they have lost
-        discipline.
+<a href="#reset" class="side-link">
+03 / The Reset
+</a>
 
-        Sometimes they have simply
-        trained their brain to expect
-        interruption.
+<a href="#control" class="side-link">
+04 / The Control
+</a>
 
-      </p>
+<a href="#reset-protocol" class="side-link">
+05 / Reset Protocol
+</a>
 
+<a href="#final" class="side-link">
+06 / Final
+</a>
 
-      <div class="index">
-        03 / THE RESET
-      </div>
+<div class="progress-card">
 
-      <h2 class="reveal">
+<span>
+READING PROGRESS
+</span>
 
-        MAKE
-        <span>
-          BOREDOM
-        </span>
+<strong id="readingPercent">
+0%
+</strong>
 
-        NORMAL
-        AGAIN.
+<div class="reading-line">
+<span id="readingLine"></span>
+</div>
 
-      </h2>
+</div>
 
+</aside>
 
-      <p class="reveal">
+</div>
 
-        You don't need to disappear
-        into a mountain.
-
-        Start smaller.
-
-        Eat without your phone.
-
-        Walk without headphones.
-
-        Wait without opening an app.
-
-        Work without checking messages
-        every four minutes.
-
-      </p>
-
-
-      <p class="reveal">
-
-        Give your attention enough silence
-        to become yours again.
-
-      </p>
-
-    </article>
-
-  </div>
-
-</section>
-
-
-<!-- DISTRACTION WALL -->
-
-<section class="wall">
-
-  <div class="container">
-
-    <div class="wall-title">
-      THINGS THAT WANT YOUR ATTENTION
-    </div>
-
-    <div class="words">
-
-      <div class="word">NOTIFICATIONS</div>
-      <div class="word">SHORT VIDEOS</div>
-      <div class="word">EMAIL</div>
-      <div class="word">NEWS</div>
-      <div class="word">MESSAGES</div>
-      <div class="word">TRENDS</div>
-      <div class="word">COMMENTS</div>
-      <div class="word">RECOMMENDATIONS</div>
-      <div class="word">ALGORITHMS</div>
-      <div class="word">UPDATES</div>
-      <div class="word">FOMO</div>
-      <div class="word">ENDLESS SCROLL</div>
-      <div class="word">GROUP CHATS</div>
-      <div class="word">BREAKING NEWS</div>
-      <div class="word">NEW CONTENT</div>
-      <div class="word">NEW MESSAGE</div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- FINAL -->
-
-<section class="final">
-
-  <div class="container">
-
-    <div class="meta">
-      TRANSMISSION COMPLETE / 002
-    </div>
-
-    <h2 class="reveal">
-
-      TAKE BACK
-
-      <br>
-
-      YOUR
-
-      <br>
-
-      <span>
-        ATTENTION.
-      </span>
-
-    </h2>
-
-    <a href="vault.html" class="final-link">
-      ← RETURN TO THE VAULT
-    </a>
-
-  </div>
+</div>
 
 </section>
 
@@ -1194,140 +1398,212 @@ footer{
 
 <footer>
 
-  <div>
-    FOCUSPULSE®
-  </div>
+<div class="container footer">
 
-  <div>
-    CONTROL YOUR ATTENTION.
-  </div>
+<div class="footer-copy">
+© <span id="year"></span>
+FocusPulse — Empowering the 10% who execute.
+</div>
+
+<div class="footer-links">
+
+<a href="index.html">Home</a>
+<a href="manifesto.html">Manifesto</a>
+<a href="vault.html">Vault</a>
+<a href="protocols.html">Protocols</a>
+<a href="focus.html">Focus</a>
+
+</div>
+
+</div>
 
 </footer>
 
 
 <script>
 
-/* =========================
-   SCROLL PROGRESS
-========================= */
+const progress=document.getElementById("progress");
+const readingLine=document.getElementById("readingLine");
+const readingPercent=document.getElementById("readingPercent");
+const nav=document.getElementById("nav");
 
-const progress =
-document.querySelector(".progress");
+function updateProgress(){
 
-window.addEventListener("scroll",()=>{
+const top=window.scrollY;
 
-  const top=window.scrollY;
+const height=
+document.documentElement.scrollHeight-
+window.innerHeight;
 
-  const height=
-    document.documentElement.scrollHeight-
-    window.innerHeight;
+const percent=
+height>0
+?(top/height)*100
+:0;
 
-  progress.style.width=
-    ((top/height)*100)+"%";
+const value=Math.min(100,Math.max(0,percent));
 
-});
+progress.style.width=value+"%";
+readingLine.style.width=value+"%";
+readingPercent.textContent=Math.round(value)+"%";
+
+}
+
+window.addEventListener(
+"scroll",
+updateProgress,
+{passive:true}
+);
+
+updateProgress();
 
 
-/* =========================
-   REVEAL
-========================= */
+function updateNav(){
+
+nav.classList.toggle(
+"scrolled",
+window.scrollY>25
+);
+
+}
+
+window.addEventListener(
+"scroll",
+updateNav,
+{passive:true}
+);
+
+updateNav();
+
+
+const reveals=
+document.querySelectorAll(".reveal");
+
+const reduceMotion=
+window.matchMedia(
+"(prefers-reduced-motion: reduce)"
+).matches;
+
+
+if(
+"IntersectionObserver" in window &&
+!reduceMotion
+){
 
 const observer=
 new IntersectionObserver(
-  entries=>{
+(entries,obs)=>{
 
-    entries.forEach(entry=>{
+entries.forEach(entry=>{
 
-      if(entry.isIntersecting){
+if(!entry.isIntersecting)return;
 
-        entry.target.classList.add("show");
+entry.target.classList.add("visible");
 
-      }
-
-    });
-
-  },
-  {
-    threshold:.12
-  }
-);
-
-document
-.querySelectorAll(".reveal")
-.forEach(el=>observer.observe(el));
-
-
-/* =========================
-   ATTENTION METER
-========================= */
-
-const meter=
-document.querySelector(".meter-fill");
-
-const number=
-document.getElementById("meterNumber");
-
-let started=false;
-
-const meterObserver=
-new IntersectionObserver(
-  entries=>{
-
-    if(
-      entries[0].isIntersecting &&
-      !started
-    ){
-
-      started=true;
-
-      meter.style.width="87%";
-
-      let value=0;
-
-      const interval=
-      setInterval(()=>{
-
-        value+=1;
-
-        number.textContent=value;
-
-        if(value>=87){
-
-          clearInterval(interval);
-
-        }
-
-      },18);
-
-    }
-
-  }
-);
-
-meterObserver.observe(
-  document.querySelector(".meter")
-);
-
-
-/* =========================
-   MOUSE GLITCH
-========================= */
-
-const glitch=
-document.querySelector(".glitch");
-
-document.addEventListener("mousemove",e=>{
-
-  const x=
-    (e.clientX/window.innerWidth-.5)*4;
-
-  const y=
-    (e.clientY/window.innerHeight-.5)*4;
-
-  glitch.style.transform=
-    `translate(${x}px,${y}px)`;
+obs.unobserve(entry.target);
 
 });
+
+},
+{
+threshold:.10,
+rootMargin:"0px 0px -50px 0px"
+}
+);
+
+reveals.forEach(
+element=>observer.observe(element)
+);
+
+}else{
+
+reveals.forEach(
+element=>element.classList.add("visible")
+);
+
+}
+
+
+const sideLinks=
+document.querySelectorAll(".side-link");
+
+sideLinks.forEach(link=>{
+
+link.addEventListener("click",event=>{
+
+const id=
+link.getAttribute("href");
+
+const target=
+document.querySelector(id);
+
+if(!target)return;
+
+event.preventDefault();
+
+target.scrollIntoView({
+behavior:reduceMotion?"auto":"smooth",
+block:"start"
+});
+
+});
+
+});
+
+
+const sections=[
+document.getElementById("loop"),
+document.getElementById("cost"),
+document.getElementById("reset"),
+document.getElementById("control"),
+document.getElementById("reset-protocol"),
+document.getElementById("final")
+];
+
+if("IntersectionObserver" in window){
+
+const sectionObserver=
+new IntersectionObserver(
+entries=>{
+
+entries.forEach(entry=>{
+
+if(!entry.isIntersecting)return;
+
+sideLinks.forEach(
+link=>link.style.color="#666"
+);
+
+const active=
+document.querySelector(
+`.side-link[href="#${entry.target.id}"]`
+);
+
+if(active){
+active.style.color="#d8ff3e";
+}
+
+});
+
+},
+{
+rootMargin:"-35% 0px -55% 0px"
+}
+);
+
+sections.forEach(section=>{
+
+if(section){
+sectionObserver.observe(section);
+}
+
+});
+
+}
+
+
+document.getElementById("year")
+.textContent=
+new Date().getFullYear();
 
 </script>
 
