@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050505">
+<meta name="description" content="Too Hard — FocusPulse Field Note 05">
+<title>Too Hard — FocusPulse</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+--bg:#050505;
+--panel:#0a0a0a;
+--text:#f4f4ef;
+--muted:#777;
+--muted2:#4b4b4b;
+--line:rgba(255,255,255,.10);
+--lime:#d8ff3e;
+--ease:cubic-bezier(.16,1,.3,1);
+--max:1180px;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html{
+scroll-behavior:smooth;
+background:var(--bg);
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+font-family:"DM Sans",sans-serif;
+overflow-x:hidden;
+}
+
+body:before{
+content:"";
+position:fixed;
+inset:0;
+pointer-events:none;
+z-index:-2;
+background-image:
+linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+background-size:80px 80px;
+mask-image:linear-gradient(to bottom,#000,transparent);
+}
+
+body:after{
+content:"";
+position:fixed;
+inset:0;
+pointer-events:none;
+z-index:9999;
+opacity:.035;
+pointer-events:none;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+a{
+color:inherit;
+text-decoration:none;
+}
+
+::selection{
+background:var(--lime);
+color:#000;
+}
+
+::-webkit-scrollbar{
+width:7px;
+}
+
+::-webkit-scrollbar-track{
+background:#050505;
+}
+
+::-webkit-scrollbar-thumb{
+background:#292929;
+border-radius:50px;
+}
+
+.progress{
+position:fixed;
+top:0;
+left:0;
+width:0;
+height:2px;
+background:var(--lime);
+box-shadow:0 0 18px rgba(216,255,62,.45);
+z-index:10000;
+}
+
+.container{
+width:min(var(--max),calc(100% - 40px));
+margin:auto;
+}
+
+/* NAV */
+
+.nav{
+position:fixed;
+z-index:1000;
+top:18px;
+left:50%;
+transform:translateX(-50%);
+width:min(1120px,calc(100% - 28px));
+height:64px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:8px 9px 8px 22px;
+border:1px solid var(--line);
+border-radius:100px;
+background:rgba(5,5,5,.72);
+backdrop-filter:blur(25px);
+-webkit-backdrop-filter:blur(25px);
+transition:.4s var(--ease);
+}
+
+.nav.scrolled{
+background:rgba(5,5,5,.94);
+border-color:rgba(255,255,255,.16);
+}
+
+.logo{
+font-family:"Space Grotesk";
+font-size:21px;
+font-weight:700;
+letter-spacing:-1.5px;
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.logo-mark{
+width:22px;
+height:22px;
+border:2px solid #eee;
+border-radius:50%;
+position:relative;
+}
+
+.logo-mark:before{
+content:"";
+position:absolute;
+width:6px;
+height:6px;
+left:6px;
+top:6px;
+border-radius:50%;
+background:var(--lime);
+box-shadow:0 0 12px var(--lime);
+}
+
+.logo-text span{
+color:var(--lime);
+}
+
+.logo sup{
+font-size:8px;
+color:#555;
+}
+
+.nav-links{
+display:flex;
+gap:28px;
+font-size:11px;
+color:#777;
+}
+
+.nav-links a{
+transition:.3s;
+}
+
+.nav-links a:hover{
+color:#fff;
+}
+
+.nav-cta{
+padding:12px 18px;
+border-radius:100px;
+background:var(--lime);
+color:#000;
+font-size:11px;
+font-weight:700;
+transition:.35s var(--ease);
+}
+
+.nav-cta:hover{
+transform:translateY(-3px);
+box-shadow:0 15px 50px rgba(216,255,62,.18);
+}
+
+/* HERO */
+
+.hero{
+min-height:88vh;
+padding:190px 0 100px;
+display:flex;
+align-items:center;
+}
+
+.eyebrow{
+display:inline-flex;
+align-items:center;
+gap:9px;
+padding:8px 13px;
+border:1px solid var(--line);
+border-radius:100px;
+color:#777;
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
+}
+
+.dot{
+width:6px;
+height:6px;
+border-radius:50%;
+background:var(--lime);
+box-shadow:0 0 15px var(--lime);
+}
+
+.hero h1{
+margin-top:38px;
+font-family:"Space Grotesk";
+font-size:clamp(70px,12vw,155px);
+line-height:.80;
+letter-spacing:-10px;
+font-weight:500;
+max-width:1100px;
+}
+
+.outline{
+color:transparent;
+-webkit-text-stroke:1px rgba(255,255,255,.4);
+}
+
+.lime{
+color:var(--lime);
+}
+
+.hero-bottom{
+margin-top:55px;
+display:flex;
+align-items:flex-end;
+justify-content:space-between;
+gap:50px;
+}
+
+.intro{
+max-width:580px;
+color:var(--muted);
+font-size:14px;
+line-height:1.9;
+}
+
+.meta{
+display:flex;
+gap:28px;
+white-space:nowrap;
+font-size:9px;
+letter-spacing:1.6px;
+color:#555;
+text-transform:uppercase;
+}
+
+/* ARTICLE */
+
+.article-section{
+padding:70px 0 130px;
+}
+
+.article-layout{
+display:grid;
+grid-template-columns:minmax(0,760px) 220px;
+gap:100px;
+align-items:start;
+}
+
+.article-body{
+font-size:16px;
+line-height:1.95;
+color:#999;
+}
+
+.article-body p{
+margin-bottom:28px;
+}
+
+.article-body h2{
+font-family:"Space Grotesk";
+font-size:39px;
+line-height:.95;
+letter-spacing:-2px;
+font-weight:500;
+color:#f4f4ef;
+margin:90px 0 25px;
+}
+
+.article-body h3{
+font-family:"Space Grotesk";
+font-size:25px;
+line-height:1;
+letter-spacing:-1px;
+font-weight:500;
+color:#f4f4ef;
+margin:55px 0 18px;
+}
+
+.article-body strong{
+color:#eee;
+font-weight:600;
+}
+
+.article-body em{
+font-style:normal;
+color:var(--lime);
+}
+
+.quote{
+margin:75px 0;
+padding:32px 0 32px 28px;
+border-left:2px solid var(--lime);
+font-family:"Space Grotesk";
+font-size:34px;
+line-height:1.08;
+letter-spacing:-1.5px;
+color:#eee;
+}
+
+.highlight{
+margin:55px 0;
+padding:30px;
+border:1px solid var(--line);
+border-radius:25px;
+background:
+radial-gradient(
+circle at 15% 0%,
+rgba(216,255,62,.08),
+transparent 42%
+),
+#090909;
+}
+
+.highlight-label{
+margin-bottom:15px;
+color:var(--lime);
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
+}
+
+.highlight p{
+margin:0;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+position:sticky;
+top:110px;
+}
+
+.side-label{
+font-size:9px;
+letter-spacing:2px;
+color:#555;
+text-transform:uppercase;
+margin-bottom:18px;
+}
+
+.side-line{
+height:1px;
+background:var(--line);
+margin-bottom:12px;
+}
+
+.side-link{
+display:block;
+padding:9px 0;
+font-size:11px;
+color:#666;
+transition:.3s;
+}
+
+.side-link:hover{
+color:var(--lime);
+transform:translateX(5px);
+}
+
+.progress-card{
+margin-top:35px;
+padding:22px;
+border:1px solid var(--line);
+border-radius:20px;
+background:#090909;
+}
+
+.progress-card span{
+display:block;
+font-size:9px;
+letter-spacing:1.5px;
+color:#555;
+text-transform:uppercase;
+}
+
+.progress-card strong{
+display:block;
+margin-top:7px;
+font-family:"Space Grotesk";
+font-size:28px;
+font-weight:500;
+}
+
+.reading-line{
+height:2px;
+background:#1d1d1d;
+margin-top:15px;
+overflow:hidden;
+}
+
+.reading-line span{
+display:block;
+width:0;
+height:100%;
+background:var(--lime);
+}
+
+/* NAVIGATION CARDS */
+
+.bottom-nav{
+margin-top:140px;
+padding:35px 0;
+border-top:1px solid var(--line);
+border-bottom:1px solid var(--line);
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:18px;
+}
+
+.bottom-card{
+padding:26px;
+border:1px solid var(--line);
+border-radius:24px;
+background:#090909;
+transition:.45s var(--ease);
+}
+
+.bottom-card:hover{
+transform:translateY(-7px);
+border-color:rgba(216,255,62,.25);
+}
+
+.bottom-label{
+font-size:9px;
+letter-spacing:2px;
+color:#555;
+text-transform:uppercase;
+}
+
+.bottom-title{
+margin-top:18px;
+font-family:"Space Grotesk";
+font-size:25px;
+line-height:1;
+letter-spacing:-1px;
+}
+
+.bottom-arrow{
+margin-top:25px;
+font-size:11px;
+color:var(--lime);
+}
+
+/* FOOTER */
+
+footer{
+padding:55px 0;
+border-top:0;
+}
+
+.footer{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:25px;
+}
+
+.footer-copy{
+font-size:10px;
+color:#444;
+}
+
+.footer-links{
+display:flex;
+gap:25px;
+font-size:10px;
+color:#555;
+}
+
+.footer-links a:hover{
+color:#fff;
+}
+
+/* REVEAL */
+
+.reveal{
+opacity:0;
+transform:translateY(30px);
+transition:
+opacity .9s var(--ease),
+transform .9s var(--ease);
+}
+
+.reveal.visible{
+opacity:1;
+transform:none;
+}
+
+/* MOBILE */
+
+@media(max-width:850px){
+
+.nav-links{
+display:none;
+}
+
+.hero{
+padding-top:150px;
+}
+
+.hero h1{
+letter-spacing:-6px;
+}
+
+.hero-bottom{
+display:block;
+}
+
+.meta{
+margin-top:28px;
+}
+
+.article-layout{
+grid-template-columns:1fr;
+}
+
+.sidebar{
+display:none;
+}
+
+}
+
+@media(max-width:600px){
+
+.container{
+width:calc(100% - 28px);
+}
+
+.nav{
+top:10px;
+height:58px;
+padding-left:16px;
+}
+
+.nav-cta{
+display:none;
+}
+
+.hero{
+padding-top:135px;
+padding-bottom:70px;
+}
+
+.hero h1{
+font-size:62px;
+letter-spacing:-5px;
+}
+
+.intro{
+font-size:13px;
+}
+
+.article-body{
+font-size:15px;
+}
+
+.article-body h2{
+font-size:32px;
+}
+
+.quote{
+font-size:27px;
+margin:60px 0;
+}
+
+.bottom-nav{
+grid-template-columns:1fr;
+}
+
+.footer{
+display:block;
+}
+
+.footer-links{
+margin-top:25px;
+flex-wrap:wrap;
+}
+
+}
+
+@media(prefers-reduced-motion:reduce){
+
+*{
+scroll-behavior:auto!important;
+transition:none!important;
+animation:none!important;
+}
+
+.reveal{
+opacity:1;
+transform:none;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="progress" id="progress"></div>
+
+<header class="nav" id="nav">
+
+<a href="index.html" class="logo">
+
+<span class="logo-mark"></span>
+
+<span class="logo-text">
+focus<span>pulse</span><sup>®</sup>
+</span>
+
+</a>
+
+<nav class="nav-links">
+
+<a href="index.html">Home</a>
+<a href="manifesto.html">Manifesto</a>
+<a href="vault.html">Vault</a>
+<a href="protocols.html">Protocols</a>
+<a href="focus.html">Focus</a>
+
+</nav>
+
+<a href="focus.html" class="nav-cta">
+ENTER FOCUS →
+</a>
+
+</header>
+
+
+<main>
+
+<section class="hero">
+
+<div class="container">
+
+<div class="eyebrow reveal">
+<span class="dot"></span>
+FIELD NOTE / 05
+</div>
+
+<h1 class="reveal">
+TOO<br>
+<span class="outline">HARD</span><br>
+<span class="lime">OR TOO EASY?</span>
+</h1>
+
+<div class="hero-bottom reveal">
+
+<p class="intro">
+Sometimes the task isn't impossible.
+You've simply trained yourself to escape the moment
+it stops being comfortable.
+</p>
+
+<div class="meta">
+<span>FOCUS</span>
+<span>7 MIN READ</span>
+<span>2026</span>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="article-section">
+
+<div class="container">
+
+<div class="article-layout">
+
+<article class="article-body">
+
+
+<p class="reveal">
+There is a strange moment that happens when you try to do something
+meaningful.
+</p>
+
+<p class="reveal">
+The beginning feels easy.
+You open the document.
+You sit down.
+You make the first move.
+</p>
+
+<p class="reveal">
+Then suddenly the work becomes difficult.
+Your brain slows down.
+The answer doesn't come immediately.
+The paragraph looks terrible.
+The problem refuses to solve itself.
+</p>
+
+<p class="reveal">
+And almost instantly, another thought appears:
+<strong>"This is too hard."</strong>
+</p>
+
+<p class="reveal">
+Maybe it is.
+But sometimes "too hard" is simply the moment where
+<strong>real work begins.</strong>
+</p>
+
+
+<h2 class="reveal">
+COMFORT<br>
+IS A TERRIBLE<br>
+MEASUREMENT.
+</h2>
+
+<p class="reveal">
+We have become surprisingly good at measuring our work by how it feels.
+</p>
+
+<p class="reveal">
+If something feels easy, we assume we're productive.
+If something feels difficult, we assume something is wrong.
+</p>
+
+<p class="reveal">
+But difficulty isn't proof that you're failing.
+Often, difficulty is proof that you're operating at the edge of what
+you currently understand.
+</p>
+
+<p class="reveal">
+Learning feels difficult.
+Writing something original feels difficult.
+Building something from nothing feels difficult.
+Changing your habits feels difficult.
+</p>
+
+<p class="reveal">
+The uncomfortable part isn't necessarily the problem.
+It may be the <em>training ground.</em>
+</p>
+
+
+<div class="quote reveal">
+"The moment you want to quit is often the moment
+you finally reach something worth learning."
+</div>
+
+
+<h2 class="reveal">
+THE ESCAPE<br>
+LOOP.
+</h2>
+
+<p class="reveal">
+The pattern is simple.
+</p>
+
+<div class="highlight reveal">
+
+<div class="highlight-label">
+THE LOOP
+</div>
+
+<p>
+Difficulty → discomfort → distraction → temporary relief → regret →
+repeat.
+</p>
+
+</div>
+
+<p class="reveal">
+The distraction isn't random.
+Your brain has discovered that checking something else gives it an
+immediate reward.
+</p>
+
+<p class="reveal">
+One message.
+One video.
+One refresh.
+One quick search.
+</p>
+
+<p class="reveal">
+The task is still waiting when you return.
+But now you've also trained yourself that <strong>escaping works.</strong>
+</p>
+
+
+<h2 class="reveal">
+DON'T ASK<br>
+"IS THIS HARD?"
+</h2>
+
+<p class="reveal">
+Ask a better question:
+</p>
+
+<div class="highlight reveal">
+
+<div class="highlight-label">
+BETTER QUESTION
+</div>
+
+<p>
+<strong>"Is this difficult because it's genuinely beyond me,
+or because I haven't stayed with it long enough?"</strong>
+</p>
+
+</div>
+
+<p class="reveal">
+Those are two very different problems.
+</p>
+
+<p class="reveal">
+If the task is beyond you, learn.
+Break it down.
+Ask for help.
+Find another explanation.
+Change the method.
+</p>
+
+<p class="reveal">
+But if the task is simply uncomfortable, the answer is different:
+<strong>stay.</strong>
+</p>
+
+
+<h2 class="reveal">
+MAKE THE TASK<br>
+SMALLER.
+</h2>
+
+<p class="reveal">
+You don't need to finish the entire mountain.
+You only need to climb the next few metres.
+</p>
+
+<h3 class="reveal">
+01 — REDUCE THE TARGET
+</h3>
+
+<p class="reveal">
+Don't say:
+"I have to study this entire chapter."
+</p>
+
+<p class="reveal">
+Say:
+"I'll understand the next two pages."
+</p>
+
+<h3 class="reveal">
+02 — REMOVE THE TIMER PRESSURE
+</h3>
+
+<p class="reveal">
+Sometimes the pressure to finish makes starting harder.
+Give yourself permission to work badly for a while.
+</p>
+
+<p class="reveal">
+A rough first attempt is infinitely more useful than a perfect idea
+that never leaves your head.
+</p>
+
+<h3 class="reveal">
+03 — STAY WHEN IT GETS BORING
+</h3>
+
+<p class="reveal">
+This is where the difference appears.
+Most people can focus when the task is interesting.
+The valuable skill is continuing when the novelty disappears.
+</p>
+
+
+<h2 class="reveal">
+BORING IS NOT<br>
+THE SAME AS<br>
+<strong>POINTLESS.</strong>
+</h2>
+
+<p class="reveal">
+Modern interfaces have trained us to expect constant stimulation.
+Swipe.
+Refresh.
+Next.
+Skip.
+</p>
+
+<p class="reveal">
+Deep work does the opposite.
+It asks you to remain in one place long enough for something deeper
+to happen.
+</p>
+
+<p class="reveal">
+At first that can feel boring.
+Then it becomes calm.
+Then it becomes focus.
+</p>
+
+
+<div class="quote reveal">
+"You don't need more motivation.<br>
+You need a higher tolerance for discomfort."
+</div>
+
+
+<h2 class="reveal">
+THE TWO-MINUTE<br>
+DECISION.
+</h2>
+
+<p class="reveal">
+The next time you feel like quitting, don't make a permanent decision
+inside a temporary feeling.
+</p>
+
+<p class="reveal">
+Give yourself two more minutes.
+</p>
+
+<p class="reveal">
+No phone.
+No switching tabs.
+No checking messages.
+No changing tasks.
+</p>
+
+<p class="reveal">
+Just two more minutes.
+</p>
+
+<p class="reveal">
+Sometimes you'll discover that the problem was smaller than your
+reaction to it.
+</p>
+
+<p class="reveal">
+And sometimes you'll discover that the task really is wrong for you.
+That's useful too.
+</p>
+
+
+<h2 class="reveal">
+KNOW WHEN<br>
+TO CHANGE<br>
+DIRECTION.
+</h2>
+
+<p class="reveal">
+Persistence doesn't mean blindly repeating the same mistake.
+</p>
+
+<p class="reveal">
+If you've tried multiple approaches and nothing works, don't confuse
+stubbornness with discipline.
+</p>
+
+<p class="reveal">
+Change the strategy.
+Ask a better question.
+Take a break.
+Learn the missing concept.
+</p>
+
+<p class="reveal">
+The goal isn't to suffer.
+The goal is to <em>execute intelligently.</em>
+</p>
+
+
+<div class="highlight reveal">
+
+<div class="highlight-label">
+FOCUSPULSE PRINCIPLE
+</div>
+
+<p>
+When something becomes difficult, don't immediately escape.
+<strong>Pause. Diagnose. Adjust. Continue.</strong>
+</p>
+
+</div>
+
+
+<h2 class="reveal">
+NEXT TIME IT<br>
+FEELS TOO HARD.
+</h2>
+
+<p class="reveal">
+Don't immediately open another tab.
+</p>
+
+<p class="reveal">
+Don't reach for your phone.
+</p>
+
+<p class="reveal">
+Don't decide that you're incapable.
+</p>
+
+<p class="reveal">
+Take a breath.
+Look at the task.
+Make it smaller.
+Then stay for two more minutes.
+</p>
+
+<p class="reveal">
+Because sometimes the difference between people who finish and people
+who quit isn't talent.
+</p>
+
+<p class="reveal">
+It's simply the ability to remain present for the part where the work
+stops being easy.
+</p>
+
+<div class="quote reveal">
+"Hard doesn't mean impossible.<br>
+Sometimes it means you're getting somewhere."
+</div>
+
+
+<div class="bottom-nav reveal">
+
+<a href="article-first-hour.html" class="bottom-card">
+
+<div class="bottom-label">
+← PREVIOUS
+</div>
+
+<div class="bottom-title">
+The First Hour
+</div>
+
+<div class="bottom-arrow">
+READ ARTICLE →
+</div>
+
+</a>
+
+<a href="article-digital-drug.html" class="bottom-card">
+
+<div class="bottom-label">
+NEXT →
+</div>
+
+<div class="bottom-title">
+The Digital Drug
+</div>
+
+<div class="bottom-arrow">
+READ ARTICLE →
+</div>
+
+</a>
+
+</div>
+
+</article>
+
+
+<aside class="sidebar">
+
+<div class="side-label">
+FIELD NOTE 05
+</div>
+
+<div class="side-line"></div>
+
+<a class="side-link" href="#top">
+The Comfort Problem
+</a>
+
+<a class="side-link" href="#top">
+The Escape Loop
+</a>
+
+<a class="side-link" href="#top">
+Make It Smaller
+</a>
+
+<a class="side-link" href="#top">
+Two More Minutes
+</a>
+
+<div class="progress-card">
+
+<span>READING</span>
+
+<strong id="readingPercent">0%</strong>
+
+<div class="reading-line">
+<span id="readingLine"></span>
+</div>
+
+</div>
+
+</aside>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+<div class="container footer">
+
+<div class="footer-copy">
+© <span id="year"></span> FocusPulse — Empowering the 10% who execute.
+</div>
+
+<div class="footer-links">
+<a href="index.html">Home</a>
+<a href="manifesto.html">Manifesto</a>
+<a href="vault.html">Vault</a>
+<a href="protocols.html">Protocols</a>
+<a href="focus.html">Focus</a>
+</div>
+
+</div>
+
+</footer>
+
+
+<script>
+
+"use strict";
+
+
+/* READING PROGRESS */
+
+const progress =
+document.getElementById("progress");
+
+const readingLine =
+document.getElementById("readingLine");
+
+const readingPercent =
+document.getElementById("readingPercent");
+
+function updateProgress(){
+
+const top =
+window.scrollY;
+
+const height =
+document.documentElement.scrollHeight -
+window.innerHeight;
+
+const percentage =
+height > 0
+? (top / height) * 100
+: 0;
+
+const value =
+Math.min(100,Math.max(0,percentage));
+
+progress.style.width =
+value + "%";
+
+readingLine.style.width =
+value + "%";
+
+readingPercent.textContent =
+Math.round(value) + "%";
+
+}
+
+window.addEventListener(
+"scroll",
+updateProgress,
+{passive:true}
+);
+
+updateProgress();
+
+
+/* NAV */
+
+const nav =
+document.getElementById("nav");
+
+function updateNav(){
+
+if(window.scrollY > 25){
+nav.classList.add("scrolled");
+}else{
+nav.classList.remove("scrolled");
+}
+
+}
+
+window.addEventListener(
+"scroll",
+updateNav,
+{passive:true}
+);
+
+updateNav();
+
+
+/* REVEAL */
+
+const elements =
+document.querySelectorAll(".reveal");
+
+const reduceMotion =
+window.matchMedia(
+"(prefers-reduced-motion: reduce)"
+).matches;
+
+if(
+"IntersectionObserver" in window &&
+!reduceMotion
+){
+
+const observer =
+new IntersectionObserver(
+(entries,obs)=>{
+
+entries.forEach(entry=>{
+
+if(!entry.isIntersecting)
+return;
+
+entry.target.classList.add("visible");
+
+obs.unobserve(
+entry.target
+);
+
+});
+
+},
+{
+threshold:.12,
+rootMargin:"0px 0px -50px 0px"
+}
+);
+
+elements.forEach(
+element=>observer.observe(element)
+);
+
+}else{
+
+elements.forEach(
+element=>element.classList.add("visible")
+);
+
+}
+
+
+/* YEAR */
+
+document.getElementById("year")
+.textContent =
+new Date().getFullYear();
+
+
+/* KEYBOARD */
+
+document.addEventListener(
+"keydown",
+event=>{
+
+if(event.key === "Escape"){
+document.activeElement?.blur();
+}
+
+});
+
+
+</script>
+
+</body>
+</html>
