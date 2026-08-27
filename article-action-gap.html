@@ -3,1492 +3,2482 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#050505">
+<meta name="description" content="The Action Gap — FocusPulse. Turn understanding into movement.">
 
 <title>The Action Gap — FocusPulse®</title>
 
-<meta name="description"
-content="The gap between knowing and doing. A FocusPulse transmission on execution.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+/* =========================================================
+   FOCUSPULSE — ACTION GAP
+   TRANSMISSION 001
+   PREMIUM ARTICLE SYSTEM
+========================================================= */
 
 :root{
-  --bg:#050505;
-  --fg:#f4f4ee;
-  --muted:#707070;
-  --dim:#3c3c3c;
-  --line:rgba(255,255,255,.10);
-  --lime:#d8ff3e;
+    --bg:#050505;
+    --panel:#090909;
+    --panel2:#0c0c0c;
+    --text:#f4f4ef;
+    --muted:#777;
+    --soft:#999;
+    --line:rgba(255,255,255,.10);
+    --line2:rgba(255,255,255,.16);
+    --lime:#d8ff3e;
+    --ease:cubic-bezier(.16,1,.3,1);
 }
 
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 html{
-  scroll-behavior:smooth;
+    scroll-behavior:smooth;
+    background:var(--bg);
 }
 
 body{
-  background:var(--bg);
-  color:var(--fg);
-  font-family:"Space Grotesk",sans-serif;
-  overflow-x:hidden;
+    background:var(--bg);
+    color:var(--text);
+    font-family:"DM Sans",sans-serif;
+    overflow-x:hidden;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    pointer-events:none;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        );
+
+    background-size:80px 80px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent
+        );
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    pointer-events:none;
+
+    opacity:.035;
+
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 a{
-  color:inherit;
-  text-decoration:none;
+    color:inherit;
+    text-decoration:none;
 }
 
 ::selection{
-  background:var(--lime);
-  color:#000;
+    background:var(--lime);
+    color:#000;
 }
 
-/* =========================
-   PROGRESS
-========================= */
+::-webkit-scrollbar{
+    width:7px;
+}
+
+::-webkit-scrollbar-track{
+    background:#050505;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#292929;
+    border-radius:50px;
+}
+
+/* =========================================================
+   SCROLL PROGRESS
+========================================================= */
 
 .progress{
-  position:fixed;
-  top:0;
-  left:0;
-  width:0;
-  height:2px;
-  background:var(--lime);
-  z-index:9999;
+    position:fixed;
+    top:0;
+    left:0;
+
+    width:0;
+    height:2px;
+
+    z-index:10000;
+
+    background:var(--lime);
+
+    box-shadow:
+        0 0 18px rgba(216,255,62,.5);
+
+    transition:width .08s linear;
 }
 
-/* =========================
-   CURSOR
-========================= */
-
-.cursor{
-  position:fixed;
-  width:12px;
-  height:12px;
-  border:1px solid var(--lime);
-  border-radius:50%;
-  transform:translate(-50%,-50%);
-  pointer-events:none;
-  z-index:9998;
-  transition:
-    width .25s ease,
-    height .25s ease,
-    background .25s ease;
-  mix-blend-mode:difference;
-}
-
-.cursor.active{
-  width:50px;
-  height:50px;
-  background:var(--lime);
-}
-
-/* =========================
-   NAV
-========================= */
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
 .nav{
-  position:fixed;
-  top:20px;
-  left:50%;
-  transform:translateX(-50%);
+    position:fixed;
 
-  width:min(1200px,calc(100% - 30px));
-  height:62px;
+    top:18px;
+    left:50%;
 
-  padding:0 9px 0 22px;
+    transform:translateX(-50%);
 
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+    z-index:1000;
 
-  border:1px solid var(--line);
-  border-radius:100px;
+    width:min(
+        1120px,
+        calc(100% - 28px)
+    );
 
-  background:rgba(5,5,5,.70);
-  backdrop-filter:blur(25px);
+    height:64px;
 
-  z-index:1000;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:
+        8px
+        9px
+        8px
+        22px;
+
+    border:
+        1px solid var(--line);
+
+    border-radius:100px;
+
+    background:
+        rgba(5,5,5,.72);
+
+    backdrop-filter:blur(25px);
+    -webkit-backdrop-filter:blur(25px);
+
+    transition:
+        background .4s var(--ease),
+        border .4s var(--ease),
+        box-shadow .4s var(--ease);
+}
+
+.nav.scrolled{
+    background:rgba(5,5,5,.94);
+
+    border-color:
+        rgba(255,255,255,.16);
+
+    box-shadow:
+        0 20px 80px rgba(0,0,0,.35);
 }
 
 .logo{
-  font-size:20px;
-  font-weight:700;
-  letter-spacing:-1.5px;
+    display:flex;
+    align-items:center;
+
+    gap:8px;
+
+    font-family:"Space Grotesk";
+
+    font-size:21px;
+
+    font-weight:700;
+
+    letter-spacing:-1.5px;
 }
 
-.logo span{
-  color:var(--lime);
+.logo-mark{
+    width:22px;
+    height:22px;
+
+    border:
+        2px solid #eee;
+
+    border-radius:50%;
+
+    position:relative;
+}
+
+.logo-mark::before{
+    content:"";
+
+    position:absolute;
+
+    width:6px;
+    height:6px;
+
+    left:6px;
+    top:6px;
+
+    border-radius:50%;
+
+    background:var(--lime);
+
+    box-shadow:
+        0 0 12px var(--lime);
+}
+
+.logo-text span{
+    color:var(--lime);
 }
 
 .logo sup{
-  color:#555;
-  font-size:8px;
+    color:#555;
+    font-size:8px;
 }
 
 .nav-links{
-  display:flex;
-  gap:27px;
-  color:#666;
-  font-size:10px;
+    display:flex;
+
+    gap:28px;
+
+    color:#777;
+
+    font-size:11px;
 }
 
 .nav-links a{
-  transition:.3s;
+    transition:
+        color .3s ease,
+        transform .3s ease;
 }
 
 .nav-links a:hover{
-  color:#fff;
+    color:#fff;
 }
 
 .nav-cta{
-  padding:12px 18px;
-  border-radius:100px;
+    padding:
+        12px
+        18px;
 
-  background:var(--lime);
-  color:#000;
+    background:var(--lime);
 
-  font-size:10px;
-  font-weight:700;
+    color:#000;
+
+    border-radius:100px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    transition:
+        transform .35s var(--ease),
+        box-shadow .35s var(--ease);
 }
 
-/* =========================
-   AMBIENT GRID
-========================= */
+.nav-cta:hover{
+    transform:translateY(-3px);
 
-.grid{
-  position:fixed;
-  inset:0;
+    box-shadow:
+        0 15px 50px
+        rgba(216,255,62,.20);
+}
 
-  pointer-events:none;
-  z-index:-3;
+/* =========================================================
+   GLOBAL CONTAINER
+========================================================= */
 
-  background-image:
-    linear-gradient(
-      rgba(255,255,255,.025) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255,255,255,.025) 1px,
-      transparent 1px
+.container{
+    width:min(
+        1180px,
+        calc(100% - 40px)
     );
 
-  background-size:80px 80px;
-
-  mask-image:
-    linear-gradient(
-      to bottom,
-      #000,
-      transparent 90%
-    );
+    margin:auto;
 }
 
-.glow{
-  position:fixed;
-
-  width:500px;
-  height:500px;
-
-  border-radius:50%;
-
-  background:rgba(216,255,62,.045);
-
-  filter:blur(100px);
-
-  pointer-events:none;
-
-  transform:translate(-50%,-50%);
-
-  z-index:-2;
-}
-
-/* =========================
+/* =========================================================
    HERO
-========================= */
+========================================================= */
 
-.article-hero{
-  min-height:100vh;
+.hero{
+    min-height:88vh;
 
-  padding:
-    190px
-    30px
-    100px;
+    padding:
+        190px
+        0
+        100px;
 
-  display:flex;
-  align-items:center;
-
-  border-bottom:1px solid var(--line);
-
-  position:relative;
+    display:flex;
+    align-items:center;
 }
 
-.hero-inner{
-  width:min(1250px,100%);
-  margin:auto;
+.eyebrow{
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    padding:
+        8px
+        13px;
+
+    border:
+        1px solid var(--line);
+
+    border-radius:100px;
+
+    color:#777;
+
+    font-size:9px;
+
+    letter-spacing:2px;
+
+    text-transform:uppercase;
+}
+
+.dot{
+    width:6px;
+    height:6px;
+
+    border-radius:50%;
+
+    background:var(--lime);
+
+    box-shadow:
+        0 0 15px var(--lime);
+}
+
+.hero h1{
+    margin-top:38px;
+
+    max-width:1100px;
+
+    font-family:"Space Grotesk";
+
+    font-size:
+        clamp(
+            72px,
+            12vw,
+            155px
+        );
+
+    line-height:.80;
+
+    letter-spacing:-10px;
+
+    font-weight:500;
+}
+
+.outline{
+    color:transparent;
+
+    -webkit-text-stroke:
+        1px rgba(255,255,255,.42);
+}
+
+.lime{
+    color:var(--lime);
+}
+
+.hero-bottom{
+    margin-top:55px;
+
+    display:flex;
+
+    align-items:flex-end;
+
+    justify-content:space-between;
+
+    gap:50px;
+}
+
+.intro{
+    max-width:590px;
+
+    color:var(--muted);
+
+    font-size:14px;
+
+    line-height:1.9;
 }
 
 .meta{
-  display:flex;
-  gap:30px;
-  align-items:center;
+    display:flex;
 
-  color:#555;
+    gap:28px;
 
-  font-family:"DM Mono";
-  font-size:9px;
-  letter-spacing:1.5px;
+    white-space:nowrap;
+
+    color:#555;
+
+    font-size:9px;
+
+    letter-spacing:1.6px;
+
+    text-transform:uppercase;
 }
 
-.meta .green{
-  color:var(--lime);
+/* =========================================================
+   ARTICLE AREA
+========================================================= */
+
+.article-section{
+    padding:
+        70px
+        0
+        130px;
 }
 
-.hero-number{
-  position:absolute;
+.article-layout{
+    display:grid;
 
-  right:4vw;
-  bottom:4vw;
+    grid-template-columns:
+        minmax(0,760px)
+        220px;
 
-  color:#111;
+    gap:100px;
 
-  font-family:"Space Grotesk";
-
-  font-size:clamp(180px,35vw,520px);
-
-  line-height:.65;
-
-  font-weight:700;
-
-  letter-spacing:-30px;
-
-  pointer-events:none;
-
-  user-select:none;
+    align-items:start;
 }
 
-.hero-title{
-  position:relative;
-  z-index:2;
+.article-body{
+    color:#999;
 
-  margin-top:45px;
+    font-size:16px;
 
-  font-size:clamp(80px,14vw,180px);
-
-  line-height:.75;
-
-  letter-spacing:-12px;
-
-  font-weight:500;
+    line-height:1.95;
 }
 
-.hero-title .outline{
-  color:transparent;
-  -webkit-text-stroke:1px rgba(255,255,255,.38);
+.article-body p{
+    margin-bottom:28px;
 }
 
-.hero-title .lime{
-  color:var(--lime);
+.article-body strong{
+    color:#eee;
+
+    font-weight:600;
 }
 
-.hero-intro{
-  position:relative;
-  z-index:2;
+.article-body em{
+    color:var(--lime);
 
-  max-width:570px;
-
-  margin-top:65px;
-
-  color:#777;
-
-  font-size:15px;
-
-  line-height:1.9;
+    font-style:normal;
 }
 
-/* =========================
-   ARTICLE LAYOUT
-========================= */
+/* =========================================================
+   SECTION NUMBER
+========================================================= */
 
-.article-wrap{
-  width:min(1250px,100%);
-  margin:auto;
+.section-marker{
+    display:flex;
 
-  padding:
-    130px
-    30px
-    160px;
+    align-items:center;
 
-  display:grid;
+    gap:15px;
 
-  grid-template-columns:
-    220px
-    minmax(0,720px)
-    1fr;
+    margin-top:95px;
 
-  gap:70px;
+    margin-bottom:18px;
+
+    color:var(--lime);
+
+    font-size:9px;
+
+    letter-spacing:2px;
+
+    text-transform:uppercase;
 }
 
-/* STICKY INFO */
+.section-marker::after{
+    content:"";
 
-.side{
-  position:sticky;
-  top:120px;
-  align-self:start;
+    width:55px;
+
+    height:1px;
+
+    background:
+        rgba(216,255,62,.35);
+}
+
+/* =========================================================
+   ARTICLE HEADINGS
+========================================================= */
+
+.article-body h2{
+    margin:
+        0
+        0
+        27px;
+
+    color:#f4f4ef;
+
+    font-family:"Space Grotesk";
+
+    font-size:
+        clamp(
+            38px,
+            5vw,
+            65px
+        );
+
+    line-height:.88;
+
+    letter-spacing:-4px;
+
+    font-weight:500;
+}
+
+.article-body h3{
+    margin:
+        0
+        0
+        20px;
+
+    color:#f4f4ef;
+
+    font-family:"Space Grotesk";
+
+    font-size:27px;
+
+    line-height:1;
+
+    letter-spacing:-1.2px;
+
+    font-weight:500;
+}
+
+/* =========================================================
+   OPENING STATEMENT
+========================================================= */
+
+.opening{
+    margin:
+        45px
+        0
+        75px;
+
+    padding:
+        35px;
+
+    border:
+        1px solid var(--line);
+
+    border-radius:28px;
+
+    background:
+        radial-gradient(
+            circle at 0% 0%,
+            rgba(216,255,62,.08),
+            transparent 40%
+        ),
+        var(--panel);
+}
+
+.opening-label{
+    margin-bottom:15px;
+
+    color:var(--lime);
+
+    font-size:9px;
+
+    letter-spacing:2px;
+
+    text-transform:uppercase;
+}
+
+.opening p{
+    margin:0;
+
+    color:#ddd;
+
+    font-family:"Space Grotesk";
+
+    font-size:24px;
+
+    line-height:1.15;
+
+    letter-spacing:-1px;
+}
+
+/* =========================================================
+   QUOTE
+========================================================= */
+
+.quote{
+    margin:
+        75px
+        0;
+
+    padding:
+        30px
+        0
+        30px
+        28px;
+
+    border-left:
+        2px solid var(--lime);
+
+    color:#eee;
+
+    font-family:"Space Grotesk";
+
+    font-size:
+        clamp(
+            27px,
+            4vw,
+            39px
+        );
+
+    line-height:1.05;
+
+    letter-spacing:-1.5px;
+}
+
+/* =========================================================
+   PROTOCOL
+========================================================= */
+
+.protocol{
+    margin:
+        55px
+        0
+        70px;
+
+    overflow:hidden;
+
+    border:
+        1px solid var(--line);
+
+    border-radius:28px;
+
+    background:#090909;
+}
+
+.protocol-header{
+    padding:27px 30px;
+
+    border-bottom:
+        1px solid var(--line);
+
+    background:
+        linear-gradient(
+            120deg,
+            rgba(216,255,62,.06),
+            transparent
+        );
+}
+
+.protocol-label{
+    color:var(--lime);
+
+    font-size:9px;
+
+    letter-spacing:2px;
+
+    text-transform:uppercase;
+}
+
+.protocol-title{
+    margin-top:12px;
+
+    color:#eee;
+
+    font-family:"Space Grotesk";
+
+    font-size:32px;
+
+    line-height:.95;
+
+    letter-spacing:-1.5px;
+}
+
+.protocol-row{
+    display:grid;
+
+    grid-template-columns:
+        55px
+        1fr;
+
+    gap:20px;
+
+    padding:
+        22px
+        30px;
+
+    border-bottom:
+        1px solid var(--line);
+
+    transition:
+        background .35s ease,
+        padding-left .35s var(--ease);
+}
+
+.protocol-row:last-child{
+    border-bottom:0;
+}
+
+.protocol-row:hover{
+    background:
+        rgba(216,255,62,.025);
+
+    padding-left:35px;
+}
+
+.protocol-number{
+    color:var(--lime);
+
+    font-size:10px;
+
+    letter-spacing:1px;
+}
+
+.protocol-row p{
+    margin:0;
+
+    color:#aaa;
+
+    font-size:13px;
+
+    line-height:1.6;
+}
+
+/* =========================================================
+   FINAL TRANSMISSION
+========================================================= */
+
+.final{
+    margin-top:100px;
+
+    padding:
+        65px
+        40px;
+
+    text-align:center;
+
+    border:
+        1px solid var(--line);
+
+    border-radius:32px;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(216,255,62,.09),
+            transparent 55%
+        ),
+        #080808;
+}
+
+.final-label{
+    color:var(--lime);
+
+    font-size:9px;
+
+    letter-spacing:2px;
+
+    text-transform:uppercase;
+}
+
+.final h2{
+    margin-top:25px;
+
+    font-size:
+        clamp(
+            55px,
+            9vw,
+            105px
+        );
+
+    letter-spacing:-7px;
+
+    line-height:.8;
+}
+
+.final p{
+    max-width:500px;
+
+    margin:
+        30px
+        auto
+        0;
+
+    color:#777;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar{
+    position:sticky;
+
+    top:110px;
 }
 
 .side-label{
-  color:#444;
+    margin-bottom:18px;
 
-  font-family:"DM Mono";
-  font-size:8px;
-  letter-spacing:1.5px;
+    color:#555;
+
+    font-size:9px;
+
+    letter-spacing:2px;
+
+    text-transform:uppercase;
 }
 
 .side-line{
-  width:45px;
-  height:1px;
+    height:1px;
 
-  background:var(--lime);
+    margin-bottom:12px;
 
-  margin:18px 0;
+    background:var(--line);
 }
 
-.side p{
-  color:#555;
+.side-link{
+    display:block;
 
-  font-family:"DM Mono";
+    padding:
+        9px
+        0;
 
-  font-size:9px;
+    color:#666;
 
-  line-height:1.8;
+    font-size:11px;
+
+    transition:
+        color .3s,
+        transform .3s;
 }
 
-/* ARTICLE */
+.side-link:hover{
+    color:var(--lime);
 
-.article{
-  min-width:0;
+    transform:translateX(5px);
 }
 
-.article p{
-  color:#aaa;
+.progress-card{
+    margin-top:35px;
 
-  font-size:17px;
+    padding:22px;
 
-  line-height:2;
+    border:
+        1px solid var(--line);
 
-  margin-bottom:30px;
+    border-radius:20px;
+
+    background:#090909;
 }
 
-.article .lead{
-  color:#eee;
+.progress-card span{
+    display:block;
 
-  font-size:25px;
+    color:#555;
 
-  line-height:1.5;
+    font-size:9px;
 
-  letter-spacing:-.5px;
+    letter-spacing:1.5px;
 
-  margin-bottom:60px;
+    text-transform:uppercase;
 }
 
-.article h2{
-  margin-top:100px;
-  margin-bottom:28px;
+.progress-card strong{
+    display:block;
 
-  font-size:clamp(40px,6vw,75px);
+    margin-top:7px;
 
-  line-height:.9;
+    color:#eee;
 
-  letter-spacing:-5px;
+    font-family:"Space Grotesk";
 
-  font-weight:500;
+    font-size:28px;
+
+    font-weight:500;
 }
 
-.article h2 span{
-  color:var(--lime);
+.reading-line{
+    height:2px;
+
+    margin-top:15px;
+
+    overflow:hidden;
+
+    background:#1d1d1d;
 }
 
-.article-number{
-  margin-top:90px;
-  margin-bottom:20px;
+.reading-line span{
+    display:block;
 
-  color:var(--lime);
+    width:0;
 
-  font-family:"DM Mono";
+    height:100%;
 
-  font-size:9px;
-
-  letter-spacing:2px;
+    background:var(--lime);
 }
 
-/* =========================
-   BIG QUOTE
-========================= */
+/* =========================================================
+   NEXT / PREVIOUS
+========================================================= */
 
-.quote-section{
-  min-height:80vh;
+.bottom-nav{
+    margin-top:120px;
 
-  display:flex;
-  align-items:center;
-  justify-content:center;
+    padding-top:35px;
 
-  padding:100px 30px;
+    border-top:
+        1px solid var(--line);
 
-  border-top:1px solid var(--line);
-  border-bottom:1px solid var(--line);
+    display:grid;
 
-  background:
-    radial-gradient(
-      circle at center,
-      rgba(216,255,62,.075),
-      transparent 43%
-    );
+    grid-template-columns:
+        1fr
+        1fr;
 
-  text-align:center;
+    gap:14px;
 }
 
-.quote{
-  max-width:1100px;
+.bottom-card{
+    min-height:190px;
 
-  font-size:clamp(55px,9vw,120px);
+    padding:27px;
 
-  line-height:.87;
+    border:
+        1px solid var(--line);
 
-  letter-spacing:-8px;
+    border-radius:25px;
 
-  font-weight:500;
+    background:#090909;
+
+    transition:
+        transform .45s var(--ease),
+        border .45s ease,
+        background .45s ease;
 }
 
-.quote span{
-  color:var(--lime);
+.bottom-card:hover{
+    transform:translateY(-7px);
+
+    border-color:
+        rgba(216,255,62,.25);
+
+    background:#0b0b0b;
 }
 
-/* =========================
-   EXECUTION BLOCK
-========================= */
+.bottom-label{
+    color:#555;
 
-.execution{
-  margin-top:80px;
+    font-size:9px;
 
-  border:1px solid var(--line);
+    letter-spacing:2px;
 
-  background:#080808;
-
-  padding:35px;
-
-  position:relative;
-  overflow:hidden;
+    text-transform:uppercase;
 }
 
-.execution::after{
-  content:"";
+.bottom-title{
+    margin-top:22px;
 
-  position:absolute;
+    color:#eee;
 
-  width:250px;
-  height:250px;
+    font-family:"Space Grotesk";
 
-  right:-100px;
-  bottom:-120px;
+    font-size:27px;
 
-  border-radius:50%;
+    line-height:1;
 
-  background:rgba(216,255,62,.08);
-
-  filter:blur(50px);
+    letter-spacing:-1.3px;
 }
 
-.execution-label{
-  color:var(--lime);
+.bottom-arrow{
+    margin-top:30px;
 
-  font-family:"DM Mono";
+    color:var(--lime);
 
-  font-size:9px;
+    font-size:10px;
 
-  letter-spacing:2px;
+    letter-spacing:1px;
 }
 
-.execution h3{
-  margin-top:20px;
-
-  font-size:35px;
-
-  line-height:1;
-
-  letter-spacing:-2px;
-
-  font-weight:500;
-}
-
-.execution ul{
-  margin-top:30px;
-
-  list-style:none;
-}
-
-.execution li{
-  padding:17px 0;
-
-  border-top:1px solid var(--line);
-
-  color:#888;
-
-  font-size:13px;
-}
-
-.execution li::before{
-  content:"→";
-
-  color:var(--lime);
-
-  margin-right:12px;
-}
-
-/* =========================
-   END
-========================= */
-
-.end{
-  min-height:100vh;
-
-  padding:
-    140px 30px;
-
-  display:flex;
-  align-items:center;
-
-  border-top:1px solid var(--line);
-}
-
-.end-inner{
-  width:min(1250px,100%);
-  margin:auto;
-}
-
-.end-label{
-  color:#555;
-
-  font-family:"DM Mono";
-
-  font-size:9px;
-
-  letter-spacing:2px;
-}
-
-.end h2{
-  margin-top:40px;
-
-  font-size:clamp(70px,13vw,175px);
-
-  line-height:.76;
-
-  letter-spacing:-11px;
-
-  font-weight:500;
-}
-
-.end h2 span{
-  color:var(--lime);
-}
-
-.next{
-  display:flex;
-
-  align-items:center;
-  justify-content:space-between;
-
-  margin-top:90px;
-
-  padding-top:25px;
-
-  border-top:1px solid var(--line);
-
-  color:#777;
-
-  font-family:"DM Mono";
-
-  font-size:9px;
-
-  letter-spacing:1px;
-
-  transition:.4s;
-}
-
-.next:hover{
-  color:var(--lime);
-}
-
-/* =========================
+/* =========================================================
    FOOTER
-========================= */
+========================================================= */
 
 footer{
-  padding:30px;
+    padding:
+        55px
+        0;
 
-  border-top:1px solid var(--line);
-
-  display:flex;
-  justify-content:space-between;
-
-  color:#444;
-
-  font-family:"DM Mono";
-
-  font-size:9px;
+    border-top:
+        1px solid var(--line);
 }
 
-/* =========================
-   REVEAL
-========================= */
+.footer{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:25px;
+}
+
+.footer-copy{
+    color:#444;
+
+    font-size:10px;
+}
+
+.footer-links{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:25px;
+
+    color:#555;
+
+    font-size:10px;
+}
+
+.footer-links a:hover{
+    color:#fff;
+}
+
+/* =========================================================
+   REVEAL ANIMATION
+========================================================= */
 
 .reveal{
-  opacity:0;
-  transform:translateY(45px);
+    opacity:0;
 
-  transition:
-    opacity 1s cubic-bezier(.16,1,.3,1),
-    transform 1s cubic-bezier(.16,1,.3,1);
+    transform:
+        translateY(30px);
+
+    transition:
+        opacity .9s var(--ease),
+        transform .9s var(--ease);
 }
 
-.reveal.show{
-  opacity:1;
-  transform:translateY(0);
+.reveal.visible{
+    opacity:1;
+
+    transform:none;
 }
 
-/* =========================
+/* =========================================================
    MOBILE
-========================= */
+========================================================= */
 
-@media(max-width:800px){
+@media(max-width:850px){
 
-  .nav-links,
-  .nav-cta{
-    display:none;
-  }
+    .nav-links{
+        display:none;
+    }
 
-  .article-hero{
-    padding:
-      150px
-      20px
-      90px;
-  }
+    .hero{
+        padding-top:150px;
+    }
 
-  .hero-title{
-    font-size:20vw;
-    letter-spacing:-7px;
-  }
+    .hero h1{
+        letter-spacing:-6px;
+    }
 
-  .hero-number{
-    font-size:65vw;
-    right:-5vw;
-  }
+    .hero-bottom{
+        display:block;
+    }
 
-  .article-wrap{
-    display:block;
+    .meta{
+        margin-top:28px;
+    }
 
-    padding:
-      90px
-      20px
-      120px;
-  }
+    .article-layout{
+        grid-template-columns:1fr;
+    }
 
-  .side{
-    position:relative;
-    top:auto;
-
-    margin-bottom:60px;
-  }
-
-  .article p{
-    font-size:15px;
-  }
-
-  .article .lead{
-    font-size:21px;
-  }
-
-  .article h2{
-    letter-spacing:-3px;
-  }
-
-  .quote{
-    font-size:15vw;
-    letter-spacing:-5px;
-  }
-
-  .execution{
-    padding:25px;
-  }
-
-  .end{
-    padding:100px 20px;
-  }
-
-  .end h2{
-    font-size:20vw;
-    letter-spacing:-7px;
-  }
-
-  footer{
-    display:block;
-    line-height:2;
-  }
-
-  .cursor{
-    display:none;
-  }
+    .sidebar{
+        display:none;
+    }
 }
 
-/* REDUCED MOTION */
+@media(max-width:600px){
+
+    .container{
+        width:calc(100% - 28px);
+    }
+
+    .nav{
+        top:10px;
+
+        height:58px;
+
+        padding-left:16px;
+    }
+
+    .nav-cta{
+        display:none;
+    }
+
+    .hero{
+        min-height:auto;
+
+        padding:
+            135px
+            0
+            80px;
+    }
+
+    .hero h1{
+        font-size:62px;
+
+        letter-spacing:-5px;
+    }
+
+    .intro{
+        font-size:13px;
+    }
+
+    .article-body{
+        font-size:15px;
+    }
+
+    .article-body h2{
+        letter-spacing:-2.5px;
+    }
+
+    .opening{
+        padding:25px;
+    }
+
+    .opening p{
+        font-size:20px;
+    }
+
+    .quote{
+        font-size:27px;
+    }
+
+    .protocol-row{
+        grid-template-columns:
+            35px
+            1fr;
+
+        padding:
+            20px;
+    }
+
+    .protocol-row:hover{
+        padding-left:25px;
+    }
+
+    .final{
+        padding:
+            50px
+            22px;
+    }
+
+    .final h2{
+        letter-spacing:-5px;
+    }
+
+    .bottom-nav{
+        grid-template-columns:1fr;
+    }
+
+    .footer{
+        display:block;
+    }
+
+    .footer-links{
+        margin-top:25px;
+    }
+}
 
 @media(prefers-reduced-motion:reduce){
 
-  html{
-    scroll-behavior:auto;
-  }
+    *{
+        scroll-behavior:auto!important;
 
-  *,
-  *::before,
-  *::after{
-    animation-duration:.01ms!important;
-    transition-duration:.01ms!important;
-  }
+        transition:none!important;
+    }
 
-  .reveal{
-    opacity:1;
-    transform:none;
-  }
+    .reveal{
+        opacity:1;
+
+        transform:none;
+    }
 }
+
 </style>
 </head>
 
 <body>
 
-<div class="progress"></div>
-<div class="grid"></div>
-<div class="glow"></div>
-<div class="cursor"></div>
+<div class="progress" id="progress"></div>
 
 
-<!-- NAV -->
+<!-- =======================================================
+     NAV
+======================================================= -->
 
-<nav class="nav">
+<header class="nav" id="nav">
 
-  <a href="index.html" class="logo">
-    focus<span>pulse</span><sup>®</sup>
-  </a>
+<a href="index.html" class="logo">
 
-  <div class="nav-links">
+<span class="logo-mark"></span>
 
-    <a href="index.html">Home</a>
+<span class="logo-text">
+focus<span>pulse</span><sup>®</sup>
+</span>
 
-    <a href="manifesto.html">Manifesto</a>
+</a>
 
-    <a href="vault.html">Vault</a>
 
-    <a href="protocols.html">Protocols</a>
+<nav class="nav-links">
 
-  </div>
+<a href="index.html">
+Home
+</a>
 
-  <a href="focus.html" class="nav-cta">
-    FOCUS MODE ↗
-  </a>
+<a href="manifesto.html">
+Manifesto
+</a>
+
+<a href="vault.html">
+Vault
+</a>
+
+<a href="protocols.html">
+Protocols
+</a>
+
+<a href="focus.html">
+Focus
+</a>
 
 </nav>
 
 
+<a
+href="focus.html"
+class="nav-cta"
+>
+ENTER FOCUS →
+</a>
+
+</header>
+
+
+
+<!-- =======================================================
+     HERO
+======================================================= -->
+
 <main>
 
-<!-- HERO -->
+<section class="hero">
 
-<section class="article-hero">
+<div class="container">
 
-  <div class="hero-number">
-    001
-  </div>
+<div class="eyebrow reveal">
 
-  <div class="hero-inner">
+<span class="dot"></span>
 
-    <div class="meta">
+TRANSMISSION 001
 
-      <span class="green">
-        TRANSMISSION 001
-      </span>
-
-      <span>
-        EXECUTION
-      </span>
-
-      <span>
-        06 MIN READ
-      </span>
-
-    </div>
+</div>
 
 
-    <h1 class="hero-title reveal">
+<h1 class="reveal">
 
-      THE<br>
+THE<br>
 
-      <span class="outline">
-        ACTION
-      </span>
+<span class="outline">
+ACTION
+</span><br>
 
-      <br>
+<span class="lime">
+GAP.
+</span>
 
-      <span class="lime">
-        GAP.
-      </span>
-
-    </h1>
+</h1>
 
 
-    <p class="hero-intro reveal">
+<div class="hero-bottom reveal">
 
-      You already know what you should do.
+<p class="intro">
 
-      The problem isn't information.
+You already know what you should do.
+The problem isn't information.
+The problem is the distance between understanding something
+and actually moving.
 
-      The problem is the distance between
-      understanding something and actually
-      moving.
+</p>
 
-    </p>
 
-  </div>
+<div class="meta">
+
+<span>
+EXECUTION
+</span>
+
+<span>
+06 MIN READ
+</span>
+
+<span>
+ACTIVE
+</span>
+
+</div>
+
+</div>
+
+</div>
 
 </section>
 
 
-<!-- ARTICLE -->
 
-<section>
+<!-- =======================================================
+     ARTICLE
+======================================================= -->
 
-  <div class="article-wrap">
+<section class="article-section">
 
-    <aside class="side">
+<div class="container">
 
-      <div class="side-label">
-        FOCUSPULSE / 001
-      </div>
+<div class="article-layout">
 
-      <div class="side-line"></div>
 
-      <p>
-        CATEGORY<br>
-        EXECUTION
-        <br><br>
-        READING TIME<br>
-        06 MIN
-        <br><br>
-        STATUS<br>
-        ACTIVE
-      </p>
+<article class="article-body">
 
-    </aside>
 
+<div class="opening reveal">
 
-    <article class="article">
+<div class="opening-label">
+FOCUSPULSE / 001
+</div>
 
+<p>
+The distance between intention and execution
+is where most potential disappears.
+</p>
 
-      <p class="lead reveal">
+</div>
 
-        There is a strange moment between
-        knowing and doing.
 
-        You understand the problem.
-        You understand the solution.
-        You might even understand exactly
-        what needs to happen next.
 
-        And yet...
+<!-- 01 -->
 
-        nothing happens.
+<div
+class="section-marker reveal"
+id="information"
+>
+01 / INFORMATION
+</div>
 
-      </p>
 
+<h2 class="reveal">
 
-      <p class="reveal">
+YOU DON'T NEED<br>
+MORE INFORMATION.
 
-        We call this the Action Gap.
+</h2>
 
-        It is the distance between intention
-        and execution.
 
-        And modern life has become
-        exceptionally good at making
-        that distance comfortable.
+<p class="reveal">
 
-      </p>
+Think about how much you already know.
+You know exercise is good for you.
+You know sleep matters.
+You know your phone distracts you.
+You know the project should have started yesterday.
+You know what the next step is.
 
+</p>
 
-      <div class="article-number">
-        01 / INFORMATION
-      </div>
 
-      <h2 class="reveal">
+<p class="reveal">
 
-        YOU DON'T NEED
-        <span>
-          MORE
-        </span>
-        INFORMATION.
+Knowledge stopped being scarce a long time ago.
+The internet solved that problem.
 
-      </h2>
+</p>
 
 
-      <p class="reveal">
+<p class="reveal">
 
-        Think about how much you already know.
+Today, the scarce resource isn't information.
 
-        You know exercise is good for you.
+It's <strong>attention directed toward action.</strong>
 
-        You know sleep matters.
+</p>
 
-        You know your phone distracts you.
 
-        You know the project should have
-        started yesterday.
 
-        You know what the next step is.
+<div class="quote reveal">
 
-      </p>
+You don't have an information problem.
+You have a movement problem.
 
+</div>
 
-      <p class="reveal">
 
-        Knowledge stopped being scarce a long
-        time ago.
 
-        The internet solved that problem.
+<!-- 02 -->
 
-        Today, the scarce resource isn't
-        information.
+<div
+class="section-marker reveal"
+id="gap"
+>
+02 / THE GAP
+</div>
 
-        It's attention directed toward action.
 
-      </p>
+<h2 class="reveal">
 
+THE GAP<br>
+FEELS SMALL.
 
-      <div class="article-number">
-        02 / THE GAP
-      </div>
+</h2>
 
-      <h2 class="reveal">
 
-        THE GAP
-        <br>
-        FEELS
-        <span>
-          SMALL.
-        </span>
-      </h2>
+<p class="reveal">
 
+That's what makes it dangerous.
 
-      <p class="reveal">
+The gap rarely feels like a dramatic failure.
 
-        That's what makes it dangerous.
+It feels like:
 
-        The gap rarely feels like a dramatic
-        failure.
+</p>
 
-        It feels like:
 
-        “I'll do it later.”
+<div class="highlight reveal">
 
-        “I'll research a little more.”
+<p>
+“I'll do it later.”<br>
+“I'll research a little more.”<br>
+“I'll start tomorrow.”
+</p>
 
-        “I'll start tomorrow.”
+</div>
 
-      </p>
 
+<p class="reveal">
 
-      <p class="reveal">
+Each decision is tiny.
 
-        Each decision is tiny.
+But tiny decisions repeated every day
+become an entire lifestyle.
 
-        But tiny decisions repeated every day
-        become an entire lifestyle.
+</p>
 
-      </p>
 
+<div class="quote reveal">
 
-      <!-- QUOTE -->
+THE DISTANCE BETWEEN THINKING AND DOING
+IS WHERE LIVES CHANGE.
 
-      <section class="quote-section">
+</div>
 
-        <div class="quote reveal">
 
-          THE DISTANCE BETWEEN
 
-          <span>
-            THINKING
-          </span>
+<!-- 03 -->
 
-          AND
+<div
+class="section-marker reveal"
+id="trap"
+>
+03 / THE TRAP
+</div>
 
-          <span>
-            DOING
-          </span>
 
-          IS WHERE
+<h2 class="reveal">
 
-          <span>
-            LIVES CHANGE.
-          </span>
+PREPARATION CAN<br>
+BECOME PROCRASTINATION.
 
-        </div>
+</h2>
 
-      </section>
 
+<p class="reveal">
 
-      <div class="article-number">
-        03 / THE TRAP
-      </div>
+There is a sophisticated form of procrastination
+that looks incredibly productive.
 
-      <h2 class="reveal">
+</p>
 
-        PREPARATION CAN
-        BECOME
-        <span>
-          PROCRASTINATION.
-        </span>
 
-      </h2>
+<p class="reveal">
 
+More research.
 
-      <p class="reveal">
+More planning.
 
-        There is a sophisticated form of
-        procrastination that looks incredibly
-        productive.
+More tools.
 
-        More research.
+More productivity videos.
 
-        More planning.
+More systems.
 
-        More tools.
+</p>
 
-        More productivity videos.
 
-        More systems.
+<p class="reveal">
 
-      </p>
+It feels like progress because your brain is receiving
+the reward associated with progress.
 
+</p>
 
-      <p class="reveal">
 
-        It feels like progress because
-        your brain is receiving the reward
-        associated with progress.
+<p class="reveal">
 
-        But the output remains exactly
-        where it was.
+But the output remains exactly where it was.
 
-      </p>
+</p>
 
 
-      <p class="reveal">
+<p class="reveal">
 
-        At some point the question has to
-        change from:
+At some point the question has to change from:
 
-        “What else do I need to know?”
+<strong>
+“What else do I need to know?”
+</strong>
 
-        to:
+to:
 
-        “What can I do right now?”
+<em>
+“What can I do right now?”
+</em>
 
-      </p>
+</p>
 
 
-      <div class="article-number">
-        04 / THE SWITCH
-      </div>
 
-      <h2 class="reveal">
+<!-- 04 -->
 
-        SHRINK THE
-        <span>
-          FIRST STEP.
-        </span>
+<div
+class="section-marker reveal"
+id="switch"
+>
+04 / THE SWITCH
+</div>
 
-      </h2>
 
+<h2 class="reveal">
 
-      <p class="reveal">
+SHRINK THE<br>
+FIRST STEP.
 
-        Huge goals create psychological
-        resistance.
+</h2>
 
-        “Build the company.”
 
-        “Write the book.”
+<p class="reveal">
 
-        “Get fit.”
+Huge goals create psychological resistance.
 
-        “Learn the skill.”
+</p>
 
-        These are identities disguised
-        as tasks.
 
-      </p>
+<p class="reveal">
 
+“Build the company.”
 
-      <p class="reveal">
+“Write the book.”
 
-        Replace them with something
-        almost embarrassingly small.
+“Get fit.”
 
-        Open the document.
+“Learn the skill.”
 
-        Write one sentence.
+</p>
 
-        Put on the shoes.
 
-        Make the first call.
+<p class="reveal">
 
-        Start the timer.
+These are identities disguised as tasks.
 
-      </p>
+</p>
 
 
-      <p class="reveal">
+<p class="reveal">
 
-        Action becomes easier when the
-        first action requires almost no
-        negotiation.
+Replace them with something almost embarrassingly small.
 
-      </p>
+</p>
 
 
-      <!-- EXECUTION SYSTEM -->
+<div class="protocol reveal">
 
-      <div class="execution reveal">
+<div class="protocol-header">
 
-        <div class="execution-label">
-          THE 10-MINUTE PROTOCOL
-        </div>
+<div class="protocol-label">
+THE 10-MINUTE PROTOCOL
+</div>
 
-        <h3>
-          DON'T FINISH IT.
-          <br>
-          JUST ENTER IT.
-        </h3>
+<div class="protocol-title">
+DON'T FINISH IT.<br>
+JUST ENTER IT.
+</div>
 
-        <ul>
+</div>
 
-          <li>
-            Remove every visible distraction.
-          </li>
 
-          <li>
-            Choose one concrete action.
-          </li>
+<div class="protocol-row">
 
-          <li>
-            Start a 10-minute timer.
-          </li>
+<div class="protocol-number">
+01
+</div>
 
-          <li>
-            Work until the timer ends.
-          </li>
+<p>
+Remove every visible distraction.
+</p>
 
-          <li>
-            Decide whether to continue.
-          </li>
+</div>
 
-        </ul>
 
-      </div>
+<div class="protocol-row">
 
+<div class="protocol-number">
+02
+</div>
 
-      <div class="article-number">
-        05 / THE RULE
-      </div>
+<p>
+Choose one concrete action.
+</p>
 
-      <h2 class="reveal">
+</div>
 
-        ACTION FIRST.
 
-        <br>
+<div class="protocol-row">
 
-        <span>
-          MOTIVATION LATER.
-        </span>
+<div class="protocol-number">
+03
+</div>
 
-      </h2>
+<p>
+Start a 10-minute timer.
+</p>
 
+</div>
 
-      <p class="reveal">
 
-        Motivation is unreliable.
+<div class="protocol-row">
 
-        Action is not.
+<div class="protocol-number">
+04
+</div>
 
-        You don't need to feel ready
-        to begin.
+<p>
+Work until the timer ends.
+</p>
 
-        Beginning is often what creates
-        the feeling of readiness.
+</div>
 
-      </p>
 
+<div class="protocol-row">
 
-      <p class="reveal">
+<div class="protocol-number">
+05
+</div>
 
-        Momentum is not something you wait
-        for.
+<p>
+Decide whether to continue.
+</p>
 
-        Momentum is something you manufacture.
+</div>
 
-        One action.
+</div>
 
-        Then another.
 
-        Then another.
+<p class="reveal">
 
-      </p>
+Open the document.
 
+Write one sentence.
 
-      <div class="article-number">
-        06 / FINAL TRANSMISSION
-      </div>
+Put on the shoes.
 
-      <h2 class="reveal">
+Make the first call.
 
-        CLOSE
-        <span>
-          THE GAP.
-        </span>
+Start the timer.
 
-      </h2>
+</p>
 
 
-      <p class="reveal">
+<p class="reveal">
 
-        You will never know everything.
+Action becomes easier when the first action
+requires almost no negotiation.
 
-        You will never feel completely ready.
+</p>
 
-        There will always be another article,
-        another tool, another reason to wait.
 
-      </p>
 
+<!-- 05 -->
 
-      <p class="reveal">
+<div
+class="section-marker reveal"
+id="rule"
+>
+05 / THE RULE
+</div>
 
-        The advantage belongs to the person
-        who can turn understanding into
-        movement.
 
-      </p>
+<h2 class="reveal">
 
+ACTION FIRST.<br>
+<span class="lime">
+MOTIVATION LATER.
+</span>
 
-      <p class="lead reveal">
+</h2>
 
-        Stop collecting permission.
 
-        Start creating evidence.
+<p class="reveal">
 
-      </p>
+Motivation is unreliable.
 
+Action is not.
 
-    </article>
+</p>
 
-  </div>
 
-</section>
+<p class="reveal">
 
+You don't need to feel ready to begin.
 
-<!-- END -->
+Beginning is often what creates
+the feeling of readiness.
 
-<section class="end">
+</p>
 
-  <div class="end-inner reveal">
 
-    <div class="end-label">
-      TRANSMISSION COMPLETE / 001
-    </div>
+<p class="reveal">
 
-    <h2>
+Momentum is not something you wait for.
 
-      KNOW.
+</p>
 
-      <br>
 
-      <span>
-        MOVE.
-      </span>
+<div class="quote reveal">
 
-    </h2>
+MOMENTUM IS SOMETHING<br>
+YOU MANUFACTURE.
 
+</div>
 
-    <a href="vault.html" class="next">
 
-      <span>
-        ← RETURN TO THE VAULT
-      </span>
+<p class="reveal">
 
-      <span>
-        ALL TRANSMISSIONS ↗
-      </span>
+One action.
 
-    </a>
+Then another.
 
-  </div>
+Then another.
+
+</p>
+
+
+
+<!-- 06 -->
+
+<div
+class="section-marker reveal"
+id="final"
+>
+06 / FINAL TRANSMISSION
+</div>
+
+
+<h2 class="reveal">
+
+CLOSE<br>
+THE GAP.
+
+</h2>
+
+
+<p class="reveal">
+
+You will never know everything.
+
+</p>
+
+
+<p class="reveal">
+
+You will never feel completely ready.
+
+</p>
+
+
+<p class="reveal">
+
+There will always be another article,
+another tool,
+another reason to wait.
+
+</p>
+
+
+<p class="reveal">
+
+The advantage belongs to the person
+who can turn understanding into movement.
+
+</p>
+
+
+<div class="highlight reveal">
+
+<p>
+
+<strong>
+Stop collecting permission.
+Start creating evidence.
+</strong>
+
+</p>
+
+</div>
+
+
+
+<div class="final reveal">
+
+<div class="final-label">
+TRANSMISSION COMPLETE / 001
+</div>
+
+<h2>
+KNOW.<br>
+<span class="lime">
+MOVE.
+</span>
+</h2>
+
+<p>
+The gap closes with the first action.
+Not the perfect action.
+The first one.
+</p>
+
+</div>
+
+
+
+<!-- =======================================================
+     NAVIGATION
+======================================================= -->
+
+<div class="bottom-nav reveal">
+
+
+<a
+href="vault.html"
+class="bottom-card"
+>
+
+<div class="bottom-label">
+← RETURN
+</div>
+
+<div class="bottom-title">
+Knowledge Vault
+</div>
+
+<div class="bottom-arrow">
+ALL TRANSMISSIONS →
+</div>
+
+</a>
+
+
+<a
+href="article-digital-drug.html"
+class="bottom-card"
+>
+
+<div class="bottom-label">
+NEXT TRANSMISSION →
+</div>
+
+<div class="bottom-title">
+The Digital Drug
+</div>
+
+<div class="bottom-arrow">
+READ 002 →
+</div>
+
+</a>
+
+
+</div>
+
+
+</article>
+
+
+
+<!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+<aside class="sidebar">
+
+
+<div class="side-label">
+TRANSMISSION 001
+</div>
+
+
+<div class="side-line"></div>
+
+
+<a
+href="#information"
+class="side-link"
+>
+01 / Information
+</a>
+
+
+<a
+href="#gap"
+class="side-link"
+>
+02 / The Gap
+</a>
+
+
+<a
+href="#trap"
+class="side-link"
+>
+03 / The Trap
+</a>
+
+
+<a
+href="#switch"
+class="side-link"
+>
+04 / The Switch
+</a>
+
+
+<a
+href="#rule"
+class="side-link"
+>
+05 / The Rule
+</a>
+
+
+<a
+href="#final"
+class="side-link"
+>
+06 / Final Transmission
+</a>
+
+
+
+<div class="progress-card">
+
+<span>
+READING PROGRESS
+</span>
+
+<strong id="readingPercent">
+0%
+</strong>
+
+<div class="reading-line">
+
+<span id="readingLine">
+</span>
+
+</div>
+
+</div>
+
+
+</aside>
+
+
+</div>
+
+</div>
 
 </section>
 
 </main>
 
 
+
+<!-- =======================================================
+     FOOTER
+======================================================= -->
+
 <footer>
 
-  <div>
-    FOCUSPULSE®
-  </div>
+<div class="container footer">
 
-  <div>
-    CONTROL YOUR ATTENTION.
-  </div>
+
+<div class="footer-copy">
+
+© <span id="year"></span>
+FocusPulse — Empowering the 10% who execute.
+
+</div>
+
+
+<div class="footer-links">
+
+<a href="index.html">
+Home
+</a>
+
+<a href="manifesto.html">
+Manifesto
+</a>
+
+<a href="vault.html">
+Vault
+</a>
+
+<a href="protocols.html">
+Protocols
+</a>
+
+<a href="focus.html">
+Focus
+</a>
+
+</div>
+
+
+</div>
 
 </footer>
 
 
+
 <script>
 
-/* =========================
-   SCROLL PROGRESS
-========================= */
+/* =========================================================
+   FOCUSPULSE — ACTION GAP ENGINE
+========================================================= */
 
 const progress =
-  document.querySelector(".progress");
+document.getElementById("progress");
 
-window.addEventListener("scroll",()=>{
+const readingLine =
+document.getElementById("readingLine");
 
-  const top = window.scrollY;
+const readingPercent =
+document.getElementById("readingPercent");
 
-  const height =
-    document.documentElement.scrollHeight -
-    window.innerHeight;
-
-  const percent =
-    (top / height) * 100;
-
-  progress.style.width =
-    percent + "%";
-
-});
+const nav =
+document.getElementById("nav");
 
 
-/* =========================
-   REVEALS
-========================= */
+/* =========================================================
+   SCROLL PROGRESS
+========================================================= */
 
-const observer =
-  new IntersectionObserver(
-    entries=>{
+function updateProgress(){
 
-      entries.forEach(entry=>{
+    const scrollTop =
+        window.scrollY;
 
-        if(entry.isIntersecting){
+    const documentHeight =
+        document.documentElement.scrollHeight
+        -
+        window.innerHeight;
 
-          entry.target.classList.add("show");
+    const percentage =
+        documentHeight > 0
+        ?
+        (scrollTop / documentHeight) * 100
+        :
+        0;
+
+    const value =
+        Math.min(
+            100,
+            Math.max(
+                0,
+                percentage
+            )
+        );
+
+    progress.style.width =
+        value + "%";
+
+    readingLine.style.width =
+        value + "%";
+
+    readingPercent.textContent =
+        Math.round(value) + "%";
+}
+
+
+window.addEventListener(
+    "scroll",
+    updateProgress,
+    {passive:true}
+);
+
+updateProgress();
+
+
+
+/* =========================================================
+   NAV STATE
+========================================================= */
+
+function updateNav(){
+
+    if(window.scrollY > 25){
+
+        nav.classList.add(
+            "scrolled"
+        );
+
+    }else{
+
+        nav.classList.remove(
+            "scrolled"
+        );
+
+    }
+
+}
+
+
+window.addEventListener(
+    "scroll",
+    updateNav,
+    {passive:true}
+);
+
+updateNav();
+
+
+
+/* =========================================================
+   REVEAL
+========================================================= */
+
+const revealElements =
+    document.querySelectorAll(
+        ".reveal"
+    );
+
+const reduceMotion =
+    window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+
+if(
+    "IntersectionObserver" in window
+    &&
+    !reduceMotion
+){
+
+    const observer =
+        new IntersectionObserver(
+            (entries, observer) => {
+
+                entries.forEach(
+                    entry => {
+
+                        if(
+                            !entry.isIntersecting
+                        ){
+                            return;
+                        }
+
+                        entry.target.classList.add(
+                            "visible"
+                        );
+
+                        observer.unobserve(
+                            entry.target
+                        );
+
+                    }
+                );
+
+            },
+            {
+                threshold:.10,
+                rootMargin:
+                    "0px 0px -50px 0px"
+            }
+        );
+
+
+    revealElements.forEach(
+        element =>
+            observer.observe(
+                element
+            )
+    );
+
+}else{
+
+    revealElements.forEach(
+        element =>
+            element.classList.add(
+                "visible"
+            )
+    );
+
+}
+
+
+
+/* =========================================================
+   SIDEBAR ACTIVE SECTION
+========================================================= */
+
+const sideLinks =
+    document.querySelectorAll(
+        ".side-link"
+    );
+
+const articleSections = [
+    document.getElementById("information"),
+    document.getElementById("gap"),
+    document.getElementById("trap"),
+    document.getElementById("switch"),
+    document.getElementById("rule"),
+    document.getElementById("final")
+];
+
+
+if(
+    "IntersectionObserver" in window
+){
+
+    const sectionObserver =
+        new IntersectionObserver(
+            entries => {
+
+                entries.forEach(
+                    entry => {
+
+                        if(
+                            !entry.isIntersecting
+                        ){
+                            return;
+                        }
+
+                        sideLinks.forEach(
+                            link =>
+                                link.style.color =
+                                    "#666"
+                        );
+
+                        const active =
+                            document.querySelector(
+                                `.side-link[href="#${entry.target.id}"]`
+                            );
+
+                        if(active){
+
+                            active.style.color =
+                                "#d8ff3e";
+
+                        }
+
+                    }
+                );
+
+            },
+            {
+                rootMargin:
+                    "-35% 0px -55% 0px"
+            }
+        );
+
+
+    articleSections.forEach(
+        section => {
+
+            if(section){
+                sectionObserver.observe(
+                    section
+                );
+            }
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   SMOOTH SIDEBAR LINKS
+========================================================= */
+
+sideLinks.forEach(
+    link => {
+
+        link.addEventListener(
+            "click",
+            event => {
+
+                const targetId =
+                    link.getAttribute(
+                        "href"
+                    );
+
+                if(
+                    !targetId ||
+                    targetId === "#"
+                ){
+                    return;
+                }
+
+                const target =
+                    document.querySelector(
+                        targetId
+                    );
+
+                if(!target){
+                    return;
+                }
+
+                event.preventDefault();
+
+                target.scrollIntoView({
+                    behavior:
+                        reduceMotion
+                        ?
+                        "auto"
+                        :
+                        "smooth",
+                    block:"start"
+                });
+
+            }
+        );
+
+    }
+);
+
+
+
+/* =========================================================
+   YEAR
+========================================================= */
+
+document.getElementById(
+    "year"
+).textContent =
+    new Date().getFullYear();
+
+
+
+/* =========================================================
+   POINTER CARD EFFECT
+========================================================= */
+
+if(
+    !reduceMotion &&
+    window.matchMedia(
+        "(pointer:fine)"
+    ).matches
+){
+
+    document
+        .querySelectorAll(
+            ".bottom-card,.protocol,.opening,.final"
+        )
+        .forEach(
+            card => {
+
+                card.addEventListener(
+                    "pointermove",
+                    event => {
+
+                        const rect =
+                            card.getBoundingClientRect();
+
+                        const x =
+                            event.clientX -
+                            rect.left;
+
+                        const y =
+                            event.clientY -
+                            rect.top;
+
+                        card.style.setProperty(
+                            "--mx",
+                            x + "px"
+                        );
+
+                        card.style.setProperty(
+                            "--my",
+                            y + "px"
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key === "Escape"
+        ){
+
+            document
+                .activeElement
+                ?.blur();
 
         }
 
-      });
-
-    },
-    {
-      threshold:.12
     }
-  );
-
-document
-  .querySelectorAll(".reveal")
-  .forEach(el=>observer.observe(el));
-
-
-/* =========================
-   CURSOR
-========================= */
-
-const cursor =
-  document.querySelector(".cursor");
-
-document.addEventListener("mousemove",e=>{
-
-  cursor.style.left =
-    e.clientX + "px";
-
-  cursor.style.top =
-    e.clientY + "px";
-
-});
-
-
-document.querySelectorAll("a")
-.forEach(link=>{
-
-  link.addEventListener("mouseenter",()=>{
-    cursor.classList.add("active");
-  });
-
-  link.addEventListener("mouseleave",()=>{
-    cursor.classList.remove("active");
-  });
-
-});
-
-
-/* =========================
-   AMBIENT GLOW
-========================= */
-
-const glow =
-  document.querySelector(".glow");
-
-document.addEventListener("mousemove",e=>{
-
-  glow.animate(
-    {
-      left:e.clientX+"px",
-      top:e.clientY+"px"
-    },
-    {
-      duration:900,
-      fill:"forwards"
-    }
-  );
-
-});
-
-
-/* =========================
-   SUBTLE PARALLAX NUMBER
-========================= */
-
-const number =
-  document.querySelector(".hero-number");
-
-window.addEventListener("scroll",()=>{
-
-  const y =
-    window.scrollY * .12;
-
-  number.style.transform =
-    `translateY(${y}px)`;
-
-});
+);
 
 </script>
 
