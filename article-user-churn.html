@@ -2,1591 +2,1575 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050505">
+<meta name="description" content="The User Churn Protocol — FocusPulse. Change the system. Change the behaviour.">
 
 <title>The User Churn Protocol — FocusPulse®</title>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+<style>
 :root{
-  --bg:#050505;
-  --panel:#090909;
-  --fg:#f4f4ee;
-  --muted:#696969;
-  --dim:#383838;
-  --line:rgba(255,255,255,.10);
-  --lime:#d8ff3e;
-  --red:#ff453a;
+--bg:#050505;
+--panel:#090909;
+--panel2:#0d0d0d;
+--text:#f4f4ef;
+--muted:#777;
+--dim:#444;
+--line:rgba(255,255,255,.10);
+--lime:#d8ff3e;
+--red:#ff5b5b;
+--ease:cubic-bezier(.16,1,.3,1);
 }
 
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
 html{
-  scroll-behavior:smooth;
+scroll-behavior:smooth;
+background:var(--bg);
 }
 
 body{
-  background:var(--bg);
-  color:var(--fg);
-  font-family:"Space Grotesk",sans-serif;
-  overflow-x:hidden;
+background:var(--bg);
+color:var(--text);
+font-family:"DM Sans",sans-serif;
+overflow-x:hidden;
+}
+
+body:before{
+content:"";
+position:fixed;
+inset:0;
+z-index:-2;
+pointer-events:none;
+background-image:
+linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+background-size:80px 80px;
+mask-image:linear-gradient(to bottom,black,transparent);
+}
+
+body:after{
+content:"";
+position:fixed;
+inset:0;
+z-index:9999;
+pointer-events:none;
+opacity:.035;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 a{
-  color:inherit;
-  text-decoration:none;
+color:inherit;
+text-decoration:none;
 }
 
 ::selection{
-  background:var(--lime);
-  color:#000;
+background:var(--lime);
+color:#000;
 }
 
-/* =========================
-   PROGRESS
-========================= */
+::-webkit-scrollbar{
+width:7px;
+}
+
+::-webkit-scrollbar-track{
+background:#050505;
+}
+
+::-webkit-scrollbar-thumb{
+background:#292929;
+border-radius:50px;
+}
 
 .progress{
-  position:fixed;
-  top:0;
-  left:0;
-  width:0;
-  height:2px;
-  background:var(--lime);
-  z-index:9999;
+position:fixed;
+top:0;
+left:0;
+width:0;
+height:2px;
+z-index:10000;
+background:var(--lime);
+box-shadow:0 0 18px rgba(216,255,62,.5);
 }
 
-/* =========================
-   NAV
-========================= */
+/* NAV */
 
 .nav{
-  position:fixed;
-  top:20px;
-  left:50%;
-  transform:translateX(-50%);
+position:fixed;
+top:18px;
+left:50%;
+transform:translateX(-50%);
+z-index:1000;
+width:min(1120px,calc(100% - 28px));
+height:64px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:8px 9px 8px 22px;
+border:1px solid var(--line);
+border-radius:100px;
+background:rgba(5,5,5,.72);
+backdrop-filter:blur(25px);
+-webkit-backdrop-filter:blur(25px);
+transition:.4s var(--ease);
+}
 
-  width:min(1200px,calc(100% - 30px));
-  height:62px;
-
-  padding:0 9px 0 22px;
-
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-
-  border:1px solid var(--line);
-  border-radius:100px;
-
-  background:rgba(5,5,5,.72);
-  backdrop-filter:blur(25px);
-
-  z-index:1000;
+.nav.scrolled{
+background:rgba(5,5,5,.94);
+border-color:rgba(255,255,255,.16);
+box-shadow:0 20px 80px rgba(0,0,0,.35);
 }
 
 .logo{
-  font-size:20px;
-  font-weight:700;
-  letter-spacing:-1.5px;
+display:flex;
+align-items:center;
+gap:8px;
+font-family:"Space Grotesk";
+font-size:21px;
+font-weight:700;
+letter-spacing:-1.5px;
 }
 
-.logo span{
-  color:var(--lime);
+.logo-mark{
+width:22px;
+height:22px;
+border:2px solid #eee;
+border-radius:50%;
+position:relative;
+}
+
+.logo-mark:before{
+content:"";
+position:absolute;
+width:6px;
+height:6px;
+left:6px;
+top:6px;
+border-radius:50%;
+background:var(--lime);
+box-shadow:0 0 12px var(--lime);
+}
+
+.logo-text span{
+color:var(--lime);
 }
 
 .logo sup{
-  color:#555;
-  font-size:8px;
+color:#555;
+font-size:8px;
 }
 
 .nav-links{
-  display:flex;
-  gap:27px;
-  color:#666;
-  font-size:10px;
+display:flex;
+gap:28px;
+color:#777;
+font-size:11px;
 }
 
 .nav-links a{
-  transition:.3s;
+transition:.3s ease;
 }
 
-.nav-links a:hover{
-  color:#fff;
+.nav-links a:hover,
+.nav-links a.active{
+color:#fff;
 }
 
 .nav-cta{
-  background:var(--lime);
-  color:#000;
-
-  padding:12px 18px;
-
-  border-radius:100px;
-
-  font-size:10px;
-  font-weight:700;
+padding:12px 18px;
+background:var(--lime);
+color:#000;
+border-radius:100px;
+font-size:11px;
+font-weight:700;
+transition:.35s var(--ease);
 }
 
-/* =========================
-   BACKGROUND
-========================= */
-
-.grid{
-  position:fixed;
-  inset:0;
-  z-index:-3;
-  pointer-events:none;
-
-  background-image:
-    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
-
-  background-size:80px 80px;
+.nav-cta:hover{
+transform:translateY(-3px);
+box-shadow:0 15px 50px rgba(216,255,62,.2);
 }
 
-.scanlines{
-  position:fixed;
-  inset:0;
-
-  pointer-events:none;
-  z-index:9997;
-
-  opacity:.025;
-
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      transparent 0px,
-      transparent 3px,
-      #fff 4px
-    );
-}
-
-/* =========================
-   CONTAINER
-========================= */
+/* GLOBAL */
 
 .container{
-  width:min(1250px,100%);
-  margin:auto;
+width:min(1180px,calc(100% - 40px));
+margin:auto;
 }
 
-/* =========================
-   HERO
-========================= */
+.eyebrow{
+display:inline-flex;
+align-items:center;
+gap:9px;
+padding:8px 13px;
+border:1px solid var(--line);
+border-radius:100px;
+color:#777;
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
+}
+
+.dot{
+width:6px;
+height:6px;
+border-radius:50%;
+background:var(--lime);
+box-shadow:0 0 15px var(--lime);
+}
+
+/* HERO */
 
 .hero{
-  min-height:100vh;
-
-  padding:180px 30px 100px;
-
-  display:flex;
-  align-items:center;
-
-  position:relative;
-}
-
-.hero-inner{
-  width:min(1250px,100%);
-  margin:auto;
-}
-
-.system-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-
-  padding-bottom:20px;
-
-  border-bottom:1px solid var(--line);
-
-  color:#555;
-
-  font-family:"DM Mono";
-
-  font-size:8px;
-
-  letter-spacing:2px;
-}
-
-.live{
-  color:var(--lime);
-}
-
-.live::before{
-  content:"";
-
-  display:inline-block;
-
-  width:6px;
-  height:6px;
-
-  margin-right:7px;
-
-  border-radius:50%;
-
-  background:var(--lime);
-
-  box-shadow:0 0 15px var(--lime);
-
-  animation:pulse 1.5s infinite;
-}
-
-@keyframes pulse{
-  50%{opacity:.25}
+min-height:88vh;
+padding:190px 0 95px;
+display:flex;
+align-items:center;
 }
 
 .hero h1{
-  margin-top:55px;
-
-  font-size:clamp(65px,12vw,160px);
-
-  line-height:.78;
-
-  letter-spacing:-10px;
-
-  font-weight:500;
+margin-top:38px;
+max-width:1050px;
+font-family:"Space Grotesk";
+font-size:clamp(70px,12vw,150px);
+line-height:.80;
+letter-spacing:-10px;
+font-weight:500;
 }
 
-.hero h1 span{
-  color:var(--lime);
+.outline{
+color:transparent;
+-webkit-text-stroke:1px rgba(255,255,255,.42);
 }
 
-.hero-desc{
-  max-width:600px;
-
-  margin-top:55px;
-
-  color:#777;
-
-  font-size:15px;
-
-  line-height:1.9;
+.lime{
+color:var(--lime);
 }
 
-/* =========================
-   SYSTEM DASHBOARD
-========================= */
-
-.dashboard-section{
-  padding:0 30px 140px;
+.hero-bottom{
+margin-top:55px;
+display:flex;
+align-items:flex-end;
+justify-content:space-between;
+gap:50px;
 }
 
-.dashboard{
-  border:1px solid var(--line);
-
-  background:var(--panel);
+.intro{
+max-width:610px;
+color:var(--muted);
+font-size:14px;
+line-height:1.9;
 }
 
-.dashboard-head{
-  padding:18px 22px;
-
-  display:flex;
-  justify-content:space-between;
-
-  border-bottom:1px solid var(--line);
-
-  color:#555;
-
-  font-family:"DM Mono";
-
-  font-size:8px;
-
-  letter-spacing:1.5px;
+.meta{
+display:flex;
+gap:28px;
+white-space:nowrap;
+color:#555;
+font-size:9px;
+letter-spacing:1.6px;
+text-transform:uppercase;
 }
 
-.dashboard-body{
-  display:grid;
+/* DIAGNOSTIC */
 
-  grid-template-columns:1fr 1fr 1fr;
+.diagnostic{
+margin-top:30px;
+padding:25px;
+border:1px solid var(--line);
+border-radius:28px;
+background:
+radial-gradient(circle at 20% 0%,rgba(216,255,62,.07),transparent 40%),
+#080808;
 }
 
-.stat{
-  padding:30px;
-
-  min-height:170px;
-
-  border-right:1px solid var(--line);
+.diagnostic-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:22px;
 }
 
-.stat:last-child{
-  border-right:0;
-}
-
-.stat-label{
-  color:#444;
-
-  font-family:"DM Mono";
-
-  font-size:8px;
-}
-
-.stat-number{
-  margin-top:25px;
-
-  font-size:58px;
-
-  letter-spacing:-4px;
-}
-
-.stat-number span{
-  color:var(--lime);
-}
-
-.stat-note{
-  margin-top:10px;
-
-  color:#555;
-
-  font-size:10px;
-}
-
-/* =========================
-   ARTICLE
-========================= */
-
-.article-wrap{
-  width:min(1250px,100%);
-  margin:auto;
-
-  padding:
-    110px 30px 160px;
-
-  display:grid;
-
-  grid-template-columns:220px minmax(0,720px) 1fr;
-
-  gap:70px;
-}
-
-.side{
-  position:sticky;
-  top:120px;
-  align-self:start;
-}
-
-.side-label{
-  color:#444;
-
-  font-family:"DM Mono";
-
-  font-size:8px;
-
-  letter-spacing:2px;
-}
-
-.side-line{
-  width:45px;
-  height:1px;
-
-  background:var(--lime);
-
-  margin:18px 0;
-}
-
-.side p{
-  color:#555;
-
-  font-family:"DM Mono";
-
-  font-size:9px;
-
-  line-height:1.9;
-}
-
-.article p{
-  color:#aaa;
-
-  font-size:17px;
-
-  line-height:2;
-
-  margin-bottom:30px;
-}
-
-.article .lead{
-  color:#eee;
-
-  font-size:25px;
-
-  line-height:1.5;
-
-  margin-bottom:65px;
-}
-
-.index{
-  margin-top:100px;
-  margin-bottom:22px;
-
-  color:var(--lime);
-
-  font-family:"DM Mono";
-
-  font-size:9px;
-
-  letter-spacing:2px;
-}
-
-.article h2{
-  margin-bottom:30px;
-
-  font-size:clamp(42px,6vw,78px);
-
-  line-height:.88;
-
-  letter-spacing:-5px;
-
-  font-weight:500;
-}
-
-.article h2 span{
-  color:var(--lime);
-}
-
-/* =========================
-   PROTOCOL BOX
-========================= */
-
-.protocol{
-  margin:70px 0;
-
-  border:1px solid var(--line);
-
-  background:#080808;
-}
-
-.protocol-head{
-  padding:17px 20px;
-
-  border-bottom:1px solid var(--line);
-
-  display:flex;
-  justify-content:space-between;
-
-  color:#555;
-
-  font-family:"DM Mono";
-
-  font-size:8px;
-}
-
-.protocol-head span:last-child{
-  color:var(--lime);
-}
-
-.protocol-row{
-  padding:21px;
-
-  display:grid;
-
-  grid-template-columns:45px 1fr 90px;
-
-  gap:15px;
-
-  border-bottom:1px solid var(--line);
-
-  align-items:center;
-
-  transition:.3s;
-}
-
-.protocol-row:last-child{
-  border-bottom:0;
-}
-
-.protocol-row:hover{
-  background:#0d0d0d;
-}
-
-.protocol-num{
-  color:#444;
-
-  font-family:"DM Mono";
-
-  font-size:9px;
-}
-
-.protocol-task{
-  color:#aaa;
-
-  font-size:12px;
+.diagnostic-title{
+color:#555;
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
 }
 
 .status{
-  text-align:right;
-
-  color:#444;
-
-  font-family:"DM Mono";
-
-  font-size:8px;
+color:var(--lime);
+font-size:9px;
+letter-spacing:1.5px;
 }
 
-.status.active{
-  color:var(--lime);
+.metrics{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
 }
 
-/* =========================
-   STATEMENT
-========================= */
-
-.statement{
-  min-height:75vh;
-
-  padding:100px 30px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  border-top:1px solid var(--line);
-  border-bottom:1px solid var(--line);
-
-  text-align:center;
+.metric{
+padding:25px;
+border:1px solid var(--line);
+border-radius:18px;
+background:#0a0a0a;
 }
 
-.statement h2{
-  max-width:1100px;
-
-  font-size:clamp(55px,9vw,120px);
-
-  line-height:.85;
-
-  letter-spacing:-8px;
-
-  font-weight:500;
+.metric-label{
+color:#555;
+font-size:8px;
+letter-spacing:1.5px;
+text-transform:uppercase;
 }
 
-.statement h2 span{
-  color:var(--lime);
+.metric-number{
+margin-top:12px;
+font-family:"Space Grotesk";
+font-size:45px;
+line-height:.85;
+letter-spacing:-3px;
 }
 
-/* =========================
-   FAILURE LOG
-========================= */
-
-.log-section{
-  padding:130px 30px;
+.metric-number span{
+color:var(--lime);
 }
 
-.log{
-  border:1px solid var(--line);
+.metric-desc{
+margin-top:12px;
+color:#444;
+font-size:8px;
+letter-spacing:1px;
+text-transform:uppercase;
 }
 
-.log-title{
-  padding:20px;
+/* ARTICLE */
 
-  border-bottom:1px solid var(--line);
-
-  color:#555;
-
-  font-family:"DM Mono";
-
-  font-size:8px;
-
-  letter-spacing:2px;
+.article-section{
+padding:70px 0 130px;
 }
 
-.log-row{
-  display:grid;
-
-  grid-template-columns:100px 1fr 100px;
-
-  padding:22px;
-
-  border-bottom:1px solid var(--line);
-
-  font-family:"DM Mono";
-
-  font-size:9px;
+.article-layout{
+display:grid;
+grid-template-columns:minmax(0,760px) 220px;
+gap:100px;
+align-items:start;
 }
 
-.log-row:last-child{
-  border-bottom:0;
+.article-body{
+color:#999;
+font-size:16px;
+line-height:1.95;
 }
 
-.log-row .time{
-  color:#444;
+.article-body p{
+margin-bottom:28px;
 }
 
-.log-row .error{
-  color:#888;
+.article-body strong{
+color:#eee;
 }
 
-.log-row .fail{
-  color:var(--red);
+.opening{
+margin:45px 0 75px;
+padding:35px;
+border:1px solid var(--line);
+border-radius:28px;
+background:
+radial-gradient(circle at 0 0,rgba(216,255,62,.08),transparent 40%),
+#090909;
 }
 
-.log-row .pass{
-  color:var(--lime);
+.opening-label{
+margin-bottom:15px;
+color:var(--lime);
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
 }
 
-/* =========================
-   FINAL
-========================= */
+.opening p{
+margin:0;
+color:#ddd;
+font-family:"Space Grotesk";
+font-size:24px;
+line-height:1.15;
+letter-spacing:-1px;
+}
+
+/* SECTIONS */
+
+.section-marker{
+display:flex;
+align-items:center;
+gap:15px;
+margin-top:95px;
+margin-bottom:18px;
+color:var(--lime);
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
+}
+
+.section-marker:after{
+content:"";
+width:55px;
+height:1px;
+background:rgba(216,255,62,.35);
+}
+
+.article-body h2{
+margin:0 0 27px;
+color:#f4f4ef;
+font-family:"Space Grotesk";
+font-size:clamp(38px,5vw,65px);
+line-height:.88;
+letter-spacing:-4px;
+font-weight:500;
+}
+
+/* QUOTE */
+
+.quote{
+margin:75px 0;
+padding:30px 0 30px 28px;
+border-left:2px solid var(--lime);
+color:#eee;
+font-family:"Space Grotesk";
+font-size:clamp(27px,4vw,39px);
+line-height:1.05;
+letter-spacing:-1.5px;
+}
+
+/* PROTOCOL */
+
+.protocol{
+margin:55px 0 70px;
+border:1px solid var(--line);
+border-radius:28px;
+overflow:hidden;
+background:#090909;
+}
+
+.protocol-head{
+padding:25px 28px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:1px solid var(--line);
+}
+
+.protocol-head span:first-child{
+color:#555;
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
+}
+
+.protocol-head span:last-child{
+color:var(--lime);
+font-size:9px;
+letter-spacing:1px;
+}
+
+.protocol-row{
+display:grid;
+grid-template-columns:55px 1fr 80px;
+gap:20px;
+align-items:center;
+padding:24px 28px;
+border-bottom:1px solid var(--line);
+transition:.4s var(--ease);
+}
+
+.protocol-row:last-child{
+border-bottom:0;
+}
+
+.protocol-row:hover{
+background:rgba(216,255,62,.025);
+padding-left:33px;
+}
+
+.protocol-number{
+color:var(--lime);
+font-size:10px;
+}
+
+.protocol-text{
+color:#ccc;
+font-size:12px;
+line-height:1.5;
+}
+
+.protocol-state{
+justify-self:end;
+color:#555;
+font-size:8px;
+letter-spacing:1.5px;
+}
+
+.protocol-row:hover .protocol-state{
+color:var(--lime);
+}
+
+/* FRICTION */
+
+.friction-card{
+margin:60px 0;
+padding:32px;
+border:1px solid var(--line);
+border-radius:28px;
+background:#090909;
+}
+
+.friction-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+.friction-item{
+padding:22px;
+border:1px solid var(--line);
+border-radius:18px;
+transition:.4s var(--ease);
+}
+
+.friction-item:hover{
+transform:translateY(-5px);
+border-color:rgba(216,255,62,.25);
+}
+
+.friction-item small{
+display:block;
+color:var(--lime);
+font-size:8px;
+letter-spacing:1.5px;
+margin-bottom:10px;
+}
+
+.friction-item strong{
+display:block;
+color:#eee;
+font-family:"Space Grotesk";
+font-size:19px;
+font-weight:500;
+line-height:1;
+letter-spacing:-.5px;
+}
+
+.friction-item p{
+margin-top:10px;
+font-size:11px;
+line-height:1.6;
+}
+
+/* EVENT LOG */
+
+.event-log{
+margin:65px 0;
+border:1px solid var(--line);
+border-radius:28px;
+overflow:hidden;
+background:#080808;
+}
+
+.event-title{
+padding:22px 27px;
+border-bottom:1px solid var(--line);
+color:#555;
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
+}
+
+.event{
+display:grid;
+grid-template-columns:65px 1fr 65px;
+gap:15px;
+align-items:center;
+padding:20px 27px;
+border-bottom:1px solid var(--line);
+}
+
+.event:last-child{
+border-bottom:0;
+}
+
+.event-time{
+color:#555;
+font-family:"Space Grotesk";
+font-size:10px;
+}
+
+.event-text{
+color:#999;
+font-size:11px;
+line-height:1.5;
+}
+
+.event-status{
+justify-self:end;
+font-size:8px;
+letter-spacing:1px;
+}
+
+.fail{
+color:var(--red);
+}
+
+.patch,
+.win{
+color:var(--lime);
+}
+
+/* DEFAULT */
+
+.default-card{
+margin:65px 0;
+padding:35px;
+border:1px solid var(--line);
+border-radius:30px;
+background:
+radial-gradient(circle at 100% 0,rgba(216,255,62,.06),transparent 45%),
+#090909;
+}
+
+.default-card h3{
+color:#eee;
+font-family:"Space Grotesk";
+font-size:32px;
+line-height:.95;
+letter-spacing:-2px;
+font-weight:500;
+}
+
+.default-line{
+height:1px;
+margin:30px 0;
+background:var(--line);
+}
+
+.default-row{
+display:flex;
+justify-content:space-between;
+gap:25px;
+padding:15px 0;
+border-bottom:1px solid rgba(255,255,255,.06);
+font-size:11px;
+}
+
+.default-row:last-child{
+border-bottom:0;
+}
+
+.default-row span:first-child{
+color:#aaa;
+}
+
+.default-row span:last-child{
+color:var(--lime);
+}
+
+/* FINAL */
 
 .final{
-  min-height:100vh;
-
-  padding:130px 30px;
-
-  display:flex;
-  align-items:center;
-
-  border-top:1px solid var(--line);
+margin-top:100px;
+padding:65px 40px;
+text-align:center;
+border:1px solid var(--line);
+border-radius:32px;
+background:
+radial-gradient(circle at center,rgba(216,255,62,.09),transparent 55%),
+#080808;
 }
 
 .final-label{
-  color:#555;
-
-  font-family:"DM Mono";
-
-  font-size:9px;
-
-  letter-spacing:2px;
+color:var(--lime);
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
 }
 
 .final h2{
-  margin-top:40px;
-
-  font-size:clamp(70px,13vw,175px);
-
-  line-height:.76;
-
-  letter-spacing:-11px;
-
-  font-weight:500;
+margin-top:25px;
+font-family:"Space Grotesk";
+font-size:clamp(55px,9vw,105px);
+letter-spacing:-7px;
+line-height:.8;
+font-weight:500;
 }
 
-.final h2 span{
-  color:var(--lime);
+.final p{
+max-width:500px;
+margin:30px auto 0;
+color:#777;
 }
 
-.final-links{
-  margin-top:75px;
+/* SIDEBAR */
 
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
+.sidebar{
+position:sticky;
+top:110px;
 }
 
-.btn{
-  padding:15px 22px;
-
-  border:1px solid var(--line);
-
-  border-radius:100px;
-
-  font-family:"DM Mono";
-
-  font-size:9px;
-
-  transition:.35s;
+.side-label{
+margin-bottom:18px;
+color:#555;
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
 }
 
-.btn:hover{
-  border-color:var(--lime);
-
-  color:var(--lime);
-
-  transform:translateY(-4px);
+.side-line{
+height:1px;
+margin-bottom:12px;
+background:var(--line);
 }
 
-.btn.primary{
-  background:var(--lime);
-
-  border-color:var(--lime);
-
-  color:#000;
+.side-link{
+display:block;
+padding:9px 0;
+color:#666;
+font-size:11px;
+transition:.3s;
 }
 
-/* =========================
-   REVEAL
-========================= */
-
-.reveal{
-  opacity:0;
-
-  transform:translateY(50px);
-
-  transition:
-    opacity 1s cubic-bezier(.16,1,.3,1),
-    transform 1s cubic-bezier(.16,1,.3,1);
+.side-link:hover,
+.side-link.active{
+color:var(--lime);
+transform:translateX(5px);
 }
 
-.reveal.show{
-  opacity:1;
-  transform:translateY(0);
+.progress-card{
+margin-top:35px;
+padding:22px;
+border:1px solid var(--line);
+border-radius:20px;
+background:#090909;
 }
 
-/* =========================
-   FOOTER
-========================= */
+.progress-card span{
+display:block;
+color:#555;
+font-size:9px;
+letter-spacing:1.5px;
+text-transform:uppercase;
+}
+
+.progress-card strong{
+display:block;
+margin-top:7px;
+color:#eee;
+font-family:"Space Grotesk";
+font-size:28px;
+font-weight:500;
+}
+
+.reading-line{
+height:2px;
+margin-top:15px;
+background:#1d1d1d;
+overflow:hidden;
+}
+
+.reading-line span{
+display:block;
+width:0;
+height:100%;
+background:var(--lime);
+}
+
+/* BOTTOM */
+
+.bottom-nav{
+margin-top:120px;
+padding-top:35px;
+border-top:1px solid var(--line);
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+}
+
+.bottom-card{
+min-height:190px;
+padding:27px;
+border:1px solid var(--line);
+border-radius:25px;
+background:#090909;
+transition:.45s var(--ease);
+}
+
+.bottom-card:hover{
+transform:translateY(-7px);
+border-color:rgba(216,255,62,.25);
+}
+
+.bottom-label{
+color:#555;
+font-size:9px;
+letter-spacing:2px;
+text-transform:uppercase;
+}
+
+.bottom-title{
+margin-top:22px;
+color:#eee;
+font-family:"Space Grotesk";
+font-size:27px;
+line-height:1;
+letter-spacing:-1.3px;
+}
+
+.bottom-arrow{
+margin-top:30px;
+color:var(--lime);
+font-size:10px;
+letter-spacing:1px;
+}
+
+/* FOOTER */
 
 footer{
-  padding:30px;
-
-  border-top:1px solid var(--line);
-
-  display:flex;
-  justify-content:space-between;
-
-  color:#444;
-
-  font-family:"DM Mono";
-
-  font-size:9px;
+padding:55px 0;
+border-top:1px solid var(--line);
 }
 
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:800px){
-
-  .nav-links,
-  .nav-cta{
-    display:none;
-  }
-
-  .hero{
-    padding:
-      150px 20px 80px;
-  }
-
-  .hero h1{
-    font-size:20vw;
-    letter-spacing:-7px;
-  }
-
-  .dashboard-section{
-    padding-left:20px;
-    padding-right:20px;
-  }
-
-  .dashboard-body{
-    grid-template-columns:1fr;
-  }
-
-  .stat{
-    border-right:0;
-    border-bottom:1px solid var(--line);
-  }
-
-  .stat:last-child{
-    border-bottom:0;
-  }
-
-  .article-wrap{
-    display:block;
-
-    padding:
-      90px 20px 120px;
-  }
-
-  .side{
-    position:relative;
-    top:auto;
-
-    margin-bottom:60px;
-  }
-
-  .article p{
-    font-size:15px;
-  }
-
-  .article .lead{
-    font-size:21px;
-  }
-
-  .article h2{
-    letter-spacing:-3px;
-  }
-
-  .protocol-row{
-    grid-template-columns:35px 1fr;
-  }
-
-  .status{
-    display:none;
-  }
-
-  .statement{
-    padding-left:20px;
-    padding-right:20px;
-  }
-
-  .statement h2{
-    font-size:14vw;
-    letter-spacing:-5px;
-  }
-
-  .log-section{
-    padding-left:20px;
-    padding-right:20px;
-  }
-
-  .log-row{
-    grid-template-columns:70px 1fr;
-  }
-
-  .log-row .status{
-    display:none;
-  }
-
-  .final{
-    padding:100px 20px;
-  }
-
-  .final h2{
-    font-size:20vw;
-    letter-spacing:-7px;
-  }
-
-  footer{
-    display:block;
-    line-height:2;
-  }
+.footer{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:25px;
 }
 
-@media(prefers-reduced-motion:reduce){
+.footer-copy{
+color:#444;
+font-size:10px;
+}
 
-  html{
-    scroll-behavior:auto;
-  }
+.footer-links{
+display:flex;
+flex-wrap:wrap;
+gap:25px;
+color:#555;
+font-size:10px;
+}
 
-  *,
-  *::before,
-  *::after{
-    animation-duration:.01ms!important;
-    transition-duration:.01ms!important;
-  }
+.footer-links a:hover{
+color:#fff;
+}
 
-  .reveal{
-    opacity:1;
-    transform:none;
-  }
+/* REVEAL */
+
+.reveal{
+opacity:0;
+transform:translateY(30px);
+transition:
+opacity .9s var(--ease),
+transform .9s var(--ease);
+}
+
+.reveal.visible{
+opacity:1;
+transform:none;
+}
+
+/* MOBILE */
+
+@media(max-width:850px){
+
+.nav-links{
+display:none;
+}
+
+.hero{
+padding-top:150px;
+}
+
+.hero h1{
+letter-spacing:-6px;
+}
+
+.hero-bottom{
+display:block;
+}
+
+.meta{
+margin-top:28px;
+}
+
+.article-layout{
+grid-template-columns:1fr;
+}
+
+.sidebar{
+display:none;
+}
+
+.metrics{
+grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:600px){
+
+.container{
+width:calc(100% - 28px);
+}
+
+.nav{
+top:10px;
+height:58px;
+padding-left:16px;
+}
+
+.nav-cta{
+display:none;
+}
+
+.hero{
+min-height:auto;
+padding:135px 0 80px;
+}
+
+.hero h1{
+font-size:61px;
+letter-spacing:-5px;
+}
+
+.intro{
+font-size:13px;
+}
+
+.article-body{
+font-size:15px;
+}
+
+.article-body h2{
+letter-spacing:-2.5px;
+}
+
+.opening{
+padding:25px;
+}
+
+.opening p{
+font-size:20px;
+}
+
+.quote{
+font-size:27px;
+}
+
+.protocol-row{
+grid-template-columns:35px 1fr;
+padding:20px;
+}
+
+.protocol-state{
+display:none;
+}
+
+.friction-grid{
+grid-template-columns:1fr;
+}
+
+.event{
+grid-template-columns:55px 1fr;
+padding:18px 20px;
+}
+
+.event-status{
+display:none;
+}
+
+.final{
+padding:50px 22px;
+}
+
+.final h2{
+letter-spacing:-5px;
+}
+
+.bottom-nav{
+grid-template-columns:1fr;
+}
+
+.footer{
+display:block;
+}
+
+.footer-links{
+margin-top:25px;
+}
+
 }
 </style>
 </head>
 
 <body>
 
-<div class="progress"></div>
-<div class="grid"></div>
-<div class="scanlines"></div>
+<div class="progress" id="progress"></div>
 
+<header class="nav" id="nav">
 
-<!-- NAV -->
+<a href="index.html" class="logo">
+<span class="logo-mark"></span>
+<span class="logo-text">focus<span>pulse</span><sup>®</sup></span>
+</a>
 
-<nav class="nav">
-
-  <a href="index.html" class="logo">
-    focus<span>pulse</span><sup>®</sup>
-  </a>
-
-  <div class="nav-links">
-
-    <a href="index.html">Home</a>
-    <a href="manifesto.html">Manifesto</a>
-    <a href="vault.html">Vault</a>
-    <a href="protocols.html">Protocols</a>
-
-  </div>
-
-  <a href="focus.html" class="nav-cta">
-    FOCUS MODE ↗
-  </a>
-
+<nav class="nav-links">
+<a href="index.html">Home</a>
+<a href="manifesto.html">Manifesto</a>
+<a href="vault.html">Vault</a>
+<a href="protocols.html">Protocols</a>
+<a href="focus.html">Focus</a>
 </nav>
+
+<a href="focus.html" class="nav-cta">
+FOCUS MODE ↗
+</a>
+
+</header>
 
 
 <main>
 
-
-<!-- HERO -->
-
 <section class="hero">
 
-  <div class="hero-inner">
+<div class="container">
 
-    <div class="system-top">
+<div class="eyebrow reveal">
+<span class="dot"></span>
+FOCUSPULSE / SYSTEM 003
+</div>
 
-      <span>
-        FOCUSPULSE / SYSTEM 003
-      </span>
+<h1 class="reveal">
+THE<br>
+<span class="outline">USER</span><br>
+<span class="lime">CHURN.</span>
+</h1>
 
-      <span class="live">
-        SYSTEM ACTIVE
-      </span>
+<div class="hero-bottom reveal">
 
-    </div>
+<p class="intro">
+Stop treating distraction like a personality problem.
+Your environment is a system.
+Change the system and the behaviour begins to change with it.
+</p>
 
+<div class="meta">
+<span>SYSTEMS</span>
+<span>07 MIN</span>
+<span>PROTOCOL ACTIVE</span>
+</div>
 
-    <h1 class="reveal">
+</div>
 
-      THE
+<div class="diagnostic reveal">
 
-      <br>
+<div class="diagnostic-top">
+<div class="diagnostic-title">
+ATTENTION SYSTEM DIAGNOSTIC RUNNING / 003
+</div>
+<div class="status">
+● SYSTEM ACTIVE
+</div>
+</div>
 
-      USER
+<div class="metrics">
 
-      <br>
+<div class="metric">
+<div class="metric-label">Distraction Load</div>
+<div class="metric-number">87<span>%</span></div>
+<div class="metric-desc">Above Baseline</div>
+</div>
 
-      <span>
-        CHURN.
-      </span>
+<div class="metric">
+<div class="metric-label">Context Switches</div>
+<div class="metric-number">43<span>x</span></div>
+<div class="metric-desc">Est. Daily</div>
+</div>
 
-    </h1>
+<div class="metric">
+<div class="metric-label">Deep Work</div>
+<div class="metric-number">18<span>%</span></div>
+<div class="metric-desc">Available Capacity</div>
+</div>
 
+</div>
 
-    <p class="hero-desc reveal">
+</div>
 
-      Stop treating distraction like a
-      personality problem.
-
-      Your environment is a system.
-
-      Change the system and the behaviour
-      begins to change with it.
-
-    </p>
-
-  </div>
-
-</section>
-
-
-<!-- DASHBOARD -->
-
-<section class="dashboard-section">
-
-  <div class="container">
-
-    <div class="dashboard reveal">
-
-      <div class="dashboard-head">
-
-        <span>
-          ATTENTION SYSTEM DIAGNOSTIC
-        </span>
-
-        <span>
-          RUNNING / 003
-        </span>
-
-      </div>
-
-
-      <div class="dashboard-body">
-
-        <div class="stat">
-
-          <div class="stat-label">
-            DISTRACTION LOAD
-          </div>
-
-          <div class="stat-number">
-            87<span>%</span>
-          </div>
-
-          <div class="stat-note">
-            ABOVE BASELINE
-          </div>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-label">
-            CONTEXT SWITCHES
-          </div>
-
-          <div class="stat-number">
-            43<span>x</span>
-          </div>
-
-          <div class="stat-note">
-            EST. DAILY
-          </div>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-label">
-            DEEP WORK
-          </div>
-
-          <div class="stat-number">
-            18<span>%</span>
-          </div>
-
-          <div class="stat-note">
-            AVAILABLE CAPACITY
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
+</div>
 
 </section>
 
 
-<!-- ARTICLE -->
-
-<section>
-
-  <div class="article-wrap">
-
-    <aside class="side">
-
-      <div class="side-label">
-        FOCUSPULSE / 003
-      </div>
-
-      <div class="side-line"></div>
-
-      <p>
-        CATEGORY<br>
-        SYSTEMS
-        <br><br>
-        READING TIME<br>
-        07 MIN
-        <br><br>
-        PROTOCOL<br>
-        ACTIVE
-      </p>
-
-    </aside>
-
-
-    <article class="article">
-
-
-      <p class="lead reveal">
-
-        You keep blaming yourself for
-        losing focus.
-
-        Maybe that's the wrong diagnosis.
-
-        Maybe your environment has been
-        designed to make focus difficult.
-
-      </p>
-
-
-      <p class="reveal">
-
-        Your phone is within reach.
-
-        Notifications are enabled.
-
-        Every application wants an update.
-
-        Every platform wants another minute.
-
-        Every interruption creates another
-        context switch.
-
-      </p>
-
-
-      <p class="reveal">
-
-        Then, when you fail to concentrate,
-        you call yourself undisciplined.
-
-        That's not a very good system.
-
-      </p>
-
-
-      <div class="index">
-        01 / DIAGNOSIS
-      </div>
-
-
-      <h2 class="reveal">
-
-        DON'T FIX
-        <span>
-          WILLPOWER.
-        </span>
-
-        <br>
-
-        FIX THE
-        ENVIRONMENT.
-
-      </h2>
-
-
-      <p class="reveal">
-
-        Willpower is expensive.
-
-        Every distraction you place directly
-        in front of yourself becomes another
-        decision you have to win.
-
-      </p>
-
-
-      <p class="reveal">
-
-        A better system removes the decision
-        completely.
-
-        If something consistently steals your
-        attention, increase the friction
-        between you and that thing.
-
-      </p>
-
-
-      <div class="index">
-        02 / THE PROTOCOL
-      </div>
-
-
-      <h2 class="reveal">
-
-        MAKE
-        <span>
-          DISTRACTION
-        </span>
-
-        EXPENSIVE.
-
-      </h2>
-
-
-      <div class="protocol reveal">
-
-        <div class="protocol-head">
-
-          <span>
-            ENVIRONMENT PATCH / 003
-          </span>
-
-          <span>
-            READY
-          </span>
-
-        </div>
-
-
-        <div class="protocol-row">
-
-          <div class="protocol-num">
-            01
-          </div>
-
-          <div class="protocol-task">
-            Remove non-essential notifications.
-          </div>
-
-          <div class="status active">
-            PATCHED
-          </div>
-
-        </div>
-
-
-        <div class="protocol-row">
-
-          <div class="protocol-num">
-            02
-          </div>
-
-          <div class="protocol-task">
-            Keep distracting apps off the home screen.
-          </div>
-
-          <div class="status active">
-            PATCHED
-          </div>
-
-        </div>
-
-
-        <div class="protocol-row">
-
-          <div class="protocol-num">
-            03
-          </div>
-
-          <div class="protocol-task">
-            Create one dedicated deep-work location.
-          </div>
-
-          <div class="status active">
-            PATCHED
-          </div>
-
-        </div>
-
-
-        <div class="protocol-row">
-
-          <div class="protocol-num">
-            04
-          </div>
-
-          <div class="protocol-task">
-            Keep one task visible at a time.
-          </div>
-
-          <div class="status active">
-            PATCHED
-          </div>
-
-        </div>
-
-
-        <div class="protocol-row">
-
-          <div class="protocol-num">
-            05
-          </div>
-
-          <div class="protocol-task">
-            Put the phone outside arm's reach.
-          </div>
-
-          <div class="status active">
-            PATCHED
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <p class="reveal">
-
-        Notice what happened.
-
-        None of these actions required you
-        to become a more disciplined person.
-
-        They simply changed the default
-        environment.
-
-      </p>
-
-    </article>
-
-  </div>
-
-</section>
-
-
-<!-- STATEMENT -->
-
-<section class="statement">
-
-  <h2 class="reveal">
-
-    YOUR DEFAULT
-    <span>
-      ENVIRONMENT
-    </span>
-
-    CREATES YOUR DEFAULT
-    <span>
-      BEHAVIOUR.
-    </span>
-
-  </h2>
-
-</section>
-
-
-<!-- SECOND ARTICLE -->
-
-<section>
-
-  <div class="article-wrap">
-
-    <div></div>
-
-    <article class="article">
-
-
-      <div class="index">
-        03 / FRICTION
-      </div>
-
-
-      <h2 class="reveal">
-
-        ADD
-        <span>
-          FRICTION
-        </span>
-
-        WHERE IT MATTERS.
-
-      </h2>
-
-
-      <p class="reveal">
-
-        Friction is not always bad.
-
-        In fact, friction can be one of the
-        most powerful tools in your attention
-        system.
-
-      </p>
-
-
-      <p class="reveal">
-
-        Want to stop checking your phone?
-
-        Don't keep it on your desk.
-
-        Want to stop opening a distracting
-        website?
-
-        Log out.
-
-        Want to stop watching videos
-        automatically?
-
-        Remove the shortcut.
-
-      </p>
-
-
-      <p class="reveal">
-
-        Make the unwanted behaviour require
-        three extra steps.
-
-        Make the desired behaviour require
-        one.
-
-      </p>
-
-
-      <div class="index">
-        04 / DEFAULTS
-      </div>
-
-
-      <h2 class="reveal">
-
-        DESIGN THE
-        <span>
-          DEFAULT.
-        </span>
-
-      </h2>
-
-
-      <p class="reveal">
-
-        The best productivity system is often
-        the one you don't have to remember.
-
-      </p>
-
-
-      <p class="reveal">
-
-        If your desk already contains
-        everything required to start working,
-        starting becomes easier.
-
-        If your phone is already buried in
-        another room, checking it becomes
-        harder.
-
-      </p>
-
-
-      <p class="reveal">
-
-        The environment should quietly push
-        you toward the person you are trying
-        to become.
-
-      </p>
-
-
-    </article>
-
-  </div>
-
-</section>
-
-
-<!-- FAILURE LOG -->
-
-<section class="log-section">
-
-  <div class="container">
-
-    <div class="log reveal">
-
-      <div class="log-title">
-        RECENT ATTENTION EVENTS
-      </div>
-
-
-      <div class="log-row">
-
-        <div class="time">
-          09:41
-        </div>
-
-        <div class="error">
-          Opened social media during deep work.
-        </div>
-
-        <div class="fail">
-          FAIL
-        </div>
-
-      </div>
-
-
-      <div class="log-row">
-
-        <div class="time">
-          10:07
-        </div>
-
-        <div class="error">
-          Phone moved outside workspace.
-        </div>
-
-        <div class="pass">
-          PATCH
-        </div>
-
-      </div>
-
-
-      <div class="log-row">
-
-        <div class="time">
-          10:42
-        </div>
-
-        <div class="error">
-          Notification triggered context switch.
-        </div>
-
-        <div class="fail">
-          FAIL
-        </div>
-
-      </div>
-
-
-      <div class="log-row">
-
-        <div class="time">
-          11:03
-        </div>
-
-        <div class="error">
-          Notifications disabled.
-        </div>
-
-        <div class="pass">
-          PATCH
-        </div>
-
-      </div>
-
-
-      <div class="log-row">
-
-        <div class="time">
-          11:38
-        </div>
-
-        <div class="error">
-          35 minute uninterrupted session.
-        </div>
-
-        <div class="pass">
-          WIN
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- FINAL -->
-
-<section class="final">
-
-  <div class="container">
-
-    <div class="final-label">
-      PROTOCOL COMPLETE / SYSTEM 003
-    </div>
-
-
-    <h2 class="reveal">
-
-      CHANGE
-
-      <br>
-
-      THE
-
-      <br>
-
-      <span>
-        SYSTEM.
-      </span>
-
-    </h2>
-
-
-    <div class="final-links">
-
-      <a
-        href="vault.html"
-        class="btn primary"
-      >
-        ← RETURN TO VAULT
-      </a>
-
-      <a
-        href="protocols.html"
-        class="btn"
-      >
-        OPEN PROTOCOLS ↗
-      </a>
-
-    </div>
-
-  </div>
+<section class="article-section">
+
+<div class="container">
+
+<div class="article-layout">
+
+<article class="article-body">
+
+<div class="opening reveal">
+
+<div class="opening-label">
+FOCUSPULSE / 003
+</div>
+
+<p>
+You keep blaming yourself for losing focus.
+Maybe that's the wrong diagnosis.
+</p>
+
+</div>
+
+
+<div class="section-marker reveal" id="diagnosis">
+01 / DIAGNOSIS
+</div>
+
+<h2 class="reveal">
+DON'T FIX<br>
+WILLPOWER.
+</h2>
+
+<h2 class="reveal">
+FIX THE<br>
+<span class="lime">ENVIRONMENT.</span>
+</h2>
+
+<p class="reveal">
+Willpower is expensive.
+Every distraction you place directly in front of yourself
+becomes another decision you have to win.
+</p>
+
+<p class="reveal">
+Your phone is within reach.
+Notifications are enabled.
+Every application wants an update.
+Every platform wants another minute.
+Every interruption creates another context switch.
+</p>
+
+<p class="reveal">
+Then, when you fail to concentrate, you call yourself undisciplined.
+That's not a very good system.
+</p>
+
+<div class="quote reveal">
+YOUR ENVIRONMENT<br>
+IS PART OF YOUR<br>
+PRODUCTIVITY SYSTEM.
+</div>
+
+
+<div class="section-marker reveal" id="protocol">
+02 / THE PROTOCOL
+</div>
+
+<h2 class="reveal">
+MAKE<br>
+DISTRACTION<br>
+<span class="lime">EXPENSIVE.</span>
+</h2>
+
+<p class="reveal">
+A better system removes the decision completely.
+If something consistently steals your attention,
+increase the friction between you and that thing.
+</p>
+
+
+<div class="protocol reveal">
+
+<div class="protocol-head">
+<span>ENVIRONMENT PATCH / 003</span>
+<span>READY</span>
+</div>
+
+<div class="protocol-row">
+<div class="protocol-number">01</div>
+<div class="protocol-text">
+Remove non-essential notifications.
+</div>
+<div class="protocol-state">PATCHED</div>
+</div>
+
+<div class="protocol-row">
+<div class="protocol-number">02</div>
+<div class="protocol-text">
+Keep distracting apps off the home screen.
+</div>
+<div class="protocol-state">PATCHED</div>
+</div>
+
+<div class="protocol-row">
+<div class="protocol-number">03</div>
+<div class="protocol-text">
+Create one dedicated deep-work location.
+</div>
+<div class="protocol-state">PATCHED</div>
+</div>
+
+<div class="protocol-row">
+<div class="protocol-number">04</div>
+<div class="protocol-text">
+Keep one task visible at a time.
+</div>
+<div class="protocol-state">PATCHED</div>
+</div>
+
+<div class="protocol-row">
+<div class="protocol-number">05</div>
+<div class="protocol-text">
+Put the phone outside arm's reach.
+</div>
+<div class="protocol-state">PATCHED</div>
+</div>
+
+</div>
+
+
+<p class="reveal">
+Notice what happened.
+None of these actions required you to become a more disciplined person.
+They simply changed the default environment.
+</p>
+
+<div class="quote reveal">
+YOUR DEFAULT ENVIRONMENT<br>
+CREATES YOUR DEFAULT<br>
+BEHAVIOUR.
+</div>
+
+
+<div class="section-marker reveal" id="friction">
+03 / FRICTION
+</div>
+
+<h2 class="reveal">
+ADD FRICTION<br>
+WHERE IT<br>
+<span class="lime">MATTERS.</span>
+</h2>
+
+<p class="reveal">
+Friction is not always bad.
+In fact, friction can be one of the most powerful tools
+in your attention system.
+</p>
+
+<div class="friction-card reveal">
+
+<div class="friction-grid">
+
+<div class="friction-item">
+<small>PHONE</small>
+<strong>MOVE IT.</strong>
+<p>
+Don't keep it on your desk.
+Distance turns an impulse into a decision.
+</p>
+</div>
+
+<div class="friction-item">
+<small>WEBSITES</small>
+<strong>LOG OUT.</strong>
+<p>
+Make the next visit require an intentional action.
+</p>
+</div>
+
+<div class="friction-item">
+<small>VIDEO</small>
+<strong>REMOVE THE SHORTCUT.</strong>
+<p>
+Don't let the easiest option automatically become the default.
+</p>
+</div>
+
+<div class="friction-item">
+<small>WORK</small>
+<strong>ONE TASK.</strong>
+<p>
+Make the desired behaviour require fewer steps.
+</p>
+</div>
+
+</div>
+
+</div>
+
+<p class="reveal">
+Make the unwanted behaviour require three extra steps.
+Make the desired behaviour require one.
+</p>
+
+
+<div class="section-marker reveal" id="defaults">
+04 / DEFAULTS
+</div>
+
+<h2 class="reveal">
+DESIGN<br>
+THE <span class="lime">DEFAULT.</span>
+</h2>
+
+<p class="reveal">
+The best productivity system is often the one you don't have to remember.
+</p>
+
+<p class="reveal">
+If your desk already contains everything required to start working,
+starting becomes easier.
+If your phone is already buried in another room,
+checking it becomes harder.
+</p>
+
+<div class="default-card reveal">
+
+<h3>
+THE ENVIRONMENT<br>
+SHOULD PUSH YOU.
+</h3>
+
+<div class="default-line"></div>
+
+<div class="default-row">
+<span>STARTING WORK</span>
+<span>1 STEP</span>
+</div>
+
+<div class="default-row">
+<span>CHECKING PHONE</span>
+<span>3+ STEPS</span>
+</div>
+
+<div class="default-row">
+<span>OPENING DISTRACTION</span>
+<span>HIGH FRICTION</span>
+</div>
+
+<div class="default-row">
+<span>FOCUS SESSION</span>
+<span>LOW FRICTION</span>
+</div>
+
+</div>
+
+<p class="reveal">
+The environment should quietly push you toward the person
+you are trying to become.
+</p>
+
+
+<div class="section-marker reveal" id="events">
+05 / EVENT LOG
+</div>
+
+<h2 class="reveal">
+WATCH THE<br>
+SYSTEM <span class="lime">CHANGE.</span>
+</h2>
+
+<div class="event-log reveal">
+
+<div class="event-title">
+RECENT ATTENTION EVENTS
+</div>
+
+<div class="event">
+<div class="event-time">09:41</div>
+<div class="event-text">
+Opened social media during deep work.
+</div>
+<div class="event-status fail">FAIL</div>
+</div>
+
+<div class="event">
+<div class="event-time">10:07</div>
+<div class="event-text">
+Phone moved outside workspace.
+</div>
+<div class="event-status patch">PATCH</div>
+</div>
+
+<div class="event">
+<div class="event-time">10:42</div>
+<div class="event-text">
+Notification triggered context switch.
+</div>
+<div class="event-status fail">FAIL</div>
+</div>
+
+<div class="event">
+<div class="event-time">11:03</div>
+<div class="event-text">
+Notifications disabled.
+</div>
+<div class="event-status patch">PATCH</div>
+</div>
+
+<div class="event">
+<div class="event-time">11:38</div>
+<div class="event-text">
+35 minute uninterrupted session.
+</div>
+<div class="event-status win">WIN</div>
+</div>
+
+</div>
+
+
+<div class="section-marker reveal" id="complete">
+06 / SYSTEM COMPLETE
+</div>
+
+<h2 class="reveal">
+CHANGE<br>
+THE<br>
+<span class="lime">SYSTEM.</span>
+</h2>
+
+<p class="reveal">
+You don't need to become a completely different person.
+You need to stop building an environment that constantly fights
+the person you're trying to become.
+</p>
+
+<p class="reveal">
+Make distraction harder.
+Make focus easier.
+Let your environment carry some of the weight.
+</p>
+
+<div class="final reveal">
+
+<div class="final-label">
+PROTOCOL COMPLETE / SYSTEM 003
+</div>
+
+<h2>
+CHANGE<br>
+THE<br>
+<span class="lime">SYSTEM.</span>
+</h2>
+
+<p>
+Your environment is not background.
+It is behaviour architecture.
+</p>
+
+</div>
+
+
+<div class="bottom-nav reveal">
+
+<a href="vault.html" class="bottom-card">
+
+<div class="bottom-label">
+← RETURN TO VAULT
+</div>
+
+<div class="bottom-title">
+Knowledge Vault
+</div>
+
+<div class="bottom-arrow">
+ALL TRANSMISSIONS →
+</div>
+
+</a>
+
+<a href="protocols.html" class="bottom-card">
+
+<div class="bottom-label">
+OPEN PROTOCOLS ↗
+</div>
+
+<div class="bottom-title">
+Focus Protocols
+</div>
+
+<div class="bottom-arrow">
+ENTER SYSTEM →
+</div>
+
+</a>
+
+</div>
+
+</article>
+
+
+<aside class="sidebar">
+
+<div class="side-label">
+SYSTEM 003
+</div>
+
+<div class="side-line"></div>
+
+<a href="#diagnosis" class="side-link">
+01 / Diagnosis
+</a>
+
+<a href="#protocol" class="side-link">
+02 / Protocol
+</a>
+
+<a href="#friction" class="side-link">
+03 / Friction
+</a>
+
+<a href="#defaults" class="side-link">
+04 / Defaults
+</a>
+
+<a href="#events" class="side-link">
+05 / Event Log
+</a>
+
+<a href="#complete" class="side-link">
+06 / Complete
+</a>
+
+<div class="progress-card">
+
+<span>
+SYSTEM PROGRESS
+</span>
+
+<strong id="readingPercent">
+0%
+</strong>
+
+<div class="reading-line">
+<span id="readingLine"></span>
+</div>
+
+</div>
+
+</aside>
+
+</div>
+
+</div>
 
 </section>
 
@@ -1595,124 +1579,226 @@ footer{
 
 <footer>
 
-  <div>
-    FOCUSPULSE®
-  </div>
+<div class="container footer">
 
-  <div>
-    CONTROL YOUR ATTENTION.
-  </div>
+<div class="footer-copy">
+© <span id="year"></span>
+FocusPulse® — CONTROL YOUR ATTENTION.
+</div>
+
+<div class="footer-links">
+
+<a href="index.html">Home</a>
+<a href="manifesto.html">Manifesto</a>
+<a href="vault.html">Vault</a>
+<a href="protocols.html">Protocols</a>
+<a href="focus.html">Focus</a>
+
+</div>
+
+</div>
 
 </footer>
 
 
 <script>
 
-/* =========================
-   SCROLL PROGRESS
-========================= */
+const progress=document.getElementById("progress");
+const readingLine=document.getElementById("readingLine");
+const readingPercent=document.getElementById("readingPercent");
+const nav=document.getElementById("nav");
 
-const progress =
-document.querySelector(".progress");
+function updateProgress(){
 
-window.addEventListener("scroll",()=>{
+const scrollTop=window.scrollY;
 
-  const top=window.scrollY;
+const documentHeight=
+document.documentElement.scrollHeight-
+window.innerHeight;
 
-  const height=
-    document.documentElement.scrollHeight-
-    window.innerHeight;
+const percent=
+documentHeight>0
+?(scrollTop/documentHeight)*100
+:0;
 
-  progress.style.width=
-    ((top/height)*100)+"%";
+const value=
+Math.min(100,Math.max(0,percent));
+
+progress.style.width=value+"%";
+
+readingLine.style.width=value+"%";
+
+readingPercent.textContent=
+Math.round(value)+"%";
+
+}
+
+window.addEventListener(
+"scroll",
+updateProgress,
+{passive:true}
+);
+
+updateProgress();
+
+
+function updateNav(){
+
+nav.classList.toggle(
+"scrolled",
+window.scrollY>25
+);
+
+}
+
+window.addEventListener(
+"scroll",
+updateNav,
+{passive:true}
+);
+
+updateNav();
+
+
+const reduceMotion=
+window.matchMedia(
+"(prefers-reduced-motion: reduce)"
+).matches;
+
+const revealItems=
+document.querySelectorAll(".reveal");
+
+if(
+"IntersectionObserver" in window &&
+!reduceMotion
+){
+
+const observer=
+new IntersectionObserver(
+(entries,obs)=>{
+
+entries.forEach(entry=>{
+
+if(!entry.isIntersecting)return;
+
+entry.target.classList.add("visible");
+
+obs.unobserve(entry.target);
+
+});
+
+},
+{
+threshold:.10,
+rootMargin:"0px 0px -50px 0px"
+}
+);
+
+revealItems.forEach(
+item=>observer.observe(item)
+);
+
+}else{
+
+revealItems.forEach(
+item=>item.classList.add("visible")
+);
+
+}
+
+
+const sideLinks=
+document.querySelectorAll(".side-link");
+
+sideLinks.forEach(link=>{
+
+link.addEventListener(
+"click",
+event=>{
+
+const targetId=
+link.getAttribute("href");
+
+const target=
+document.querySelector(targetId);
+
+if(!target)return;
+
+event.preventDefault();
+
+target.scrollIntoView({
+behavior:reduceMotion?"auto":"smooth",
+block:"start"
+});
+
+history.replaceState(
+null,
+"",
+targetId
+);
+
+}
+);
 
 });
 
 
-/* =========================
-   REVEALS
-========================= */
+const sectionIds=[
+"diagnosis",
+"protocol",
+"friction",
+"defaults",
+"events",
+"complete"
+];
 
-const observer=
+const sections=
+sectionIds
+.map(id=>document.getElementById(id))
+.filter(Boolean);
+
+if("IntersectionObserver" in window){
+
+const sectionObserver=
 new IntersectionObserver(
-  entries=>{
+entries=>{
 
-    entries.forEach(entry=>{
+entries.forEach(entry=>{
 
-      if(entry.isIntersecting){
+if(!entry.isIntersecting)return;
 
-        entry.target.classList.add("show");
-
-      }
-
-    });
-
-  },
-  {
-    threshold:.12
-  }
+sideLinks.forEach(
+link=>link.classList.remove("active")
 );
 
-document
-.querySelectorAll(".reveal")
-.forEach(el=>observer.observe(el));
-
-
-/* =========================
-   STAT NUMBER MICRO ANIMATION
-========================= */
-
-const numbers=
-document.querySelectorAll(".stat-number");
-
-const statObserver=
-new IntersectionObserver(
-  entries=>{
-
-    if(!entries[0].isIntersecting)return;
-
-    numbers.forEach(el=>{
-
-      const text=el.innerText;
-
-      const match=text.match(/\d+/);
-
-      if(!match)return;
-
-      const target=parseInt(match[0]);
-
-      let current=0;
-
-      const timer=
-      setInterval(()=>{
-
-        current++;
-
-        el.innerHTML=
-          current+
-          (text.includes("%")
-            ? "<span>%</span>"
-            : text.includes("x")
-            ? "<span>x</span>"
-            : "");
-
-        if(current>=target){
-          clearInterval(timer);
-        }
-
-      },25);
-
-    });
-
-    statObserver.disconnect();
-
-  },
-  {threshold:.4}
+const active=
+document.querySelector(
+`.side-link[href="#${entry.target.id}"]`
 );
 
-statObserver.observe(
-  document.querySelector(".dashboard")
+if(active){
+active.classList.add("active");
+}
+
+});
+
+},
+{
+rootMargin:"-35% 0px -55% 0px",
+threshold:0
+}
 );
+
+sections.forEach(
+section=>sectionObserver.observe(section)
+);
+
+}
+
+
+document.getElementById("year")
+.textContent=
+new Date().getFullYear();
 
 </script>
 
