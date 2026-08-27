@@ -1,92 +1,3471 @@
-<!-- LOADER -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>FOCUSPULSE® — Control Your Attention</title>
+
+<meta name="description"
+      content="FocusPulse — a digital system for reclaiming attention, building focus, and executing with intention.">
+
+<meta name="theme-color" content="#050505">
+
+<link rel="icon" type="image/png" href="favicon.png">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* =========================================================
+   FOCUSPULSE
+   HOME SYSTEM
+   ========================================================= */
+
+:root{
+  --bg:#050505;
+  --bg-soft:#090909;
+  --fg:#f2f2ed;
+  --muted:#777;
+  --dim:#454545;
+  --line:#ffffff16;
+  --line-strong:#ffffff2b;
+  --lime:#d9ff45;
+  --lime-soft:#d9ff4512;
+  --danger:#ff5252;
+
+  --max:1280px;
+  --nav:64px;
+
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+  background:var(--bg);
+}
+
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:Inter,Arial,sans-serif;
+  overflow-x:hidden;
+  cursor:none;
+}
+
+body.menu-open{
+  overflow:hidden;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button{
+  font:inherit;
+}
+
+::selection{
+  background:var(--lime);
+  color:#050505;
+}
+
+/* =========================================================
+   CURSOR
+   ========================================================= */
+
+.cursor{
+  position:fixed;
+  left:0;
+  top:0;
+
+  width:10px;
+  height:10px;
+
+  border-radius:50%;
+  background:var(--lime);
+
+  pointer-events:none;
+  z-index:99999;
+
+  transform:translate(-50%,-50%);
+
+  mix-blend-mode:difference;
+}
+
+.cursor-ring{
+  position:fixed;
+  left:0;
+  top:0;
+
+  width:38px;
+  height:38px;
+
+  border:1px solid #ffffff66;
+  border-radius:50%;
+
+  pointer-events:none;
+  z-index:99998;
+
+  transform:translate(-50%,-50%);
+
+  transition:
+    width .35s var(--ease),
+    height .35s var(--ease),
+    border-color .35s var(--ease),
+    background .35s var(--ease);
+}
+
+.cursor-ring.big{
+  width:70px;
+  height:70px;
+  border-color:var(--lime);
+}
+
+/* =========================================================
+   BACKGROUND
+   ========================================================= */
+
+.grid{
+  position:fixed;
+  inset:0;
+
+  z-index:-5;
+
+  opacity:.085;
+
+  background-image:
+    linear-gradient(#fff1 1px,transparent 1px),
+    linear-gradient(90deg,#fff1 1px,transparent 1px);
+
+  background-size:72px 72px;
+
+  mask-image:
+    linear-gradient(
+      to bottom,
+      black 0%,
+      black 45%,
+      transparent 100%
+    );
+}
+
+.glow{
+  position:fixed;
+
+  width:480px;
+  height:480px;
+
+  border-radius:50%;
+
+  background:#d9ff450c;
+
+  filter:blur(100px);
+
+  pointer-events:none;
+
+  z-index:-4;
+
+  transform:translate(-50%,-50%);
+}
+
+.noise{
+  position:fixed;
+  inset:0;
+
+  z-index:9000;
+
+  pointer-events:none;
+
+  opacity:.035;
+
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* =========================================================
+   PAGE LOADER
+   ========================================================= */
+
+.loader{
+  position:fixed;
+  inset:0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+
+  background:#050505;
+
+  z-index:999999;
+
+  transition:
+    opacity .9s var(--ease),
+    visibility .9s;
+}
+
+.loader.hide{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+.loader-logo{
+  font-size:clamp(28px,5vw,60px);
+  font-weight:900;
+
+  letter-spacing:-.07em;
+}
+
+.loader-logo span{
+  color:var(--lime);
+}
+
+.loader-meta{
+  width:min(300px,70vw);
+  margin-top:28px;
+}
+
+.loader-line{
+  height:1px;
+  background:#ffffff20;
+  position:relative;
+  overflow:hidden;
+}
+
+.loader-progress{
+  position:absolute;
+  inset:0 auto 0 0;
+
+  width:0%;
+
+  background:var(--lime);
+
+  box-shadow:0 0 20px var(--lime);
+
+  transition:width .12s linear;
+}
+
+.loader-info{
+  display:flex;
+  justify-content:space-between;
+
+  margin-top:10px;
+
+  color:#555;
+
+  font:
+    9px "DM Mono",
+    monospace;
+
+  letter-spacing:.06em;
+}
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+nav{
+  position:fixed;
+
+  top:16px;
+  left:50%;
+
+  transform:translateX(-50%);
+
+  width:min(1180px,calc(100% - 28px));
+  height:var(--nav);
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:0 9px 0 18px;
+
+  border:1px solid var(--line);
+
+  border-radius:100px;
+
+  background:#090909b8;
+
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+
+  z-index:5000;
+
+  box-shadow:
+    0 20px 80px #0008;
+
+  transition:
+    background .3s,
+    border-color .3s,
+    transform .3s var(--ease);
+}
+
+nav.scrolled{
+  background:#080808e8;
+  border-color:var(--line-strong);
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  font-size:12px;
+  font-weight:900;
+
+  letter-spacing:.12em;
+}
+
+.brand-symbol{
+  width:25px;
+  height:25px;
+
+  border:1px solid #ffffff55;
+
+  border-radius:50%;
+
+  position:relative;
+}
+
+.brand-symbol:before{
+  content:"";
+
+  position:absolute;
+
+  inset:5px;
+
+  border:1px solid #ffffff38;
+
+  border-radius:50%;
+}
+
+.brand-symbol:after{
+  content:"";
+
+  position:absolute;
+
+  width:7px;
+  height:7px;
+
+  left:8px;
+  top:8px;
+
+  background:var(--lime);
+
+  border-radius:50%;
+
+  box-shadow:
+    0 0 18px var(--lime);
+}
+
+.nav-center{
+  display:flex;
+  align-items:center;
+  gap:27px;
+
+  margin-left:50px;
+}
+
+.nav-center a{
+  color:#666;
+
+  font:
+    9px "DM Mono",
+    monospace;
+
+  text-transform:uppercase;
+
+  letter-spacing:.06em;
+
+  transition:
+    color .25s,
+    transform .25s;
+}
+
+.nav-center a:hover,
+.nav-center a.active{
+  color:var(--lime);
+}
+
+.nav-right{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.nav-status{
+  display:flex;
+  align-items:center;
+  gap:7px;
+
+  color:#555;
+
+  font:
+    8px "DM Mono",
+    monospace;
+
+  padding:0 12px;
+}
+
+.status-dot{
+  width:5px;
+  height:5px;
+
+  border-radius:50%;
+
+  background:var(--lime);
+
+  box-shadow:
+    0 0 12px var(--lime);
+
+  animation:
+    statusPulse 2s infinite;
+}
+
+@keyframes statusPulse{
+  0%,100%{
+    opacity:.4;
+  }
+
+  50%{
+    opacity:1;
+  }
+}
+
+.nav-focus{
+  display:inline-flex;
+  align-items:center;
+
+  padding:11px 16px;
+
+  border-radius:100px;
+
+  background:var(--lime);
+  color:#050505;
+
+  font:
+    900 9px Inter,
+    sans-serif;
+
+  transition:
+    transform .3s var(--ease),
+    box-shadow .3s;
+}
+
+.nav-focus:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 30px #d9ff4530;
+}
+
+.mobile-toggle{
+  display:none;
+
+  width:42px;
+  height:42px;
+
+  border:1px solid var(--line);
+
+  border-radius:50%;
+
+  background:#ffffff06;
+
+  color:#fff;
+
+  cursor:pointer;
+}
+
+/* =========================================================
+   MOBILE MENU
+   ========================================================= */
+
+.mobile-menu{
+  position:fixed;
+  inset:0;
+
+  z-index:4500;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+
+  padding:30px;
+
+  background:#050505f5;
+
+  backdrop-filter:blur(25px);
+
+  opacity:0;
+  visibility:hidden;
+
+  transition:
+    opacity .45s,
+    visibility .45s;
+}
+
+.mobile-menu.open{
+  opacity:1;
+  visibility:visible;
+}
+
+.mobile-menu a{
+  font-size:clamp(38px,11vw,80px);
+  font-weight:900;
+
+  letter-spacing:-.07em;
+
+  padding:10px 0;
+
+  border-bottom:1px solid var(--line);
+
+  transform:translateY(20px);
+  opacity:0;
+
+  transition:
+    transform .5s var(--ease),
+    opacity .5s;
+}
+
+.mobile-menu.open a{
+  transform:none;
+  opacity:1;
+}
+
+.mobile-menu.open a:nth-child(1){
+  transition-delay:.05s;
+}
+
+.mobile-menu.open a:nth-child(2){
+  transition-delay:.1s;
+}
+
+.mobile-menu.open a:nth-child(3){
+  transition-delay:.15s;
+}
+
+.mobile-menu.open a:nth-child(4){
+  transition-delay:.2s;
+}
+
+.mobile-menu.open a:nth-child(5){
+  transition-delay:.25s;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero{
+  min-height:100svh;
+
+  position:relative;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:
+    150px 25px
+    90px;
+
+  overflow:hidden;
+
+  text-align:center;
+}
+
+.hero-orbit{
+  position:absolute;
+
+  width:min(650px,90vw);
+  height:min(650px,90vw);
+
+  left:50%;
+  top:50%;
+
+  transform:translate(-50%,-50%);
+
+  border:1px solid #ffffff09;
+
+  border-radius:50%;
+
+  pointer-events:none;
+}
+
+.hero-orbit:before,
+.hero-orbit:after{
+  content:"";
+
+  position:absolute;
+
+  border:1px solid #ffffff08;
+
+  border-radius:50%;
+}
+
+.hero-orbit:before{
+  inset:80px;
+}
+
+.hero-orbit:after{
+  inset:170px;
+}
+
+.orbit-dot{
+  position:absolute;
+
+  width:7px;
+  height:7px;
+
+  top:-3px;
+  left:50%;
+
+  background:var(--lime);
+
+  border-radius:50%;
+
+  box-shadow:
+    0 0 25px var(--lime);
+
+  transform-origin:0 min(325px,45vw);
+
+  animation:
+    orbit 9s linear infinite;
+}
+
+@keyframes orbit{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+.hero-inner{
+  width:100%;
+  max-width:1300px;
+
+  position:relative;
+
+  z-index:2;
+
+  transition:transform .15s linear;
+}
+
+.hero-kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+
+  padding:8px 13px;
+
+  border:1px solid var(--line);
+
+  border-radius:100px;
+
+  color:#686868;
+
+  font:
+    9px "DM Mono",
+    monospace;
+
+  letter-spacing:.08em;
+
+  margin-bottom:32px;
+
+  background:#ffffff03;
+}
+
+.pulse{
+  width:6px;
+  height:6px;
+
+  border-radius:50%;
+
+  background:var(--lime);
+
+  box-shadow:
+    0 0 0 0 #d9ff4555;
+
+  animation:
+    heroPulse 2s infinite;
+}
+
+@keyframes heroPulse{
+  70%{
+    box-shadow:
+      0 0 0 12px transparent;
+  }
+}
+
+.hero h1{
+  font-size:clamp(70px,13.2vw,175px);
+
+  line-height:.77;
+
+  letter-spacing:-.095em;
+
+  font-weight:900;
+}
+
+.hero h1 .line{
+  display:block;
+}
+
+.hero h1 .outline{
+  color:transparent;
+
+  -webkit-text-stroke:
+    1px #ffffff72;
+}
+
+.hero h1 .lime{
+  color:var(--lime);
+}
+
+.hero-copy{
+  max-width:560px;
+
+  margin:43px auto 0;
+
+  color:#707070;
+
+  font-size:13px;
+
+  line-height:1.9;
+}
+
+.hero-actions{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+
+  margin-top:34px;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  min-height:48px;
+
+  padding:0 21px;
+
+  border:1px solid var(--line-strong);
+
+  border-radius:100px;
+
+  color:#eee;
+
+  font-size:10px;
+  font-weight:800;
+
+  transition:
+    transform .35s var(--ease),
+    background .35s,
+    color .35s,
+    border-color .35s,
+    box-shadow .35s;
+}
+
+.btn:hover{
+  transform:translateY(-4px);
+  border-color:#ffffff50;
+}
+
+.btn-primary{
+  background:var(--lime);
+  color:#050505;
+
+  border-color:var(--lime);
+}
+
+.btn-primary:hover{
+  box-shadow:
+    0 12px 45px #d9ff4530;
+
+  border-color:var(--lime);
+}
+
+.hero-meta{
+  margin-top:70px;
+
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:24px;
+
+  color:#484848;
+
+  font:
+    8px "DM Mono",
+    monospace;
+
+  letter-spacing:.15em;
+}
+
+/* =========================================================
+   MARQUEE
+   ========================================================= */
+
+.marquee{
+  overflow:hidden;
+
+  white-space:nowrap;
+
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+
+  padding:16px 0;
+
+  background:#ffffff01;
+}
+
+.marquee-track{
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:28px;
+
+  min-width:max-content;
+
+  animation:
+    marquee 30s linear infinite;
+}
+
+.marquee span{
+  color:#505050;
+
+  font:
+    10px "DM Mono",
+    monospace;
+
+  letter-spacing:.14em;
+}
+
+.marquee .symbol{
+  color:var(--lime);
+
+  font-size:13px;
+}
+
+@keyframes marquee{
+  to{
+    transform:translateX(-50%);
+  }
+}
+
+/* =========================================================
+   GENERIC
+   ========================================================= */
+
+.container{
+  width:min(var(--max),100%);
+
+  margin:auto;
+
+  padding:
+    145px 30px;
+}
+
+.section-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+
+  gap:40px;
+
+  margin-bottom:65px;
+}
+
+.section-index{
+  margin-bottom:15px;
+
+  color:var(--lime);
+
+  font:
+    9px "DM Mono",
+    monospace;
+
+  letter-spacing:.08em;
+}
+
+.section-title{
+  font-size:clamp(45px,6.5vw,82px);
+
+  line-height:.86;
+
+  letter-spacing:-.075em;
+}
+
+.section-title em{
+  color:#6a6a6a;
+
+  font-weight:400;
+
+  font-style:normal;
+}
+
+.section-description{
+  width:min(370px,100%);
+
+  color:#666;
+
+  font-size:12px;
+
+  line-height:1.85;
+}
+
+/* =========================================================
+   HOME MODULES
+   ========================================================= */
+
+.module-grid{
+  display:grid;
+
+  grid-template-columns:
+    1.25fr
+    .75fr;
+
+  gap:14px;
+}
+
+.module{
+  min-height:390px;
+
+  position:relative;
+
+  padding:35px;
+
+  border:1px solid var(--line);
+
+  border-radius:30px;
+
+  overflow:hidden;
+
+  background:#ffffff02;
+
+  transition:
+    transform .5s var(--ease),
+    border-color .4s,
+    background .4s;
+}
+
+.module:hover{
+  transform:translateY(-7px);
+
+  border-color:#ffffff32;
+
+  background:#ffffff04;
+}
+
+.module-small{
+  min-height:390px;
+}
+
+.module-index{
+  color:var(--lime);
+
+  font:
+    9px "DM Mono",
+    monospace;
+}
+
+.module h3{
+  margin-top:75px;
+
+  font-size:clamp(30px,4vw,54px);
+
+  line-height:.9;
+
+  letter-spacing:-.06em;
+}
+
+.module p{
+  max-width:430px;
+
+  margin-top:18px;
+
+  color:#656565;
+
+  font-size:11px;
+
+  line-height:1.8;
+}
+
+.module-arrow{
+  position:absolute;
+
+  top:30px;
+  right:30px;
+
+  color:#555;
+
+  font-size:20px;
+
+  transition:
+    transform .4s var(--ease),
+    color .3s;
+}
+
+.module:hover .module-arrow{
+  color:var(--lime);
+  transform:translate(4px,-4px);
+}
+
+.module-orb{
+  position:absolute;
+
+  width:300px;
+  height:300px;
+
+  right:-100px;
+  bottom:-120px;
+
+  border:1px solid #ffffff0b;
+
+  border-radius:50%;
+
+  transition:
+    transform .8s var(--ease);
+}
+
+.module-orb:before{
+  content:"";
+
+  position:absolute;
+
+  inset:40px;
+
+  border:1px solid #d9ff4512;
+
+  border-radius:50%;
+}
+
+.module:hover .module-orb{
+  transform:scale(1.15) rotate(20deg);
+}
+
+.module-list{
+  position:absolute;
+
+  left:35px;
+  right:35px;
+  bottom:35px;
+}
+
+.module-list-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:12px 0;
+
+  border-bottom:1px solid var(--line);
+
+  color:#666;
+
+  font:
+    9px "DM Mono",
+    monospace;
+}
+
+.module-list-item strong{
+  color:#ddd;
+
+  font-weight:500;
+}
+
+/* =========================================================
+   LIVE SYSTEM
+   ========================================================= */
+
+.system{
+  position:relative;
+
+  min-height:560px;
+
+  display:grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  border:1px solid var(--line);
+
+  border-radius:35px;
+
+  overflow:hidden;
+
+  background:
+    radial-gradient(
+      circle at 75% 50%,
+      #d9ff450b,
+      transparent 30%
+    );
+}
+
+.system-copy{
+  padding:55px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+
+  border-right:1px solid var(--line);
+}
+
+.system-copy h3{
+  max-width:530px;
+
+  font-size:clamp(45px,6vw,80px);
+
+  line-height:.86;
+
+  letter-spacing:-.075em;
+}
+
+.system-copy h3 span{
+  color:var(--lime);
+}
+
+.system-copy p{
+  max-width:450px;
+
+  margin-top:25px;
+
+  color:#666;
+
+  font-size:12px;
+
+  line-height:1.9;
+}
+
+.system-link{
+  margin-top:32px;
+
+  width:max-content;
+}
+
+.system-visual{
+  position:relative;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  overflow:hidden;
+}
+
+.system-ring{
+  position:absolute;
+
+  width:390px;
+  height:390px;
+
+  border:1px solid #ffffff10;
+
+  border-radius:50%;
+
+  animation:
+    spin 22s linear infinite;
+}
+
+.system-ring:before{
+  content:"";
+
+  position:absolute;
+
+  width:9px;
+  height:9px;
+
+  top:-5px;
+  left:50%;
+
+  border-radius:50%;
+
+  background:var(--lime);
+
+  box-shadow:
+    0 0 25px var(--lime);
+}
+
+.system-ring.two{
+  width:280px;
+  height:280px;
+
+  border-style:dashed;
+
+  animation:
+    spinReverse 15s linear infinite;
+}
+
+.system-core{
+  width:150px;
+  height:150px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle at 33% 27%,
+      #fff 0%,
+      var(--lime) 12%,
+      #758523 32%,
+      #151515 67%,
+      #050505 100%
+    );
+
+  box-shadow:
+    0 0 80px #d9ff4538,
+    inset -30px -30px 50px #000b;
+
+  animation:
+    corePulse 3.5s ease-in-out infinite;
+}
+
+.system-label{
+  position:absolute;
+
+  bottom:35px;
+  left:35px;
+
+  color:#555;
+
+  font:
+    8px "DM Mono",
+    monospace;
+
+  letter-spacing:.13em;
+}
+
+.system-status{
+  position:absolute;
+
+  bottom:35px;
+  right:35px;
+
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  color:#555;
+
+  font:
+    8px "DM Mono",
+    monospace;
+}
+
+.system-status span{
+  color:var(--lime);
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+@keyframes spinReverse{
+  to{
+    transform:rotate(-360deg);
+  }
+}
+
+@keyframes corePulse{
+  0%,100%{
+    transform:scale(1);
+  }
+
+  50%{
+    transform:scale(1.07);
+
+    box-shadow:
+      0 0 120px #d9ff4550,
+      inset -30px -30px 50px #000b;
+  }
+}
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+.stats{
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+
+.stat{
+  padding:35px 25px;
+
+  border-right:1px solid var(--line);
+}
+
+.stat:last-child{
+  border-right:0;
+}
+
+.stat-number{
+  font-size:clamp(38px,5vw,65px);
+
+  line-height:1;
+
+  letter-spacing:-.07em;
+}
+
+.stat-number span{
+  color:var(--lime);
+}
+
+.stat-label{
+  margin-top:12px;
+
+  color:#555;
+
+  font:
+    8px "DM Mono",
+    monospace;
+
+  letter-spacing:.1em;
+}
+
+/* =========================================================
+   ARTICLES
+   ========================================================= */
+
+.article-feature{
+  display:grid;
+
+  grid-template-columns:
+    1.3fr
+    .7fr;
+
+  gap:14px;
+}
+
+.article-main{
+  min-height:480px;
+
+  position:relative;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+
+  padding:40px;
+
+  border:1px solid var(--line);
+
+  border-radius:30px;
+
+  overflow:hidden;
+
+  background:
+    radial-gradient(
+      circle at 75% 25%,
+      #d9ff4514,
+      transparent 32%
+    );
+}
+
+.article-main:before{
+  content:"";
+
+  position:absolute;
+
+  width:500px;
+  height:500px;
+
+  right:-180px;
+  top:-180px;
+
+  border:1px solid #ffffff08;
+
+  border-radius:50%;
+}
+
+.article-main:after{
+  content:"";
+
+  position:absolute;
+
+  width:300px;
+  height:300px;
+
+  right:-70px;
+  top:-70px;
+
+  border:1px dashed #d9ff4512;
+
+  border-radius:50%;
+
+  animation:
+    spin 20s linear infinite;
+}
+
+.article-tag{
+  position:relative;
+  z-index:2;
+
+  color:var(--lime);
+
+  font:
+    9px "DM Mono",
+    monospace;
+}
+
+.article-main h3{
+  position:relative;
+  z-index:2;
+
+  max-width:700px;
+
+  margin-top:20px;
+
+  font-size:clamp(40px,5.5vw,72px);
+
+  line-height:.9;
+
+  letter-spacing:-.07em;
+}
+
+.article-main p{
+  position:relative;
+  z-index:2;
+
+  max-width:550px;
+
+  margin-top:18px;
+
+  color:#666;
+
+  font-size:11px;
+
+  line-height:1.8;
+}
+
+.article-side{
+  display:grid;
+
+  gap:14px;
+}
+
+.article-card{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+
+  padding:30px;
+
+  border:1px solid var(--line);
+
+  border-radius:25px;
+
+  transition:
+    transform .45s var(--ease),
+    border-color .3s;
+}
+
+.article-card:hover{
+  transform:translateY(-6px);
+  border-color:#ffffff35;
+}
+
+.article-card-number{
+  color:#555;
+
+  font:
+    8px "DM Mono",
+    monospace;
+}
+
+.article-card h4{
+  margin-top:50px;
+
+  font-size:27px;
+
+  line-height:.95;
+
+  letter-spacing:-.05em;
+}
+
+.article-card-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  margin-top:25px;
+}
+
+.article-card-bottom span{
+  color:#555;
+
+  font:
+    8px "DM Mono",
+    monospace;
+}
+
+.article-card-bottom b{
+  color:var(--lime);
+
+  font-weight:400;
+}
+
+/* =========================================================
+   CTA
+   ========================================================= */
+
+.final{
+  padding-top:80px;
+}
+
+.final-box{
+  min-height:580px;
+
+  position:relative;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  flex-direction:column;
+
+  overflow:hidden;
+
+  border:1px solid var(--line);
+
+  border-radius:40px;
+
+  text-align:center;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      #d9ff4512,
+      transparent 42%
+    );
+}
+
+.final-orbit{
+  position:absolute;
+
+  width:480px;
+  height:480px;
+
+  border:1px solid #ffffff08;
+
+  border-radius:50%;
+
+  animation:
+    spin 30s linear infinite;
+}
+
+.final-orbit:before{
+  content:"";
+
+  position:absolute;
+
+  inset:80px;
+
+  border:1px dashed #ffffff09;
+
+  border-radius:50%;
+}
+
+.final-content{
+  position:relative;
+  z-index:2;
+}
+
+.final h2{
+  font-size:clamp(55px,9vw,115px);
+
+  line-height:.82;
+
+  letter-spacing:-.085em;
+}
+
+.final h2 span{
+  color:var(--lime);
+}
+
+.final p{
+  max-width:480px;
+
+  margin:28px auto;
+
+  color:#666;
+
+  font-size:12px;
+
+  line-height:1.8;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer{
+  border-top:1px solid var(--line);
+
+  padding:28px 30px;
+
+  color:#4e4e4e;
+
+  font:
+    8px "DM Mono",
+    monospace;
+}
+
+.footer-inner{
+  width:min(var(--max),100%);
+
+  margin:auto;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:20px;
+}
+
+.footer-brand{
+  color:#777;
+}
+
+.footer-brand strong{
+  color:#aaa;
+}
+
+.footer-links{
+  display:flex;
+  gap:22px;
+}
+
+.footer-links a{
+  transition:color .25s;
+}
+
+.footer-links a:hover{
+  color:var(--lime);
+}
+
+/* =========================================================
+   REVEAL
+   ========================================================= */
+
+.reveal{
+  opacity:0;
+
+  transform:
+    translateY(40px);
+
+  transition:
+    opacity 1s var(--ease),
+    transform 1s var(--ease);
+}
+
+.reveal.visible{
+  opacity:1;
+  transform:none;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:950px){
+
+  body{
+    cursor:auto;
+  }
+
+  .cursor,
+  .cursor-ring{
+    display:none;
+  }
+
+  nav{
+    height:58px;
+  }
+
+  .nav-center,
+  .nav-status{
+    display:none;
+  }
+
+  .mobile-toggle{
+    display:block;
+  }
+
+  .nav-focus{
+    display:none;
+  }
+
+  .hero{
+    padding-top:135px;
+  }
+
+  .hero-orbit{
+    width:500px;
+    height:500px;
+  }
+
+  .orbit-dot{
+    transform-origin:0 250px;
+  }
+
+  .module-grid,
+  .article-feature{
+    grid-template-columns:1fr;
+  }
+
+  .module-small{
+    min-height:330px;
+  }
+
+  .article-side{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .system{
+    grid-template-columns:1fr;
+  }
+
+  .system-copy{
+    border-right:0;
+    border-bottom:1px solid var(--line);
+  }
+
+  .system-visual{
+    min-height:500px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .stat:nth-child(2){
+    border-right:0;
+  }
+
+  .stat:nth-child(-n+2){
+    border-bottom:1px solid var(--line);
+  }
+}
+
+@media(max-width:650px){
+
+  .container{
+    padding:
+      95px 20px;
+  }
+
+  .hero{
+    padding:
+      125px 18px
+      80px;
+  }
+
+  .hero h1{
+    font-size:
+      clamp(61px,18vw,110px);
+  }
+
+  .hero-copy{
+    font-size:12px;
+  }
+
+  .hero-actions{
+    flex-direction:column;
+
+    width:min(300px,100%);
+
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .hero-actions .btn{
+    width:100%;
+  }
+
+  .hero-meta{
+    margin-top:50px;
+    gap:15px;
+  }
+
+  .section-head{
+    display:block;
+  }
+
+  .section-description{
+    margin-top:25px;
+  }
+
+  .module{
+    min-height:350px;
+    padding:27px;
+  }
+
+  .module-list{
+    left:27px;
+    right:27px;
+    bottom:27px;
+  }
+
+  .system-copy{
+    padding:32px 27px;
+  }
+
+  .system-visual{
+    min-height:390px;
+  }
+
+  .system-ring{
+    width:300px;
+    height:300px;
+  }
+
+  .system-ring.two{
+    width:215px;
+    height:215px;
+  }
+
+  .system-core{
+    width:125px;
+    height:125px;
+  }
+
+  .system-label{
+    left:25px;
+    bottom:25px;
+  }
+
+  .system-status{
+    right:25px;
+    bottom:25px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .stat{
+    padding:28px 18px;
+  }
+
+  .article-side{
+    grid-template-columns:1fr;
+  }
+
+  .article-main{
+    min-height:430px;
+    padding:27px;
+  }
+
+  .final-box{
+    min-height:500px;
+    border-radius:30px;
+  }
+
+  .final-orbit{
+    width:340px;
+    height:340px;
+  }
+
+  .footer-inner{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .footer-links{
+    flex-wrap:wrap;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+
+  *,
+  *:before,
+  *:after{
+    scroll-behavior:auto !important;
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ========================================================
+     SYSTEM LAYERS
+     ======================================================== -->
+
+<div class="noise"></div>
+<div class="grid"></div>
+<div class="glow" id="mouseGlow"></div>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+
+<!-- ========================================================
+     LOADER
+     ======================================================== -->
+
 <div class="loader" id="loader">
-  <div class="loader-inner">
-    <div class="loader-top">
-      <span>FOCUSPULSE</span>
-      <span>INITIALIZING</span>
-    </div>
 
-    <div class="loader-bar">
-      <div class="loader-fill" id="loaderFill"></div>
-    </div>
-
-    <div class="loader-number" id="loaderNumber">
-      0%
-    </div>
+  <div class="loader-logo">
+    focuspulse<span>®</span>
   </div>
+
+  <div class="loader-meta">
+
+    <div class="loader-line">
+      <div
+        class="loader-progress"
+        id="loaderProgress">
+      </div>
+    </div>
+
+    <div class="loader-info">
+      <span>SYSTEM INITIALIZING</span>
+      <span id="loaderPercent">0%</span>
+    </div>
+
+  </div>
+
 </div>
 
-<!-- SCROLL PROGRESS -->
-<div class="progress" id="progress"></div>
 
-<!-- BACKGROUND -->
-<div class="grid"></div>
+<!-- ========================================================
+     NAVIGATION
+     ======================================================== -->
 
-<!-- NAV -->
-<nav class="nav">
-  <a href="#" class="logo">
-    focus<span>pulse</span><sup>®</sup>
+<nav id="navbar">
+
+  <a
+    href="index.html"
+    class="brand"
+    aria-label="FocusPulse Home">
+
+    <span class="brand-symbol"></span>
+
+    <span>
+      focuspulse®
+    </span>
+
   </a>
 
-  <div class="nav-links">
-    <a href="#manifesto">Manifesto</a>
-    <a href="#vault">Vault</a>
-    <a href="#protocols">Protocols</a>
+
+  <div class="nav-center">
+
+    <a
+      href="index.html"
+      class="active">
+      Home
+    </a>
+
+    <a href="manifesto.html">
+      Manifesto
+    </a>
+
+    <a href="vault.html">
+      Vault
+    </a>
+
+    <a href="protocols.html">
+      Protocols
+    </a>
+
+    <a href="focus.html">
+      Focus
+    </a>
+
   </div>
 
-  <a href="focus.html" class="nav-cta">
-    ENTER FOCUS →
-  </a>
-</nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="glow"></div>
+  <div class="nav-right">
 
-  <div class="container">
+    <div class="nav-status">
 
-    <div class="eyebrow">
-      CONTROL YOUR ATTENTION
+      <span class="status-dot"></span>
+
+      SYSTEM ONLINE
+
     </div>
 
+    <a
+      href="focus.html"
+      class="nav-focus">
+      ENTER FOCUS →
+    </a>
+
+    <button
+      class="mobile-toggle"
+      id="mobileToggle"
+      aria-label="Open menu">
+
+      ☰
+
+    </button>
+
+  </div>
+
+</nav>
+
+
+<!-- ========================================================
+     MOBILE MENU
+     ======================================================== -->
+
+<div
+  class="mobile-menu"
+  id="mobileMenu">
+
+  <a href="index.html">
+    HOME
+  </a>
+
+  <a href="manifesto.html">
+    MANIFESTO
+  </a>
+
+  <a href="vault.html">
+    VAULT
+  </a>
+
+  <a href="protocols.html">
+    PROTOCOLS
+  </a>
+
+  <a href="focus.html">
+    FOCUS
+  </a>
+
+</div>
+
+
+<!-- ========================================================
+     HERO
+     ======================================================== -->
+
+<main>
+
+<section class="hero">
+
+  <div class="hero-orbit">
+    <div class="orbit-dot"></div>
+  </div>
+
+
+  <div
+    class="hero-inner"
+    id="heroInner">
+
+    <div class="hero-kicker">
+
+      <span class="pulse"></span>
+
+      ATTENTION IS THE NEW CURRENCY
+
+    </div>
+
+
     <h1>
-      FOCUS<br>
-      <span class="outline">IS A</span><br>
-      <span class="lime">CHOICE.</span>
+
+      <span class="line">
+        CONTROL
+      </span>
+
+      <span class="line">
+        YOUR
+      </span>
+
+      <span class="line outline">
+        ATTENTION.
+      </span>
+
     </h1>
 
-    <div class="hero-bottom">
 
-      <p class="hero-copy">
-        The world is engineered to capture your attention.
-        FocusPulse exists to help you take it back.
-        Build systems. Remove noise. Execute.
+    <p class="hero-copy">
+
+      The world is engineered to capture your attention.
+      FocusPulse is a digital system designed to help
+      you take it back — remove noise, build systems,
+      and execute with intention.
+
+    </p>
+
+
+    <div class="hero-actions">
+
+      <a
+        href="focus.html"
+        class="btn btn-primary magnetic">
+
+        START FOCUS →
+
+      </a>
+
+      <a
+        href="manifesto.html"
+        class="btn magnetic">
+
+        EXPLORE THE SYSTEM ↓
+
+      </a>
+
+    </div>
+
+
+    <div class="hero-meta">
+
+      <span>FOCUS</span>
+      <span>DISCIPLINE</span>
+      <span>EXECUTION</span>
+      <span>ATTENTION</span>
+      <span>INTENTION</span>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================================
+     MARQUEE
+     ======================================================== -->
+
+<div class="marquee">
+
+  <div class="marquee-track">
+
+    <span>FOCUS</span>
+    <span class="symbol">✦</span>
+
+    <span>DISCIPLINE</span>
+    <span class="symbol">✦</span>
+
+    <span>EXECUTION</span>
+    <span class="symbol">✦</span>
+
+    <span>ATTENTION</span>
+    <span class="symbol">✦</span>
+
+    <span>INTENTION</span>
+    <span class="symbol">✦</span>
+
+    <span>FOCUS</span>
+    <span class="symbol">✦</span>
+
+    <span>DISCIPLINE</span>
+    <span class="symbol">✦</span>
+
+    <span>EXECUTION</span>
+    <span class="symbol">✦</span>
+
+    <span>ATTENTION</span>
+    <span class="symbol">✦</span>
+
+    <span>INTENTION</span>
+    <span class="symbol">✦</span>
+
+    <span>FOCUS</span>
+    <span class="symbol">✦</span>
+
+    <span>DISCIPLINE</span>
+    <span class="symbol">✦</span>
+
+    <span>EXECUTION</span>
+    <span class="symbol">✦</span>
+
+    <span>ATTENTION</span>
+    <span class="symbol">✦</span>
+
+    <span>INTENTION</span>
+    <span class="symbol">✦</span>
+
+  </div>
+
+</div>
+
+
+<!-- ========================================================
+     INTRO / SYSTEM
+     ======================================================== -->
+
+<section class="container">
+
+  <div class="section-head reveal">
+
+    <div>
+
+      <div class="section-index">
+        01 / THE SYSTEM
+      </div>
+
+      <h2 class="section-title">
+        ATTENTION<br>
+        <em>IS FINITE.</em>
+      </h2>
+
+    </div>
+
+
+    <p class="section-description">
+
+      FocusPulse isn't another productivity dashboard.
+      It's a philosophy, a toolkit and a place to practice
+      deliberate attention.
+
+    </p>
+
+  </div>
+
+
+  <div class="module-grid">
+
+    <a
+      href="manifesto.html"
+      class="module reveal">
+
+      <div class="module-index">
+        001 / MANIFESTO
+      </div>
+
+      <div class="module-arrow">
+        ↗
+      </div>
+
+      <h3>
+        RECLAIM<br>
+        YOUR<br>
+        ATTENTION.
+      </h3>
+
+      <p>
+
+        Learn the principles behind intentional focus,
+        digital minimalism and deliberate execution.
+
       </p>
 
-      <div class="hero-action">
-        <a href="#vault" class="primary">
-          EXPLORE THE SYSTEM
-          <span>↓</span>
-        </a>
+      <div class="module-orb"></div>
+
+    </a>
+
+
+    <a
+      href="vault.html"
+      class="module module-small reveal">
+
+      <div class="module-index">
+        002 / THE VAULT
+      </div>
+
+      <div class="module-arrow">
+        ↗
+      </div>
+
+      <h3>
+        TOOLS<br>
+        FOR<br>
+        DEPTH.
+      </h3>
+
+      <div class="module-list">
+
+        <div class="module-list-item">
+          <strong>DEEP WORK</strong>
+          <span>001</span>
+        </div>
+
+        <div class="module-list-item">
+          <strong>ATTENTION BUDGET</strong>
+          <span>002</span>
+        </div>
+
+        <div class="module-list-item">
+          <strong>DIGITAL MINIMALISM</strong>
+          <span>003</span>
+        </div>
+
+      </div>
+
+    </a>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================================
+     LIVE FOCUS CORE
+     ======================================================== -->
+
+<section class="container">
+
+  <div class="system reveal">
+
+    <div class="system-copy">
+
+      <div class="section-index">
+        LIVE SYSTEM / 002
+      </div>
+
+      <h3>
+        BUILD A
+        <span>STATE</span>
+        WHERE
+        FOCUS
+        WINS.
+      </h3>
+
+      <p>
+
+        Remove the unnecessary. Reduce the surface area
+        of distraction. Give your best cognitive energy
+        to the work that matters.
+
+      </p>
+
+      <a
+        href="focus.html"
+        class="btn btn-primary system-link magnetic">
+
+        ENTER FOCUS MODE →
+
+      </a>
+
+    </div>
+
+
+    <div class="system-visual">
+
+      <div class="system-ring"></div>
+
+      <div class="system-ring two"></div>
+
+      <div class="system-core"></div>
+
+      <div class="system-label">
+        FOCUS CORE / ACTIVE
+      </div>
+
+      <div class="system-status">
+
+        <span class="status-dot"></span>
+
+        SYSTEM STATUS:
+        <span>READY</span>
+
       </div>
 
     </div>
+
   </div>
+
 </section>
 
-<!-- MARQUEE -->
-<div class="marquee">
-  <div class="marquee-track">
-    <span>FOCUS</span>
-    <span>DISCIPLINE</span>
-    <span class="active">EXECUTION</span>
-    <span>ATTENTION</span>
-    <span>INTENTION</span>
 
-    <span>FOCUS</span>
-    <span>DISCIPLINE</span>
-    <span class="active">EXECUTION</span>
-    <span>ATTENTION</span>
-    <span>INTENTION</span>
+<!-- ========================================================
+     LOCAL STORAGE STATS
+     ======================================================== -->
+
+<section class="container">
+
+  <div class="section-head reveal">
+
+    <div>
+
+      <div class="section-index">
+        03 / YOUR SIGNAL
+      </div>
+
+      <h2 class="section-title">
+        PROGRESS<br>
+        <em>WITHOUT NOISE.</em>
+      </h2>
+
+    </div>
+
+    <p class="section-description">
+
+      Your FocusPulse activity stays on this device.
+      Nothing here is hard-coded as a fake achievement.
+
+    </p>
+
   </div>
-</div>
+
+
+  <div class="stats reveal">
+
+    <div class="stat">
+
+      <div
+        class="stat-number"
+        id="statMinutes">
+        0
+      </div>
+
+      <div class="stat-label">
+        FOCUS MINUTES
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div
+        class="stat-number"
+        id="statSessions">
+        0
+      </div>
+
+      <div class="stat-label">
+        COMPLETED SESSIONS
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div
+        class="stat-number"
+        id="statStreak">
+        0<span> DAYS</span>
+      </div>
+
+      <div class="stat-label">
+        CURRENT STREAK
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div
+        class="stat-number"
+        id="statScore">
+        0<span>/100</span>
+      </div>
+
+      <div class="stat-label">
+        FOCUS SCORE
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================================
+     ARTICLES
+     ======================================================== -->
+
+<section class="container">
+
+  <div class="section-head reveal">
+
+    <div>
+
+      <div class="section-index">
+        04 / SIGNAL
+      </div>
+
+      <h2 class="section-title">
+        READ<br>
+        <em>DEEPER.</em>
+      </h2>
+
+    </div>
+
+    <p class="section-description">
+
+      Essays and experiments about attention,
+      technology, behaviour and execution.
+
+    </p>
+
+  </div>
+
+
+  <div class="article-feature">
+
+    <a
+      href="article-digital-drug.html"
+      class="article-main reveal">
+
+      <div class="article-tag">
+        FEATURED / 001
+      </div>
+
+      <h3>
+        THE DIGITAL<br>
+        DRUG
+      </h3>
+
+      <p>
+
+        What happens when the machines designed to
+        entertain us become better at predicting what
+        will keep us looking?
+
+      </p>
+
+    </a>
+
+
+    <div class="article-side">
+
+      <a
+        href="article-action-gap.html"
+        class="article-card reveal">
+
+        <div class="article-card-number">
+          ARTICLE / 002
+        </div>
+
+        <h4>
+          THE ACTION<br>
+          GAP
+        </h4>
+
+        <div class="article-card-bottom">
+
+          <span>
+            READ ARTICLE
+          </span>
+
+          <b>
+            ↗
+          </b>
+
+        </div>
+
+      </a>
+
+
+      <a
+        href="article-user-churn.html"
+        class="article-card reveal">
+
+        <div class="article-card-number">
+          ARTICLE / 003
+        </div>
+
+        <h4>
+          USER<br>
+          CHURN<br>
+          PROTOCOL
+        </h4>
+
+        <div class="article-card-bottom">
+
+          <span>
+            READ ARTICLE
+          </span>
+
+          <b>
+            ↗
+          </b>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================================
+     PROTOCOL PREVIEW
+     ======================================================== -->
+
+<section class="container">
+
+  <div class="section-head reveal">
+
+    <div>
+
+      <div class="section-index">
+        05 / PROTOCOLS
+      </div>
+
+      <h2 class="section-title">
+        TURN<br>
+        <em>INTENTION</em><br>
+        INTO ACTION.
+      </h2>
+
+    </div>
+
+    <p class="section-description">
+
+      Focus becomes powerful when it becomes repeatable.
+      Explore the protocols built around deliberate work.
+
+    </p>
+
+  </div>
+
+
+  <div class="module-grid">
+
+    <a
+      href="protocols.html"
+      class="module reveal">
+
+      <div class="module-index">
+        PROTOCOL SYSTEM
+      </div>
+
+      <div class="module-arrow">
+        ↗
+      </div>
+
+      <h3>
+        90 / 20<br>
+        SINGLE TAB<br>
+        PHONE ZERO.
+      </h3>
+
+      <p>
+
+        Practical rules for protecting uninterrupted
+        cognitive work.
+
+      </p>
+
+    </a>
+
+
+    <a
+      href="focus.html"
+      class="module module-small reveal">
+
+      <div class="module-index">
+        FOCUS ENGINE
+      </div>
+
+      <div class="module-arrow">
+        ↗
+      </div>
+
+      <h3>
+        START<br>
+        THE<br>
+        CLOCK.
+      </h3>
+
+      <div class="module-list">
+
+        <div class="module-list-item">
+          <strong>SESSION TIMER</strong>
+          <span>READY</span>
+        </div>
+
+        <div class="module-list-item">
+          <strong>LOCAL TRACKING</strong>
+          <span>ON</span>
+        </div>
+
+        <div class="module-list-item">
+          <strong>INTERRUPTIONS</strong>
+          <span>ZERO</span>
+        </div>
+
+      </div>
+
+    </a>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================================
+     FINAL CTA
+     ======================================================== -->
+
+<section class="container final">
+
+  <div class="final-box reveal">
+
+    <div class="final-orbit"></div>
+
+    <div class="final-content">
+
+      <div class="section-index">
+        FOCUSPULSE / FINAL TRANSMISSION
+      </div>
+
+      <h2>
+        FOCUS<br>
+        <span>IS A CHOICE.</span>
+      </h2>
+
+      <p>
+
+        The world will always compete for your attention.
+        You don't need to compete back.
+        You only need to choose.
+
+      </p>
+
+      <a
+        href="focus.html"
+        class="btn btn-primary magnetic">
+
+        ENTER FOCUS →
+
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<!-- ========================================================
+     FOOTER
+     ======================================================== -->
+
+<footer>
+
+  <div class="footer-inner">
+
+    <div class="footer-brand">
+
+      © 2026
+      <strong>FOCUSPULSE®</strong>
+      — CONTROL YOUR ATTENTION.
+
+    </div>
+
+
+    <div class="footer-links">
+
+      <a href="index.html">
+        HOME
+      </a>
+
+      <a href="manifesto.html">
+        MANIFESTO
+      </a>
+
+      <a href="vault.html">
+        VAULT
+      </a>
+
+      <a href="protocols.html">
+        PROTOCOLS
+      </a>
+
+      <a href="focus.html">
+        FOCUS
+      </a>
+
+    </div>
+
+  </div>
+
+</footer>
+
+
+<!-- ========================================================
+     JAVASCRIPT
+     ======================================================== -->
+
+<script>
+
+/* =========================================================
+   SAFE LOCAL STORAGE
+   ========================================================= */
+
+const STORAGE_KEY = "focuspulse";
+
+const defaultData = {
+  totalFocusMinutes: 0,
+  sessionsCompleted: 0,
+  sessionsStarted: 0,
+  streak: 0,
+  lastSessionDate: null
+};
+
+function getFocusData(){
+
+  try{
+
+    const saved =
+      localStorage.getItem(STORAGE_KEY);
+
+    if(!saved){
+      return {...defaultData};
+    }
+
+    return {
+      ...defaultData,
+      ...JSON.parse(saved)
+    };
+
+  }catch(error){
+
+    return {...defaultData};
+
+  }
+
+}
+
+
+/* =========================================================
+   FOCUS SCORE
+   ========================================================= */
+
+function calculateFocusScore(data){
+
+  if(
+    data.totalFocusMinutes <= 0 &&
+    data.sessionsCompleted <= 0 &&
+    data.streak <= 0
+  ){
+    return 0;
+  }
+
+  const minutesScore =
+    Math.min(
+      data.totalFocusMinutes / 120,
+      1
+    ) * 40;
+
+  const completionScore =
+    data.sessionsStarted > 0
+      ? (
+          data.sessionsCompleted /
+          data.sessionsStarted
+        ) * 30
+      : 0;
+
+  const streakScore =
+    Math.min(
+      data.streak / 7,
+      1
+    ) * 30;
+
+  return Math.min(
+    100,
+    Math.round(
+      minutesScore +
+      completionScore +
+      streakScore
+    )
+  );
+
+}
+
+
+/* =========================================================
+   UPDATE HOME STATS
+   ========================================================= */
+
+function updateStats(){
+
+  const data =
+    getFocusData();
+
+  const score =
+    calculateFocusScore(data);
+
+  const minutes =
+    document.getElementById("statMinutes");
+
+  const sessions =
+    document.getElementById("statSessions");
+
+  const streak =
+    document.getElementById("statStreak");
+
+  const scoreElement =
+    document.getElementById("statScore");
+
+
+  if(minutes){
+
+    minutes.textContent =
+      Math.floor(
+        Number(data.totalFocusMinutes) || 0
+      );
+
+  }
+
+
+  if(sessions){
+
+    sessions.textContent =
+      Number(data.sessionsCompleted) || 0;
+
+  }
+
+
+  if(streak){
+
+    streak.innerHTML =
+      `${Number(data.streak) || 0}<span> DAYS</span>`;
+
+  }
+
+
+  if(scoreElement){
+
+    scoreElement.innerHTML =
+      `${score}<span>/100</span>`;
+
+  }
+
+}
+
+
+/* =========================================================
+   INITIAL STATS
+   ========================================================= */
+
+updateStats();
+
+
+/* =========================================================
+   LOADER
+   ========================================================= */
+
+const loader =
+  document.getElementById("loader");
+
+const progressBar =
+  document.getElementById("loaderProgress");
+
+const percent =
+  document.getElementById("loaderPercent");
+
+let progress = 0;
+
+const loaderTimer =
+  setInterval(() => {
+
+    progress +=
+      Math.floor(
+        Math.random() * 8
+      ) + 3;
+
+    if(progress >= 100){
+
+      progress = 100;
+
+      clearInterval(loaderTimer);
+
+      setTimeout(() => {
+
+        loader.classList.add("hide");
+
+      },350);
+
+    }
+
+    progressBar.style.width =
+      progress + "%";
+
+    percent.textContent =
+      progress + "%";
+
+  },65);
+
+
+/* =========================================================
+   CURSOR
+   ========================================================= */
+
+const cursor =
+  document.getElementById("cursor");
+
+const cursorRing =
+  document.getElementById("cursorRing");
+
+const mouseGlow =
+  document.getElementById("mouseGlow");
+
+
+let mouseX = 0;
+let mouseY = 0;
+
+let ringX = 0;
+let ringY = 0;
+
+
+window.addEventListener(
+  "mousemove",
+  event => {
+
+    mouseX =
+      event.clientX;
+
+    mouseY =
+      event.clientY;
+
+    cursor.style.left =
+      mouseX + "px";
+
+    cursor.style.top =
+      mouseY + "px";
+
+    mouseGlow.style.left =
+      mouseX + "px";
+
+    mouseGlow.style.top =
+      mouseY + "px";
+
+  }
+);
+
+
+function animateCursor(){
+
+  ringX +=
+    (mouseX - ringX) * .14;
+
+  ringY +=
+    (mouseY - ringY) * .14;
+
+  cursorRing.style.left =
+    ringX + "px";
+
+  cursorRing.style.top =
+    ringY + "px";
+
+  requestAnimationFrame(
+    animateCursor
+  );
+
+}
+
+animateCursor();
+
+
+/* =========================================================
+   CURSOR INTERACTION
+   ========================================================= */
+
+function bindCursorTargets(){
+
+  document
+    .querySelectorAll(
+      "a,button,.module,.article-card"
+    )
+    .forEach(element => {
+
+      element.addEventListener(
+        "mouseenter",
+        () => {
+
+          cursorRing.classList.add("big");
+
+        }
+      );
+
+      element.addEventListener(
+        "mouseleave",
+        () => {
+
+          cursorRing.classList.remove("big");
+
+        }
+      );
+
+    });
+
+}
+
+bindCursorTargets();
+
+
+/* =========================================================
+   NAV SCROLL
+   ========================================================= */
+
+const navbar =
+  document.getElementById("navbar");
+
+window.addEventListener(
+  "scroll",
+  () => {
+
+    if(window.scrollY > 30){
+
+      navbar.classList.add(
+        "scrolled"
+      );
+
+    }else{
+
+      navbar.classList.remove(
+        "scrolled"
+      );
+
+    }
+
+  },
+  {passive:true}
+);
+
+
+/* =========================================================
+   MOBILE MENU
+   ========================================================= */
+
+const mobileToggle =
+  document.getElementById(
+    "mobileToggle"
+  );
+
+const mobileMenu =
+  document.getElementById(
+    "mobileMenu"
+  );
+
+
+mobileToggle.addEventListener(
+  "click",
+  () => {
+
+    const opened =
+      mobileMenu.classList.toggle(
+        "open"
+      );
+
+    document.body.classList.toggle(
+      "menu-open",
+      opened
+    );
+
+    mobileToggle.textContent =
+      opened ? "×" : "☰";
+
+  }
+);
+
+
+document
+  .querySelectorAll(
+    ".mobile-menu a"
+  )
+  .forEach(link => {
+
+    link.addEventListener(
+      "click",
+      () => {
+
+        mobileMenu.classList.remove(
+          "open"
+        );
+
+        document.body.classList.remove(
+          "menu-open"
+        );
+
+        mobileToggle.textContent =
+          "☰";
+
+      }
+    );
+
+  });
+
+
+/* =========================================================
+   SCROLL REVEAL
+   ========================================================= */
+
+const revealObserver =
+  new IntersectionObserver(
+    entries => {
+
+      entries.forEach(entry => {
+
+        if(entry.isIntersecting){
+
+          entry.target.classList.add(
+            "visible"
+          );
+
+          revealObserver.unobserve(
+            entry.target
+          );
+
+        }
+
+      });
+
+    },
+    {
+      threshold:.12
+    }
+  );
+
+
+document
+  .querySelectorAll(".reveal")
+  .forEach(element => {
+
+    revealObserver.observe(
+      element
+    );
+
+  });
+
+
+/* =========================================================
+   HERO PARALLAX
+   ========================================================= */
+
+const heroInner =
+  document.getElementById(
+    "heroInner"
+  );
+
+
+window.addEventListener(
+  "mousemove",
+  event => {
+
+    if(
+      window.innerWidth < 950
+    ){
+      return;
+    }
+
+    const x =
+      (
+        event.clientX /
+        window.innerWidth
+        - .5
+      );
+
+    const y =
+      (
+        event.clientY /
+        window.innerHeight
+        - .5
+      );
+
+    heroInner.style.transform =
+      `translate(${x * 8}px,${y * 5}px)`;
+
+  }
+);
+
+
+/* =========================================================
+   MAGNETIC BUTTONS
+   ========================================================= */
+
+document
+  .querySelectorAll(
+    ".magnetic"
+  )
+  .forEach(button => {
+
+    button.addEventListener(
+      "mousemove",
+      event => {
+
+        if(
+          window.innerWidth < 950
+        ){
+          return;
+        }
+
+        const rect =
+          button.getBoundingClientRect();
+
+        const x =
+          event.clientX -
+          rect.left -
+          rect.width / 2;
+
+        const y =
+          event.clientY -
+          rect.top -
+          rect.height / 2;
+
+        button.style.transform =
+          `translate(${x * .12}px,${y * .12}px)`;
+
+      }
+    );
+
+
+    button.addEventListener(
+      "mouseleave",
+      () => {
+
+        button.style.transform =
+          "";
+
+      }
+    );
+
+  });
+
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+   ========================================================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key === "/" &&
+      !event.ctrlKey &&
+      !event.metaKey
+    ){
+
+      const active =
+        document.activeElement;
+
+      if(
+        active &&
+        (
+          active.tagName === "INPUT" ||
+          active.tagName === "TEXTAREA"
+        )
+      ){
+        return;
+      }
+
+      event.preventDefault();
+
+      window.location.href =
+        "focus.html";
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   PAGE TRANSITION
+   ========================================================= */
+
+document
+  .querySelectorAll(
+    'a[href$=".html"]'
+  )
+  .forEach(link => {
+
+    link.addEventListener(
+      "click",
+      event => {
+
+        const href =
+          link.getAttribute("href");
+
+        if(
+          !href ||
+          href.startsWith("#") ||
+          link.target === "_blank"
+        ){
+          return;
+        }
+
+        /*
+         * Allow browser navigation normally.
+         * This small delay is intentionally avoided
+         * to keep GitHub Pages navigation reliable.
+         */
+
+      }
+    );
+
+  });
+
+
+/* =========================================================
+   VISIBILITY REFRESH
+   ========================================================= */
+
+document.addEventListener(
+  "visibilitychange",
+  () => {
+
+    if(
+      document.visibilityState ===
+      "visible"
+    ){
+
+      updateStats();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   DEV / DEBUG HELPER
+   ========================================================= */
+
+window.FocusPulse = {
+
+  getData(){
+    return getFocusData();
+  },
+
+  getScore(){
+    return calculateFocusScore(
+      getFocusData()
+    );
+  },
+
+  reset(){
+
+    localStorage.removeItem(
+      STORAGE_KEY
+    );
+
+    updateStats();
+
+  }
+
+};
+
+</script>
+
+</body>
+</html>
